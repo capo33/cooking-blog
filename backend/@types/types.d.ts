@@ -6,7 +6,7 @@ declare global {
     interface Request {
       user?: {
         _id: Types.ObjectId;
-        role: string;
+        isAdmin: string;
         // email: string;
         // username: string;
       } | null;
