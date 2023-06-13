@@ -1,9 +1,9 @@
-import { NextFunction, Request, Response } from "express";
+import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 
 import UserModel from "../models/User";
-import { generateToken } from "../utils/generateToken";
 import asyncHandler from "../middlewares/asyncHandler";
+import { generateToken } from "../utils/generateToken";
 
 // @desc    Register user
 // @route   POST /api/v1/auth/register
@@ -103,44 +103,41 @@ const logout = asyncHandler(async (req: Request, res: Response) => {
 // @desc    Get user profile
 // @route   GET /api/v1/auth/profile
 // @access  Private
-// const getProfile = asyncHandler(async (req: Request, res: Response) => {
-//   // const user = req.user;
+const getProfile = asyncHandler(async (req: Request, res: Response) => {
+  // const user = req.user;
 
-//   // if (user) {
-//   //   res.json({
-//   //     success: true,
-//   //     message: "User profile fetched successfully",
-//   //     user,
-//   //   });
-//   // } else {
-//   //   res.status(404);
-//   //   throw new Error("User not found");
-//   // }
-//   // get user from req.user
-//   const user = await UserModel.findById(req.user?._id).select("-password");
+  // if (user) {
+  //   res.json({
+  //     success: true,
+  //     message: "User profile fetched successfully",
+  //     user,
+  //   });
+  // } else {
+  //   res.status(404);
+  //   throw new Error("User not found");
+  // }
+  // get user from req.user
+  const user = await UserModel.findById(req.user?._id).select("-password");
 
-//   // check user existince
-//   if (!user) {
-//     res.status(400);
-//     throw new Error("User not found");
-//   }
+  // check user existince
+  if (!user) {
+    res.status(400);
+    throw new Error("User not found");
+  }
 
-//   // generate token
-//   const token = generateToken(user?._id);
+  // generate token
+  const token = generateToken(user?._id);
 
-//   // Remove password
-//   const { password: _, ...result } = user.toObject();
+  // Remove password
+  const { password: _, ...result } = user.toObject();
 
-//   console.log(user);
+  // send response
+  res.status(200).json({
+    success: true,
+    message: "Your profile",
+    result,
+    token,
+  });
+});
 
-//   // send response
-//   res.status(200).json({
-//     success: true,
-//     message: "User found",
-//     result,
-//     token,
-//   });
-// });
-
-
-export { register, login, logout };
+export { register, login, logout, getProfile };

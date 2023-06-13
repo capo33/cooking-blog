@@ -6,6 +6,7 @@ dotenv.config();
 
 import { connectDB } from "./config/db";
 import userRoutes from "./routes/Auth.routes";
+import recipeRoutes from "./routes/Recipe.routes";
 import { errorHandler, notFound } from "./middlewares/errorHandler";
 
 // Initialize express
@@ -32,6 +33,7 @@ app.get("/", async (req: Request, res: Response): Promise<Response> => {
 
 // Routes
 app.use("/api/v1/auth", userRoutes);
+app.use("/api/v1/recipes", recipeRoutes);
 
 // Error handler middleware
 app.use(notFound);
