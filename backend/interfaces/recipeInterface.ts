@@ -9,6 +9,8 @@ export interface IRecipe extends Document {
   cookingTime: number;
   views: number;
   reviews: IReview[];
+  rating: number;
+  numReviews: number;
   slug: string;
   likes: Types.ObjectId[];
   category: Types.ObjectId;

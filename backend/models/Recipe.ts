@@ -32,6 +32,18 @@ const recipeSchema = new Schema<IRecipe>(
       default: 0,
     },
     reviews: [ReviewModel.schema],
+    rating: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
+
+    numReviews: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
+
     slug: {
       type: String,
       lowercase: true,

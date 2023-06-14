@@ -3,6 +3,8 @@ import { Request, Response } from "express";
 import UserModel from "../models/User";
 import RecipeModel from "../models/Recipe";
 import asyncHandler from "../middlewares/asyncHandler";
+import { IReview } from "../interfaces/reviewInterface";
+import { IRecipe } from "../interfaces/recipeInterface";
 
 // @desc    GET all recipes
 // @route   GET /api/v1/recipes
@@ -131,7 +133,7 @@ const saveRecipe = asyncHandler(async (req: Request, res: Response) => {
   }
 
   // Check if the user is the owner of the recipe
-  if (recipe.owner.toString() === req.user._id.toString()) {
+  if (recipe.owner.toString() === req?.user?._id.toString()) {
     res.status(401);
 
     throw new Error("You cannot save your own recipe");
@@ -148,7 +150,10 @@ const saveRecipe = asyncHandler(async (req: Request, res: Response) => {
 
   await user?.save();
 
-  res.status(200).json({ message: "Recipe saved successfully",savedRecipes: user?.savedRecipes });
+  res.status(200).json({
+    message: "Recipe saved successfully",
+    savedRecipes: user?.savedRecipes,
+  });
 });
 
 // @desc    Unsave a recipe
@@ -160,8 +165,8 @@ const unsaveRecipe = asyncHandler(async (req: Request, res: Response) => {
     throw new Error("Not authorized");
   }
 
-  const recipe = await RecipeModel.findById(req.params.id);
-  const user = await UserModel.findById(req.user._id);
+  const recipe = await RecipeModel.findById(req.body.recipeID);
+  const user = await UserModel.findById(req.body.userID);
 
   if (!recipe) {
     res.status(404);
@@ -175,14 +180,15 @@ const unsaveRecipe = asyncHandler(async (req: Request, res: Response) => {
     throw new Error("You cannot unsave your own recipe");
   }
 
-  // Check if the recipe is already saved
-  const isSaved = user?.savedRecipes.includes(recipe._id);
-  if (!isSaved) {
+  // Check if the recipe is already unsaved
+  const isUnsaved = user?.savedRecipes.includes(recipe._id);
+
+  if (!isUnsaved) {
     res.status(400);
-    throw new Error("Recipe not saved");
+    throw new Error("Recipe already unsaved");
   }
 
-  await UserModel.findByIdAndUpdate(req.user._id, {
+  await UserModel.findByIdAndUpdate(req.body.userID, {
     $pull: { savedRecipes: recipe._id },
   });
 
@@ -196,11 +202,10 @@ const getSavedRecipes = asyncHandler(async (req: Request, res: Response) => {
   const { id } = req.params;
 
   const user = await UserModel.findById(id).select("-password");
- 
+
   const savedRecipes = await RecipeModel.find({
     _id: { $in: user?.savedRecipes },
   });
-console.log(savedRecipes);
 
   res.status(200).json(savedRecipes);
 });
@@ -211,13 +216,55 @@ console.log(savedRecipes);
 const getRecipesByUser = asyncHandler(async (req: Request, res: Response) => {
   const { id } = req.params;
   console.log(id);
-  
+
   const user = await UserModel.findById(id)
     .populate("savedRecipes")
     .select("-password");
-console.log(user);
 
   res.status(200).json({ savedRecipes: user?.savedRecipes });
+});
+
+// @desc    Create a review
+// @route   POST /api/v1/recipes/:id/reviews
+// @access  Private
+const addReview = asyncHandler(async (req: Request, res: Response) => {
+  const { id } = req.params; // recipe id
+  const { rating, comment } = req.body;
+
+  const recipe = await RecipeModel.findById(id);
+
+  if (!recipe) {
+    res.status(404);
+    throw new Error("Recipe not found");
+  }
+
+  const alreadyReviewed = recipe.reviews.find(
+    (r) => r?.user?.toString() === req.user?._id.toString()
+  );
+
+  if (alreadyReviewed) {
+    res.status(400);
+    throw new Error("Recipe already reviewed");
+  }
+
+  const review = {
+    name: req.user?.name,
+    rating: Number(rating),
+    comment: comment,
+    user: req.user?._id,
+  };
+
+  recipe.reviews.push(review as IReview);
+
+  recipe.numReviews = recipe.reviews.length;
+
+  recipe.rating =
+    recipe?.reviews?.reduce((acc, item) => Number(item?.rating) + acc, 0) /
+    recipe.reviews.length;
+
+  await recipe.save();
+
+  res.status(201).json({ message: "Review added" });
 });
 
 export {
@@ -230,4 +277,5 @@ export {
   unsaveRecipe,
   getSavedRecipes,
   getRecipesByUser,
+  addReview,
 };

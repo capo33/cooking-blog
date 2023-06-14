@@ -6,8 +6,8 @@ declare global {
     interface Request {
       user?: {
         _id: Types.ObjectId;
-        isAdmin: string;
-        // email: string;
+        isAdmin?: string;
+        name?: string;
         // username: string;
       } | null;
     }

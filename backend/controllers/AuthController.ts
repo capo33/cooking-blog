@@ -104,40 +104,40 @@ const logout = asyncHandler(async (req: Request, res: Response) => {
 // @route   GET /api/v1/auth/profile
 // @access  Private
 const getProfile = asyncHandler(async (req: Request, res: Response) => {
-  // const user = req.user;
+  const user = req.user;
 
-  // if (user) {
-  //   res.json({
-  //     success: true,
-  //     message: "User profile fetched successfully",
-  //     user,
-  //   });
-  // } else {
-  //   res.status(404);
-  //   throw new Error("User not found");
-  // }
-  // get user from req.user
-  const user = await UserModel.findById(req.user?._id).select("-password");
-
-  // check user existince
-  if (!user) {
-    res.status(400);
+  if (user) {
+    res.json({
+      success: true,
+      message: "User profile fetched successfully",
+      user,
+    });
+  } else {
+    res.status(404);
     throw new Error("User not found");
   }
+  // get user from req.user
+  // const user = await UserModel.findById(req.user?._id).select("-password");
 
-  // generate token
-  const token = generateToken(user?._id);
+  // // check user existince
+  // if (!user) {
+  //   res.status(400);
+  //   throw new Error("User not found");
+  // }
 
-  // Remove password
-  const { password: _, ...result } = user.toObject();
+  // // generate token
+  // const token = generateToken(user?._id);
 
-  // send response
-  res.status(200).json({
-    success: true,
-    message: "Your profile",
-    result,
-    token,
-  });
+  // // Remove password
+  // const { password: _, ...result } = user.toObject();
+
+  // // send response
+  // res.status(200).json({
+  //   success: true,
+  //   message: "Your profile",
+  //   result,
+  //   token,
+  // });
 });
 
 export { register, login, logout, getProfile };

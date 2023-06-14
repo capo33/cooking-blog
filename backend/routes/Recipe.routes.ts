@@ -16,16 +16,18 @@ const router: Router = Router();
 router
   .route("/")
   .get(recipeController.getRecipes)
-  .put(protect, recipeController.saveRecipe)
-  .put(protect, recipeController.unsaveRecipe)
+  // .put(protect, recipeController.saveRecipe)
+  // .put(protect, recipeController.unsaveRecipe)
   .post(protect, recipeController.createRecipe);
-
+router.put("/saveRecipe", protect, recipeController.saveRecipe);
+router.put("/unsaveRecipe", protect, recipeController.unsaveRecipe);
 router
   .route("/:recipeId")
   .get(recipeController.getRecipeById)
   .put(protect, recipeController.updateRecipe)
   .delete(protect, recipeController.deleteRecipe);
 
+router.post("/:id/reviews", protect, recipeController.addReview);
 router.get("/savedRecipes/:id", recipeController.getRecipesByUser);
 router.get("/savedRecipes/ids/:id", recipeController.getSavedRecipes);
 

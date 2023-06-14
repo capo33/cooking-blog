@@ -2,7 +2,7 @@ import { Schema, model } from "mongoose";
 
 import { IReview } from "../interfaces/reviewInterface";
 
-const reviewSchema = new Schema(
+const reviewSchema = new Schema<IReview>(
   {
     name: {
       type: String,
