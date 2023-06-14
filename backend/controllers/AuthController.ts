@@ -51,7 +51,7 @@ const register = asyncHandler(async (req: Request, res: Response) => {
     success: true,
     message: "User created successfully",
     token,
-    user: userWithoutPassword
+    user: userWithoutPassword,
   });
 });
 
@@ -104,40 +104,81 @@ const logout = asyncHandler(async (req: Request, res: Response) => {
 // @route   GET /api/v1/auth/profile
 // @access  Private
 const getProfile = asyncHandler(async (req: Request, res: Response) => {
-  const user = req.user;
+  // get user from req.user
+  const user = await UserModel.findById(req.user?._id).select("-password");
 
-  if (user) {
-    res.json({
-      success: true,
-      message: "User profile fetched successfully",
-      user,
-    });
-  } else {
-    res.status(404);
+  // check user existince
+  if (!user) {
+    res.status(400);
     throw new Error("User not found");
   }
-  // get user from req.user
-  // const user = await UserModel.findById(req.user?._id).select("-password");
 
-  // // check user existince
-  // if (!user) {
-  //   res.status(400);
-  //   throw new Error("User not found");
-  // }
+  // generate token
+  const token = generateToken(user?._id);
 
-  // // generate token
-  // const token = generateToken(user?._id);
+  // Remove password
+  const { password: _, ...result } = user.toObject();
 
-  // // Remove password
-  // const { password: _, ...result } = user.toObject();
-
-  // // send response
-  // res.status(200).json({
-  //   success: true,
-  //   message: "Your profile",
-  //   result,
-  //   token,
-  // });
+  // send response
+  res.status(200).json({
+    success: true,
+    message: "Your profile",
+    result,
+    token,
+  });
 });
 
-export { register, login, logout, getProfile };
+// @desc    Forgot password
+// @route   POST /api/v1/auth/forgot-password
+// @access  Public
+const forgotPassword = asyncHandler(async (req: Request, res: Response) => {
+  const { email, answer, newPassword } = req.body;
+
+  // Check if user exists
+  const existingUser = await UserModel.findOne({ email });
+  if (!existingUser) {
+    res.status(400);
+    throw new Error("User does not exist");
+  }
+
+  // Check if email is provided
+  if (!email) {
+    res.status(400);
+    throw new Error("Please enter your email");
+  }
+
+  // Check if answer is provided
+  if (!answer) {
+    res.status(400);
+    throw new Error("Please enter your answer");
+  }
+
+  // Check if the answer is matching
+  if (existingUser.answer !== answer) {
+    res.status(400);
+    throw new Error("Answer is not correct");
+  }
+
+  // Check if newPassword is empty
+  if (!newPassword) {
+    res.status(400);
+    throw new Error("Please enter your new password");
+  }
+
+  // generate salt to hash password
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+  // Update user password
+  const user = await UserModel.findByIdAndUpdate(existingUser._id, {
+    password: hashedPassword,
+  });
+
+  res.status(200).json({
+    success: true,
+    message: "Password updated successfully",
+    user,
+  });
+});
+
+export { register, login, logout, getProfile, forgotPassword };
