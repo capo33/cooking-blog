@@ -29,6 +29,10 @@ const userSchema = new Schema<IUser>(
       type: String,
       default: "example: I am a photographer",
     },
+    isAdmin: {
+      type: Boolean,
+      default: false,
+    },
     savedRecipes: [
       {
         type: Schema.Types.ObjectId,

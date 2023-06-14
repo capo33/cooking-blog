@@ -1,7 +1,7 @@
 import express from "express";
 
-import * as categoryController from "../controllers/CategoryController";
 import { protect, admin } from "../middlewares/authMiddleware";
+import * as categoryController from "../controllers/CategoryController";
 
 const router = express.Router();
 
@@ -10,7 +10,7 @@ router
   .get(categoryController.getCategories)
   .post(protect, admin, categoryController.createCategory);
 
-router.get("/:slug", categoryController.getCategoryById);
+router.get("/:slug", categoryController.getCategory);
 
 router
   .route("/:id")

@@ -9,6 +9,7 @@ export interface IUser extends Document {
   about: string;
   savedRecipes: Types.ObjectId[];
   phone: string;
+  isAdmin: boolean;
   address: string;
   createdAt: Date;
   updatedAt: Date;

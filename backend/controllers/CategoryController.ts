@@ -1,14 +1,14 @@
 import slugify from "slugify";
 import { Request, Response } from "express";
 
-import CategoryModel from "../models/Recipe";
+import CategoryModel from "../models/Category";
 import asyncHandler from "../middlewares/asyncHandler";
 
 // @desc    Get all categories
 // @route   GET /api/v1/categories
 // @access  Public
 const getCategories = asyncHandler(async (req: Request, res: Response) => {
-  const categories = await CategoryModel.find({}).sort({ createdAt: -1 });
+  const categories = await CategoryModel.find({});
 
   res.status(200).json(categories);
 });
@@ -16,7 +16,7 @@ const getCategories = asyncHandler(async (req: Request, res: Response) => {
 // @desc    Get a category by id
 // @route   GET /api/v1/categories/:slug
 // @access  Public
-const getCategoryById = asyncHandler(async (req: Request, res: Response) => {
+const getCategory = asyncHandler(async (req: Request, res: Response) => {
   const { slug } = req.params;
   const category = await CategoryModel.findOne({ slug });
 
@@ -85,13 +85,12 @@ const deleteCategory = asyncHandler(async (req: Request, res: Response) => {
   res.status(200).json({
     success: true,
     message: "Category deleted successfully",
-    category: deletedCat,
   });
 });
 
 export {
   getCategories,
-  getCategoryById,
+  getCategory,
   createCategory,
   updateCategory,
   deleteCategory,
