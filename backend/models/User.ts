@@ -2,7 +2,7 @@ import { Schema, model } from "mongoose";
 
 import { IUser } from "../interfaces/userInterface";
 
-const userSchema = new Schema(
+const userSchema = new Schema<IUser>(
   {
     name: {
       type: String,
@@ -25,24 +25,10 @@ const userSchema = new Schema(
       default:
         "https://t4.ftcdn.net/jpg/03/32/59/65/240_F_332596535_lAdLhf6KzbW6PWXBWeIFTovTii1drkbT.jpg",
     },
-    isAdmin: {
-      type: Boolean,
-      default: false, 
-    },
-    interests: {
-      type: [String],
-      default: [],
-    },
     about: {
       type: String,
       default: "example: I am a photographer",
     },
-    recipes: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "Recipe",
-      },
-    ],
     savedRecipes: [
       {
         type: Schema.Types.ObjectId,
@@ -56,10 +42,6 @@ const userSchema = new Schema(
     address: {
       type: String,
       default: "1234 Main St",
-    },
-    birthday: {
-      type: Date,
-      default: Date.now,
     },
   },
   { timestamps: true }

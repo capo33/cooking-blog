@@ -1,3 +1,4 @@
+import path from "path";
 import dotenv from "dotenv";
 import express, { Application, Request, Response } from "express";
 
@@ -7,6 +8,7 @@ dotenv.config();
 import { connectDB } from "./config/db";
 import userRoutes from "./routes/Auth.routes";
 import recipeRoutes from "./routes/Recipe.routes";
+import uploadRoutes from "./routes/Upload.routes";
 import { errorHandler, notFound } from "./middlewares/errorHandler";
 
 // Initialize express
@@ -22,18 +24,34 @@ connectDB();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Welcome route
-app.get("/", async (req: Request, res: Response): Promise<Response> => {
-  return res.json({
-    message: "Welcome to the MongoDB API",
-    author: "Mohamed Capo",
-    version: "1.0.0",
-  });
-});
-
 // Routes
 app.use("/api/v1/auth", userRoutes);
 app.use("/api/v1/recipes", recipeRoutes);
+app.use("/api/v1/upload", uploadRoutes);
+
+const __dirname = path.resolve();
+app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
+
+// Make uploads folder static
+if (process.env.NODE_ENV === "production") {
+  const __dirname = path.resolve();
+  app.use("/uploads", express.static("/var/data/uploads"));
+  app.use(express.static(path.join(__dirname, "/frontend/build")));
+
+  // for any route that is not api, redirect to index.html
+  app.get("*", (req, res) =>
+    res.sendFile(path.resolve(__dirname, "frontend", "build", "index.html"))
+  );
+} else {
+  // Welcome route
+  app.get("/", (req, res) => {
+    res.json({
+      message: "API is running...",
+      path: path.join(__dirname, "/uploads"),
+    });
+  });
+}
+
 
 // Error handler middleware
 app.use(notFound);

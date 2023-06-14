@@ -4,9 +4,29 @@ import { protect } from "../middlewares/authMiddleware";
 import * as recipeController from "../controllers/RecipeController";
 
 const router: Router = Router();
+// getRecipes,
+//   getRecipeById,
+//   createRecipe,
+//   updateRecipe,
+//   deleteRecipe,
+//   saveRecipe,
+//   unsaveRecipe,
+//   getSavedRecipes,
+//   getRecipesByUser
+router
+  .route("/")
+  .get(recipeController.getRecipes)
+  .put(protect, recipeController.saveRecipe)
+  .put(protect, recipeController.unsaveRecipe)
+  .post(protect, recipeController.createRecipe);
 
-router.get("/", recipeController.getRecipes);
-router.get("/:id", recipeController.getRecipeById);
-router.post("/", protect, recipeController.createRecipe);
+router
+  .route("/:recipeId")
+  .get(recipeController.getRecipeById)
+  .put(protect, recipeController.updateRecipe)
+  .delete(protect, recipeController.deleteRecipe);
+
+router.get("/savedRecipes/:id", recipeController.getRecipesByUser);
+router.get("/savedRecipes/ids/:id", recipeController.getSavedRecipes);
 
 export default router;
