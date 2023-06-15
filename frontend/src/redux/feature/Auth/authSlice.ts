@@ -30,9 +30,6 @@ export const register = createAsyncThunk(
       const response = await authServices.register(formData);
       navigate("/");
       toast.success(response?.message);
-      if (response) {
-      }
-
       return response;
     } catch (error: unknown | any) {
       const message =

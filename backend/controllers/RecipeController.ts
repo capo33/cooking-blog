@@ -199,14 +199,14 @@ const unsaveRecipe = asyncHandler(async (req: Request, res: Response) => {
 // @route   GET /api/v1/recipes/saved
 // @access  Private
 const getSavedRecipes = asyncHandler(async (req: Request, res: Response) => {
-  const { id } = req.params;
+  const { id } = req.params; // user id
 
   const user = await UserModel.findById(id).select("-password");
 
   const savedRecipes = await RecipeModel.find({
     _id: { $in: user?.savedRecipes },
   });
-
+  
   res.status(200).json(savedRecipes);
 });
 
@@ -214,8 +214,7 @@ const getSavedRecipes = asyncHandler(async (req: Request, res: Response) => {
 // @route   GET /api/v1/recipes/savedRecipes/:userId
 // @access  Public
 const getRecipesByUser = asyncHandler(async (req: Request, res: Response) => {
-  const { id } = req.params;
-  console.log(id);
+  const { id } = req.params; // user id
 
   const user = await UserModel.findById(id)
     .populate("savedRecipes")

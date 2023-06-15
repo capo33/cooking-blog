@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { CiLogout } from "react-icons/ci";
 import { Link, useNavigate } from "react-router-dom";
 import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
@@ -12,14 +12,12 @@ const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const { user } = useAppSelector((state) => state.auth);
-  console.log(user?.about);
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+
   const avatar = user?.avatar;
   const token = user?.token;
-  console.log(user?.about);
-
   const admin = user?.isAdmin;
 
   const handleLogout = () => {
@@ -143,7 +141,7 @@ const Header = () => {
                           onClick={handleLogout}
                           className='py-1.5 px-4 hover:bg-teal-400 rounded cursor-pointer flex justify-between'
                         >
-                          <Link  to='/login'>Logout</Link>
+                          <Link to='/login'>Logout</Link>
                           <CiLogout className='w-6 h-6' />
                         </div>
                       </ul>
