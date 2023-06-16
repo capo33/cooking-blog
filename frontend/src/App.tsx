@@ -6,6 +6,7 @@ import Header from "./components/Header";
 import Home from "./pages/Home";
 import Register from "./pages/Auth/Register";
 import Login from "./pages/Auth/Login";
+import AddRecipe from "./pages/AddRecipe";
 
 function App() {
   const { user } = useAppSelector((state) => state.auth);
@@ -15,8 +16,9 @@ function App() {
       <Header />
       <Routes>
         <Route path='/' element={<Home />} />
-        <Route path='/register' element={<Register />} />
         <Route path='/login' element={<Login />} />
+        <Route path='/register' element={<Register />} />
+        <Route path='/add-recipe' element={<AddRecipe />} />
       </Routes>
     </Router>
   );

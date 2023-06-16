@@ -10,7 +10,7 @@ import { IRecipe } from "../interfaces/recipeInterface";
 // @route   GET /api/v1/recipes
 // @access  Public
 const getRecipes = asyncHandler(async (req: Request, res: Response) => {
-  const recipes = await RecipeModel.find();
+  const recipes = await RecipeModel.find().populate("owner", "-password");
 
   if (recipes?.length === 0) {
     res.status(404);

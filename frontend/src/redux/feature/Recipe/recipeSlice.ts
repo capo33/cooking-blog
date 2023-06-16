@@ -1,17 +1,9 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 import recipeServices from "./recipeServices";
+import { CreateRecipe, Recipe } from "../../../interfaces/RecipeInterface";
 
-interface Recipe {
-  name: string;
-  ingredients: string;
-  instructions: string;
-  image: string;
-  cookingTime: number;
-  category: string;
-  owner: string;
- }
-
+ 
 interface RecipeState {
   recipes: Recipe[];
   isError: boolean;
@@ -20,18 +12,13 @@ interface RecipeState {
   message: string;
 }
 
-interface CreateRecipe {
-  formData: Recipe;
-  token: string;
-}
-const initialState: RecipeState = {
+ const initialState: RecipeState = {
   recipes: [],
   isError: false,
   isLoading: false,
   isSuccess: false,
   message: "",
 };
-
 
 // *************************** Recipe *************************** //
 // get all recipes
@@ -54,11 +41,11 @@ export const getAllRecipes = createAsyncThunk(
 );
 
 // Create a recipe
-export const createRecipe = createAsyncThunk(
+export const createRecipe = createAsyncThunk<Recipe[], CreateRecipe>(
   "recipe/createRecipe",
-  async ( {formData, token}: CreateRecipe , thunkAPI) => {
+  async ({ formData, token }, thunkAPI) => {
     try {
-      const response = await recipeServices.createRecipe(formData, token);
+      const response = await recipeServices.createRecipe( formData, token );
       return response;
     } catch (error: unknown | any) {
       return thunkAPI.rejectWithValue(error.response.data.message);
@@ -66,3 +53,46 @@ export const createRecipe = createAsyncThunk(
   }
 );
 
+const recipeSlice = createSlice({
+  name: "recipe",
+  initialState,
+  reducers: {
+    setName: (state, action) => {
+      state.recipes = action.payload;
+    },
+  },
+  extraReducers: (builder) => {
+    // Get all recipes
+    builder.addCase(getAllRecipes.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(getAllRecipes.fulfilled, (state, { payload }) => {
+      state.isLoading = false;
+      state.recipes = payload;
+    });
+    builder.addCase(getAllRecipes.rejected, (state, { payload }) => {
+      state.isLoading = false;
+      state.isError = true;
+      state.message = payload as string;
+    });
+
+    // Create a recipe
+    builder.addCase(createRecipe.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(createRecipe.fulfilled, (state, { payload }) => {
+      state.isLoading = false;
+      state.isSuccess = true;
+      state.recipes = payload;
+    });
+    builder.addCase(createRecipe.rejected, (state, { payload }) => {
+      state.isLoading = false;
+      state.isError = true;
+      state.message = payload as string;
+    });
+  },
+});
+
+export const { setName } = recipeSlice.actions;
+
+export default recipeSlice.reducer;

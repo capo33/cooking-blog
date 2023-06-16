@@ -1,6 +1,7 @@
 import axios from "axios";
 
 import { RECIPE_URL } from "../../../constants/constants";
+import { Recipe } from "../../../interfaces/RecipeInterface";
 
 // *************************** Recipe *************************** //
 // get all recipes
@@ -9,16 +10,9 @@ const getAllRecipes = async () => {
   return response.data;
 };
 
-interface Recipe {
-  name: string;
-  ingredients: string;
-  instructions: string;
-  image: string;
-  cookingTime: number;
-  category: string;
-  owner: string;
-}
 
+
+ 
 // Create a recipe
 const createRecipe = async (formData: Recipe, token: string) => {
   const response = await axios.post(`${RECIPE_URL}`, formData, {
