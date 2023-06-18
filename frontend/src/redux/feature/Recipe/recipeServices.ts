@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { RECIPE_URL } from "../../../constants/constants";
+import { RECIPE_URL, UPLOAD_URL } from "../../../constants/constants";
 import { Recipe } from "../../../interfaces/RecipeInterface";
 
 // *************************** Recipe *************************** //
@@ -10,16 +10,17 @@ const getAllRecipes = async () => {
   return response.data;
 };
 
-
-
- 
 // Create a recipe
 const createRecipe = async (formData: Recipe, token: string) => {
-  const response = await axios.post(`${RECIPE_URL}`, formData, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  const response = await axios.post(
+    `${RECIPE_URL}`,
+    { ...formData },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
   return response.data;
 };
 
@@ -81,6 +82,16 @@ const deleteRecipe = async (recipeId: string, token: string) => {
   return response.data;
 };
 
+// Update a recipe image
+const uploadRecipeImage = async (data: string, token: string) => {
+  const response = await axios.post(`${UPLOAD_URL}`, data, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+};
+
 const recipeService = {
   getAllRecipes,
   createRecipe,
@@ -89,6 +100,7 @@ const recipeService = {
   getRecipeById,
   updateRecipe,
   deleteRecipe,
+  uploadRecipeImage,
 };
 
 export default recipeService;

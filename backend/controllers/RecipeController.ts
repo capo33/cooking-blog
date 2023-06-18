@@ -10,7 +10,9 @@ import { IRecipe } from "../interfaces/recipeInterface";
 // @route   GET /api/v1/recipes
 // @access  Public
 const getRecipes = asyncHandler(async (req: Request, res: Response) => {
-  const recipes = await RecipeModel.find().populate("owner", "-password");
+  const recipes = await RecipeModel.find()
+    .populate("owner", "-password")
+    .populate("category");
 
   if (recipes?.length === 0) {
     res.status(404);
@@ -206,7 +208,7 @@ const getSavedRecipes = asyncHandler(async (req: Request, res: Response) => {
   const savedRecipes = await RecipeModel.find({
     _id: { $in: user?.savedRecipes },
   });
-  
+
   res.status(200).json(savedRecipes);
 });
 

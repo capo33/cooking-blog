@@ -9,7 +9,7 @@ import { Recipe } from "../interfaces/RecipeInterface";
 const Home = () => {
   const { recipes } = useAppSelector((state) => state.recipe);
   const { user } = useAppSelector((state) => state.auth);
-console.log(recipes);
+  console.log('recipes', recipes);
 
   const dispatch = useAppDispatch();
 
@@ -17,9 +17,9 @@ console.log(recipes);
   const userID = user?._id;
 
   useEffect(() => {
-
     dispatch(getAllRecipes());
-  }, [dispatch, token, userID]);
+  }, [dispatch]);
+
   return (
     <div>
       <div className='max-w-screen-xl mx-auto p-5 sm:p-10 md:p-16'>
@@ -35,45 +35,47 @@ console.log(recipes);
         </div>
 
         <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10'>
-          <div className='rounded overflow-hidden shadow-lg flex flex-col'>
-              {recipes.map((recipe:Recipe) => (
-                <div   className='flex flex-col'>
-                  <img
-                    className='w-full'
-                    src={recipe?.image}
-                    alt={recipe?.name}
+          {recipes && recipes?.map((recipe: Recipe) => (
+            <>
+            {console.log(recipe.image)}
+            <div className='rounded overflow-hidden shadow-lg flex flex-col'>
+              <div className='flex flex-col'>
+                <img
+                  className='w-full'
+                  src={recipe?.image}
+                  alt={recipe?.name}
                   />
-                  <div className='px-6 py-4'>
-                    <div className='font-bold text-xl mb-2'>
-                      {recipe?.name}
-                    </div>
-                    <p className='text-gray-700 text-base'>
-                      {recipe?.instructions}
-                    </p>
-                  </div>
-                  <div className='px-6 pt-4 pb-2'>
-                    <span className='inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2'>
-                      {recipe?.category}
-                    </span>
-                    <span className='inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2'>
-                      {recipe?.name}
-                    </span>
-                    <span className='inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2'>
-                      {recipe?.owner?.name}
-                    </span>
-                  </div>
+                <div className='px-6 py-4'>
+                  <div className='font-bold text-xl mb-2'>{recipe?.name}</div>
+                  <p className='text-gray-700 text-base'>
+                    {recipe?.instructions}
+                  </p>
                 </div>
-              ))}
-          </div>
+                <div className='px-6 pt-4 pb-2'>
+                  <span className='inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2'>
+                    {recipe?.category}
+                  </span>
+                  <span className='inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2'>
+                    {recipe?.name}
+                  </span>
+                  <span className='inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2'>
+                    {recipe?.owner?.name}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </>
+          ))}
         </div>
       </div>
-    </div>
+      </div>
   );
 };
 
 export default Home;
 
-{/* <Link to='/'>
+{
+  /* <Link to='/'>
               <img
                 className='w-full'
                 src='https://images.pexels.com/photos/61180/pexels-photo-61180.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500'
@@ -124,4 +126,5 @@ export default Home;
                 </Link>
                 <p className='text-gray-600'>Aug 18</p>
               </div>
-            </div> */}
+            </div> */
+}

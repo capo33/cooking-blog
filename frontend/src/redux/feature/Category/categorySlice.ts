@@ -5,6 +5,7 @@ import categoryServices from "./categoryServices";
 interface ICategory {
   name: string;
   slug: string;
+  _id: string;
 }
 interface CategoryState {
   categories: ICategory[];

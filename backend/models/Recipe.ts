@@ -19,7 +19,6 @@ const recipeSchema = new Schema<IRecipe>(
     },
     image: {
       type: String,
-      required: [true, "Please enter your image"],
     },
     cookingTime: {
       type: Number,

@@ -7,7 +7,6 @@ import { AuthUser } from "../../../interfaces/AuthInterface";
 // register
 const register = async (formData: AuthUser) => {
   const response = await axios.post(`${AUTH_URL}/register`, formData);
-  console.log("response.data", response.data);
 
   if (response.data) {
     localStorage.setItem("user", JSON.stringify(response.data));
