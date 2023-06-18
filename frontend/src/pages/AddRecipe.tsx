@@ -15,7 +15,7 @@ const AddRecipe = () => {
     instructions: "",
     image: "",
     cookingTime: 0,
-    category: "",
+    category: { _id: "", name: "", slug: "" },
 
     owner: {
       _id: user?._id as string,
@@ -178,7 +178,7 @@ const AddRecipe = () => {
           <label htmlFor='category'>Category</label>
           <select
             name='category'
-            value={recipe.category}
+            value={recipe.category._id}
             onChange={handleChange}
             className='w-full border-2 border-gray-900 dark:border-gray-100 rounded-md p-2 my-2'
           >

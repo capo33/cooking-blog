@@ -6,6 +6,13 @@ export interface Owner {
   isAdmin?: boolean;
 }
 
+export interface Category {
+  _id?: string;
+  name: string;
+  slug: string;
+}
+
+
 export interface Recipe {
   _id?: string;
   name: string;
@@ -13,7 +20,7 @@ export interface Recipe {
   instructions: string;
   image: string;
   cookingTime: number;
-  category: string;
+  category: Category;
   owner: Owner;
 }
 
