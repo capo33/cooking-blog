@@ -22,6 +22,14 @@ export interface Recipe {
   cookingTime: number;
   category: Category;
   owner: Owner;
+  likes?: string[];
+  views?: number;
+  reviews?: string[];
+  rating?: number;
+  numReviews?: number;
+  slug?: string;
+  createdAt?: number;
+  
 }
 
 export interface CreateRecipe {

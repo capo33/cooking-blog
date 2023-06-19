@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { createRecipe } from "../redux/feature/Recipe/recipeSlice";
-import { useAppDispatch, useAppSelector } from "../redux/app/store";
-import { Recipe } from "../interfaces/RecipeInterface";
-import { getAllCategories } from "../redux/feature/Category/categorySlice";
+import { createRecipe } from "../../redux/feature/Recipe/recipeSlice";
+import { useAppDispatch, useAppSelector } from "../../redux/app/store";
+import { Recipe } from "../../interfaces/RecipeInterface";
+import { getAllCategories } from "../../redux/feature/Category/categorySlice";
 import axios from "axios";
 
 const AddRecipe = () => {
