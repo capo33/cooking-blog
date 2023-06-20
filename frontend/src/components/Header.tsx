@@ -30,7 +30,7 @@ const Header = () => {
   };
 
   return (
-    <nav className=' bg-teal-400 shad'>
+    <nav className=' bg-teal-400 shad sticky top-0 z-50'>
       <div className='justify-between px-4 m-auto lg:max-w-7xl md:items-center md:flex md:px-8'>
         <div>
           <div className='flex items-center justify-between py-3 md:py-5 md:block'>

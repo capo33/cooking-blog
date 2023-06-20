@@ -9,7 +9,7 @@ interface Props {
 const BLogCard = ({ recipe }: Props) => {
   return (
     <div key={recipe?._id} >
-      <div className='flex flex-col max-w-lg p-6 space-y-6 overflow-hidden rounded-lg shadow-lg dark:bg-gray-900 dark:text-gray-100'>
+      <div className='flex flex-col max-w-lg p-6 space-y-6 overflow-hidden bg-slate-200 rounded-lg shadow-lg dark:bg-gray-900 dark:text-gray-100'>
         <Link to={`/blog-details/${recipe?._id}`}>
           <div className='flex space-x-4'>
             <img

@@ -12,7 +12,7 @@ function App() {
   const { user } = useAppSelector((state) => state.auth);
 
   return (
-    <div className="container px-5 py-10 mx-auto">
+    <div className='container mx-auto '>
 
     <Router>
       <Header />
