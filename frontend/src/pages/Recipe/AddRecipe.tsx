@@ -1,23 +1,24 @@
-import React, { createRef, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { AiOutlinePlus } from "react-icons/ai";
+import { toast } from "react-toastify";
+import axios from "axios";
 
+import { Recipe } from "../../interfaces/RecipeInterface";
+import Category from "../../components/RecipeForm/Category";
+import RecipeName from "../../components/RecipeForm/RecipeName";
+import CookingTime from "../../components/RecipeForm/CookingTime";
+import Ingredients from "../../components/RecipeForm/Ingredients";
+import Instructions from "../../components/RecipeForm/Instructions";
+import RecipeButton from "../../components/RecipeForm/RecipeButton";
+import UploadPicture from "../../components/RecipeForm/UploadPicture";
 import { createRecipe } from "../../redux/feature/Recipe/recipeSlice";
 import { useAppDispatch, useAppSelector } from "../../redux/app/store";
-import { Recipe } from "../../interfaces/RecipeInterface";
 import { getAllCategories } from "../../redux/feature/Category/categorySlice";
-import axios from "axios";
-import { toast } from "react-toastify";
-import Category from "../../components/RecipeForm/Category";
-import Ingredients from "../../components/RecipeForm/Ingredients";
-import CookingTime from "../../components/RecipeForm/CookingTime";
-import Instructions from "../../components/RecipeForm/Instructions";
-import RecipeName from "../../components/RecipeForm/RecipeName";
-import UploadPicture from "../../components/RecipeForm/UploadPicture";
-import RecipeButton from "../../components/RecipeForm/RecipeButton";
 
 const AddRecipe = () => {
   const { user } = useAppSelector((state) => state.auth);
+  const [uploading, setUploading] = useState(false);
+  const [inputValue, setInputValue] = useState("");
   const [recipe, setRecipe] = useState<Recipe>({
     name: "",
     ingredients: [],
@@ -30,37 +31,7 @@ const AddRecipe = () => {
       _id: user?._id as string,
     },
   });
-  const [uploading, setUploading] = useState(false);
-  const [inputValue, setInputValue] = useState("");
 
-  // useEffect(() => {
-  //   if (recipe) {
-  //     const defaultIngredient = recipe.ingredients as string[];
-
-  //     defaultIngredient.map((ingredient) => {
-  //      return setRecipe((prevRecipe) => ({
-  //         ...prevRecipe,
-  //         ingredients: [...prevRecipe.ingredients, ingredient],
-  //       }));
-  //     });
-  //   }
-  // }, [recipe]);
-
-  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    setRecipe((prevRecipe) => ({
-      ...prevRecipe,
-      ingredients: [...prevRecipe.ingredients, inputValue],
-    }));
-    setInputValue("");
-  };
-
-  const handleDelete = (ingredient: string) => {
-    const newIngredients = recipe.ingredients.filter(
-      (ing) => ing !== ingredient
-    );
-    setRecipe({ ...recipe, ingredients: newIngredients });
-  };
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -70,6 +41,25 @@ const AddRecipe = () => {
     dispatch(getAllCategories());
   }, [dispatch]);
 
+  // Click handler for adding ingredients
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    setRecipe((prevRecipe) => ({
+      ...prevRecipe,
+      ingredients: [...prevRecipe.ingredients, inputValue],
+    }));
+    setInputValue("");
+  };
+
+  // Click handler for deleting ingredients
+  const handleDelete = (ingredient: string) => {
+    const newIngredients = recipe.ingredients.filter(
+      (ing) => ing !== ingredient
+    );
+    setRecipe({ ...recipe, ingredients: newIngredients });
+  };
+
+  // Change handler for input field
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
@@ -82,23 +72,7 @@ const AddRecipe = () => {
     }));
   };
 
-  const addIngredient = () => {
-    // we are updating the ingredients array by adding a new empty string
-    const ingredients = [...recipe.ingredients, ""];
-    setRecipe({ ...recipe, ingredients });
-  };
-
-  const handleIngredientChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    index: number
-  ) => {
-    // we need to copy the array and then update the value at the index we want to update with the new value
-
-    const ingredients = [...recipe.ingredients];
-    ingredients[index] = e.target.value;
-    setRecipe({ ...recipe, ingredients });
-  };
-
+  // Submit handler for form
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     dispatch(createRecipe({ formData: recipe, token }));
@@ -116,6 +90,7 @@ const AddRecipe = () => {
     });
   };
 
+  // Upload image handler
   const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e?.currentTarget?.files?.[0];
     const formData = new FormData();
@@ -128,7 +103,6 @@ const AddRecipe = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log("response", response.data.image);
       setRecipe({ ...recipe, image: response.data.image });
       setUploading(false);
     } catch (error: any) {
@@ -157,9 +131,6 @@ const AddRecipe = () => {
             <div className='shadow sm:rounded-md sm:overflow-hidden'>
               <div className='px-4 py-5 bg-white space-y-6 sm:p-6'>
                 <RecipeName recipe={recipe} handleChange={handleChange} />
-                <Instructions recipe={recipe} handleChange={handleChange} />
-                <CookingTime recipe={recipe} handleChange={handleChange} />
-                <Category recipe={recipe} handleChange={handleChange} />
                 <Ingredients
                   recipe={recipe}
                   handleDelete={handleDelete}
@@ -167,6 +138,9 @@ const AddRecipe = () => {
                   inputValue={inputValue}
                   setInputValue={setInputValue}
                 />
+                <Instructions recipe={recipe} handleChange={handleChange} />
+                <CookingTime recipe={recipe} handleChange={handleChange} />
+                <Category recipe={recipe} handleChange={handleChange} />
                 <UploadPicture
                   handleUpload={handleUpload}
                   uploading={uploading}
