@@ -1,11 +1,20 @@
-import React, { useEffect, useState } from "react";
+import React, { createRef, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { AiOutlinePlus } from "react-icons/ai";
 
 import { createRecipe } from "../../redux/feature/Recipe/recipeSlice";
 import { useAppDispatch, useAppSelector } from "../../redux/app/store";
 import { Recipe } from "../../interfaces/RecipeInterface";
 import { getAllCategories } from "../../redux/feature/Category/categorySlice";
 import axios from "axios";
+import { toast } from "react-toastify";
+import Category from "../../components/RecipeForm/Category";
+import Ingredients from "../../components/RecipeForm/Ingredients";
+import CookingTime from "../../components/RecipeForm/CookingTime";
+import Instructions from "../../components/RecipeForm/Instructions";
+import RecipeName from "../../components/RecipeForm/RecipeName";
+import UploadPicture from "../../components/RecipeForm/UploadPicture";
+import RecipeButton from "../../components/RecipeForm/RecipeButton";
 
 const AddRecipe = () => {
   const { user } = useAppSelector((state) => state.auth);
@@ -21,10 +30,37 @@ const AddRecipe = () => {
       _id: user?._id as string,
     },
   });
-  const [category, setCategory] = useState<string>("");
-  const { categories } = useAppSelector((state) => state.category);
   const [uploading, setUploading] = useState(false);
+  const [inputValue, setInputValue] = useState("");
 
+  // useEffect(() => {
+  //   if (recipe) {
+  //     const defaultIngredient = recipe.ingredients as string[];
+
+  //     defaultIngredient.map((ingredient) => {
+  //      return setRecipe((prevRecipe) => ({
+  //         ...prevRecipe,
+  //         ingredients: [...prevRecipe.ingredients, ingredient],
+  //       }));
+  //     });
+  //   }
+  // }, [recipe]);
+
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    setRecipe((prevRecipe) => ({
+      ...prevRecipe,
+      ingredients: [...prevRecipe.ingredients, inputValue],
+    }));
+    setInputValue("");
+  };
+
+  const handleDelete = (ingredient: string) => {
+    const newIngredients = recipe.ingredients.filter(
+      (ing) => ing !== ingredient
+    );
+    setRecipe({ ...recipe, ingredients: newIngredients });
+  };
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -67,17 +103,17 @@ const AddRecipe = () => {
     e.preventDefault();
     dispatch(createRecipe({ formData: recipe, token }));
     navigate("/");
-    // setRecipe({
-    //   name: "",
-    //   ingredients: [],
-    //   instructions: "",
-    //   image: "",
-    //   cookingTime: 0,
-    //   category: "",
-    //   owner: {
-    //     _id: user?._id as string,
-    //   },
-    // });
+    setRecipe({
+      name: "",
+      ingredients: [],
+      instructions: "",
+      image: "",
+      cookingTime: 0,
+      category: { _id: "", name: "", slug: "" },
+      owner: {
+        _id: user?._id as string,
+      },
+    });
   };
 
   const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -95,108 +131,52 @@ const AddRecipe = () => {
       console.log("response", response.data.image);
       setRecipe({ ...recipe, image: response.data.image });
       setUploading(false);
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
+      toast.error(error?.response?.data?.message);
       setUploading(false);
     }
   };
 
   return (
     <div>
-      <h1>Add Recipe</h1>
-      <form
-        onSubmit={handleSubmit}
-        className='my-20 p-10 max-w-xl mx-auto shadow-md sm:border-0 md:border md:border-gray-900 md:dark:border-gray-100 bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100'
-      >
-        <div>
-          <label htmlFor='name'>Name</label>
-          <input
-            type='text'
-            name='name'
-            value={recipe.name}
-            onChange={handleChange}
-            className='w-full border-2 border-gray-900 dark:border-gray-100 rounded-md p-2 my-2'
-          />
+      <div className='md:grid md:grid-cols-3 md:gap-6'>
+        <div className='md:col-span-1'>
+          <div className='px-4 sm:px-0'>
+            <h3 className='p-5 text-lg font-medium leading-6 text-gray-900'>
+              Create your recipe and share it to the world!
+            </h3>
+            <p className='px-5 text-sm text-gray-600'>
+              "Cooking is like painting or writing a song. Just as there are
+              only so many notes or colors, there are only so many flavors—it’s
+              how you combine them that sets you apart."
+            </p>
+          </div>
         </div>
-        <div>
-          <label htmlFor='ingredients'>Ingredients</label>
-          {recipe.ingredients.map((ingredient, index) => (
-            <input
-              key={index}
-              type='text'
-              name='ingredients'
-              value={ingredient}
-              className='w-full border-2 border-gray-900 dark:border-gray-100 rounded-md p-2 my-2'
-              onChange={(e) => handleIngredientChange(e, index)}
-            />
-          ))}
-          <button
-            type='button'
-            onClick={addIngredient}
-            className='w-full border-2 border-gray-900 dark:border-gray-100 rounded-md p-2 my-2'
-          >
-            Add Ingredient
-          </button>
+        <div className='mt-5 md:mt-0 md:col-span-2'>
+          <form onSubmit={handleSubmit}>
+            <div className='shadow sm:rounded-md sm:overflow-hidden'>
+              <div className='px-4 py-5 bg-white space-y-6 sm:p-6'>
+                <RecipeName recipe={recipe} handleChange={handleChange} />
+                <Instructions recipe={recipe} handleChange={handleChange} />
+                <CookingTime recipe={recipe} handleChange={handleChange} />
+                <Category recipe={recipe} handleChange={handleChange} />
+                <Ingredients
+                  recipe={recipe}
+                  handleDelete={handleDelete}
+                  handleClick={handleClick}
+                  inputValue={inputValue}
+                  setInputValue={setInputValue}
+                />
+                <UploadPicture
+                  handleUpload={handleUpload}
+                  uploading={uploading}
+                />
+              </div>
+              <RecipeButton />
+            </div>
+          </form>
         </div>
-        <div>
-          <label htmlFor='instructions'>Instructions</label>
-          <textarea
-            name='instructions'
-            value={recipe.instructions}
-            className='w-full border-2 border-gray-900 dark:border-gray-100 rounded-md p-2 my-2'
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label htmlFor='image'>Image</label>
-          {/* <input
-            type='text'
-            name='image'
-            value={recipe.image}
-            onChange={handleChange}
-            className='w-full border-2 border-gray-900 dark:border-gray-100 rounded-md p-2 my-2'
-          /> */}
-          <input
-            type='file'
-            name='image'
-            onChange={handleUpload}
-            className='w-full border-2 border-gray-900 dark:border-gray-100 rounded-md p-2 my-2'
-          />
-          {uploading && <p>Uploading image...</p>}
-        </div>
-        <div>
-          <label htmlFor='cookingTime'>Cooking Time</label>
-          <input
-            type='number'
-            name='cookingTime'
-            value={recipe.cookingTime}
-            onChange={handleChange}
-            className='w-full border-2 border-gray-900 dark:border-gray-100 rounded-md p-2 my-2'
-          />
-        </div>
-        <div>
-          <label htmlFor='category'>Category</label>
-          <select
-            name='category'
-            value={recipe.category._id}
-            onChange={handleChange}
-            className='w-full border-2 border-gray-900 dark:border-gray-100 rounded-md p-2 my-2'
-          >
-            <option value=''>Select a category</option>
-            {categories.map((category) => (
-              <option key={category._id} value={category._id}>
-                {category.name}
-              </option>
-            ))}
-          </select>
-        </div>
-        <button
-          type='submit'
-          className='w-full border-2 bg-orange-600 border-gray-900 dark:border-gray-100 rounded-md p-2 my-2'
-        >
-          Add Recipe
-        </button>
-      </form>
+      </div>
     </div>
   );
 };
