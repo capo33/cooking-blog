@@ -7,22 +7,23 @@ import Home from "./pages/Home/Home";
 import Register from "./pages/Auth/Register";
 import Login from "./pages/Auth/Login";
 import AddRecipe from "./pages/Recipe/AddRecipe";
+import RecipeDetails from "./pages/Recipe/RecipeDetails";
 
 function App() {
   const { user } = useAppSelector((state) => state.auth);
 
   return (
-    <div className='container mx-auto '>
-
-    <Router>
-      <Header />
-      <Routes>
-        <Route path='/' element={<Home />} />
-        <Route path='/login' element={<Login />} />
-        <Route path='/register' element={<Register />} />
-        <Route path='/add-recipe' element={<AddRecipe />} />
-      </Routes>
-    </Router>
+    <div className='container mx-auto py-10 px-5'>
+      <Router>
+        <Header />
+        <Routes>
+          <Route path='/' element={<Home />} />
+          <Route path='/login' element={<Login />} />
+          <Route path='/register' element={<Register />} />
+          <Route path='/add-recipe' element={<AddRecipe />} />
+          <Route path='/recipe-details/:id' element={<RecipeDetails />} />
+        </Routes>
+      </Router>
     </div>
   );
 }

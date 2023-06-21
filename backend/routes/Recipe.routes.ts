@@ -23,6 +23,6 @@ router
 
 router.post("/:id/reviews", protect, recipeController.addReview);
 router.get("/savedRecipes/:id", recipeController.getRecipesByUser); // Own recipes
-router.get("/savedRecipes/ids/:id", recipeController.getSavedRecipes);   // Saved recipes
+router.get("/savedRecipes/ids/:id", recipeController.getSavedRecipes); // Saved recipes
 
 export default router;

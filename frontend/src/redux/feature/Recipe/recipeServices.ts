@@ -24,10 +24,29 @@ const createRecipe = async (formData: Recipe, token: string) => {
   return response.data;
 };
 
-// Get saved recipes
-const getRecipesByUserId = async (userID: string, token: string) => {
-  const response = await axios.get(
-    `${RECIPE_URL}/savedRecipes/ids/${userID} `,
+// Save a recipe
+const saveRecipe = async (recipeID: string, userID: string, token: string) => {
+  const response = await axios.put(
+    `${RECIPE_URL}/saveRecipe`,
+    { recipeID, userID },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  return response.data;
+};
+
+// Unsave a recipe
+const unsaveRecipe = async (
+  recipeID: string,
+  userID: string,
+  token: string
+) => {
+  const response = await axios.put(
+    `${RECIPE_URL}/unsaveRecipe`,
+    { recipeID, userID },
     {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -38,17 +57,17 @@ const getRecipesByUserId = async (userID: string, token: string) => {
   return response.data;
 };
 
-// Save a recipe
-const saveRecipe = async (recipeID: string, userID: string, token: string) => {
-  const response = await axios.put(
-    `${RECIPE_URL}`,
-    { recipeID, userID },
+// Get saved recipes
+const getRecipesByUserId = async (userID: string, token: string) => {
+  const response = await axios.get(
+    `${RECIPE_URL}/savedRecipes/ids/${userID}`,
     {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     }
   );
+
   return response.data;
 };
 
@@ -60,11 +79,11 @@ const getRecipeById = async (userID: string) => {
 
 // Update a recipe
 const updateRecipe = async (
-  recipeId: string,
+  recipeID: string,
   formData: Recipe,
   token: string
 ) => {
-  const response = await axios.put(`${RECIPE_URL}/${recipeId}`, formData, {
+  const response = await axios.put(`${RECIPE_URL}/${recipeID}`, formData, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -73,8 +92,8 @@ const updateRecipe = async (
 };
 
 // Delete a recipe
-const deleteRecipe = async (recipeId: string, token: string) => {
-  const response = await axios.delete(`${RECIPE_URL}/${recipeId}`, {
+const deleteRecipe = async (recipeID: string, token: string) => {
+  const response = await axios.delete(`${RECIPE_URL}/${recipeID}`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -97,6 +116,7 @@ const recipeService = {
   createRecipe,
   getRecipesByUserId,
   saveRecipe,
+  unsaveRecipe,
   getRecipeById,
   updateRecipe,
   deleteRecipe,

@@ -135,11 +135,10 @@ const saveRecipe = asyncHandler(async (req: Request, res: Response) => {
   }
 
   // Check if the user is the owner of the recipe
-  if (recipe.owner.toString() === req?.user?._id.toString()) {
-    res.status(401);
-
-    throw new Error("You cannot save your own recipe");
-  }
+  // if (recipe.owner.toString() === req?.user?._id.toString()) {
+  //   res.status(401);
+  //   throw new Error("You cannot save your own recipe");
+  // }
 
   // Check if the recipe is already saved
   const isSaved = user?.savedRecipes.includes(recipe._id);
@@ -176,11 +175,11 @@ const unsaveRecipe = asyncHandler(async (req: Request, res: Response) => {
   }
 
   // Check if the user is the owner of the recipe
-  if (recipe.owner.toString() === req.user._id.toString()) {
-    res.status(401);
+  // if (recipe.owner.toString() === req.user._id.toString()) {
+  //   res.status(401);
 
-    throw new Error("You cannot unsave your own recipe");
-  }
+  //   throw new Error("You cannot unsave your own recipe");
+  // }
 
   // Check if the recipe is already unsaved
   const isUnsaved = user?.savedRecipes.includes(recipe._id);

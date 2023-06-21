@@ -11,8 +11,7 @@ import { useAppDispatch, useAppSelector } from "../../redux/app/store";
 const Home = () => {
   const { recipes } = useAppSelector((state) => state.recipe);
   const { user } = useAppSelector((state) => state.auth);
-  console.log("recipes", recipes);
-
+ 
   const dispatch = useAppDispatch();
 
   const token = user?.token;

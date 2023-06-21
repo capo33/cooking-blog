@@ -39,7 +39,7 @@ const Ingredients = ({
             />
 
             <div className='mt-2 sm:mt-0 sm:ml-4'>
-              <div className='-m-1 flex flex-wrap items-center'>
+              <div className='m-1 flex flex-wrap items-center'>
                 {recipe.ingredients.map((ingredient) => (
                   <span
                     key={ingredient}
@@ -100,14 +100,13 @@ const Ingredients = ({
               <span className='ml-3'>
                 <button
                   type='button'
-                  className='bg-white inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500'
+                  className='bg-white inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 hover:bg-gray-50 focus:outline-none ´'
                   onClick={handleClick}
                 >
                   <AiOutlinePlus
                     className='h-5 w-5 text-gray-400'
                     aria-hidden='true'
                   />
-                  <span>Add</span>
                 </button>
               </span>
             </div>
