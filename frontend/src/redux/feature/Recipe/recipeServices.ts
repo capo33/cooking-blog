@@ -23,6 +23,15 @@ const createRecipe = async (formData: Recipe, token: string) => {
   );
   return response.data;
 };
+// Update a recipe image
+const uploadRecipeImage = async (data: string, token: string) => {
+  const response = await axios.post(`${UPLOAD_URL}`, data, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+};
 
 // Save a recipe
 const saveRecipe = async (recipeID: string, userID: string, token: string) => {
@@ -57,6 +66,12 @@ const unsaveRecipe = async (
   return response.data;
 };
 
+// Get a recipe by ID
+const getRecipeById = async (userID: string) => {
+  const response = await axios.get(`${RECIPE_URL}/savedRecipes/${userID}`);
+  return response.data;
+};
+
 // Get saved recipes
 const getRecipesByUserId = async (userID: string, token: string) => {
   const response = await axios.get(
@@ -71,11 +86,6 @@ const getRecipesByUserId = async (userID: string, token: string) => {
   return response.data;
 };
 
-// Get a recipe by ID
-const getRecipeById = async (userID: string) => {
-  const response = await axios.get(`${RECIPE_URL}/savedRecipes/${userID}`);
-  return response.data;
-};
 
 // Update a recipe
 const updateRecipe = async (
@@ -101,15 +111,6 @@ const deleteRecipe = async (recipeID: string, token: string) => {
   return response.data;
 };
 
-// Update a recipe image
-const uploadRecipeImage = async (data: string, token: string) => {
-  const response = await axios.post(`${UPLOAD_URL}`, data, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-  return response.data;
-};
 
 const recipeService = {
   getAllRecipes,

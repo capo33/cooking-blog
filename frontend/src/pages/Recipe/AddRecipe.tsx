@@ -11,7 +11,7 @@ import Ingredients from "../../components/RecipeForm/Ingredients";
 import Instructions from "../../components/RecipeForm/Instructions";
 import RecipeButton from "../../components/RecipeForm/RecipeButton";
 import UploadPicture from "../../components/RecipeForm/UploadPicture";
-import { createRecipe } from "../../redux/feature/Recipe/recipeSlice";
+// import { createRecipe } from "../../redux/feature/Recipe/recipeSlice";
 import { useAppDispatch, useAppSelector } from "../../redux/app/store";
 import { getAllCategories } from "../../redux/feature/Category/categorySlice";
 
@@ -75,7 +75,7 @@ const AddRecipe = () => {
   // Submit handler for form
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(createRecipe({ formData: recipe, token }));
+    // dispatch(createRecipe({ formData: recipe, token }));
     navigate("/");
     setRecipe({
       name: "",

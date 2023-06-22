@@ -12,12 +12,11 @@ import { IRecipe } from "../interfaces/recipeInterface";
 const getRecipes = asyncHandler(async (req: Request, res: Response) => {
   const recipes = await RecipeModel.find()
     .populate("owner", "-password")
-    .populate("category");
-
-  if (recipes?.length === 0) {
-    res.status(404);
-    throw new Error("No recipes found");
-  }
+ 
+  // if (recipes?.length === 0) {
+  //   res.status(404)
+  //   throw new Error("No recipes found");
+  // }
 
   res.status(200).json(recipes);
 });

@@ -7,6 +7,8 @@ import BLogCard from "../../components/BLogCard/BLogCard";
 import { Recipe } from "../../interfaces/RecipeInterface";
 import { getAllRecipes } from "../../redux/feature/Recipe/recipeSlice";
 import { useAppDispatch, useAppSelector } from "../../redux/app/store";
+import { getProfile } from "../../redux/feature/Auth/authSlice";
+import { toast } from "react-toastify";
 
 const Home = () => {
   const { recipes } = useAppSelector((state) => state.recipe);
@@ -19,7 +21,8 @@ const Home = () => {
 
   useEffect(() => {
     dispatch(getAllRecipes());
-  }, [dispatch]);
+    dispatch(getProfile({token , toast}));
+  }, [dispatch, token, userID]);
 
   return (
     <>

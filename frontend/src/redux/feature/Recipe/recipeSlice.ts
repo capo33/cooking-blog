@@ -186,51 +186,51 @@ const recipeSlice = createSlice({
     });
 
     // Save a recipe
-    // builder.addCase(saveRecipe.pending, (state) => {
-    //   state.isLoading = true;
-    // });
-    // builder.addCase(saveRecipe.fulfilled, (state, { payload }) => {
-    //   state.isLoading = false;
-    //   state.isSuccess = true;
-    //   state.savedRecipes = payload as Recipe[];
-    // });
-    // builder.addCase(saveRecipe.rejected, (state, { payload }) => {
-    //   state.isLoading = false;
-    //   state.isError = true;
-    //   state.message = payload as string;
-    // });
-
-    // // Unsave a recipe
-    // builder.addCase(unsaveRecipe.pending, (state) => {
-    //   state.isLoading = true;
-    // });
-    // builder.addCase(unsaveRecipe.fulfilled, (state, { payload }) => {
-    //   state.isLoading = false;
-    //   state.isSuccess = true;
-    //   state.savedRecipes = payload as Recipe[];
-    // });
-    // builder.addCase(unsaveRecipe.rejected, (state, { payload }) => {
-    //   state.isLoading = false;
-    //   state.isError = true;
-    //   state.message = payload as string;
-    // });
-
-    // Upload images
-    builder.addCase(uploadImages.pending, (state) => {
+    builder.addCase(saveRecipe.pending, (state) => {
       state.isLoading = true;
     });
-    builder.addCase(uploadImages.fulfilled, (state, { payload }) => {
-      console.log(payload);
-
+    builder.addCase(saveRecipe.fulfilled, (state, { payload }) => {
       state.isLoading = false;
       state.isSuccess = true;
-      state.recipes = payload;
+      state.savedRecipes = payload as Recipe[];
     });
-    builder.addCase(uploadImages.rejected, (state, { payload }) => {
+    builder.addCase(saveRecipe.rejected, (state, { payload }) => {
       state.isLoading = false;
       state.isError = true;
       state.message = payload as string;
     });
+
+    // Unsave a recipe
+    builder.addCase(unsaveRecipe.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(unsaveRecipe.fulfilled, (state, { payload }) => {
+      state.isLoading = false;
+      state.isSuccess = true;
+      state.savedRecipes = payload as Recipe[];
+    });
+    builder.addCase(unsaveRecipe.rejected, (state, { payload }) => {
+      state.isLoading = false;
+      state.isError = true;
+      state.message = payload as string;
+    });
+
+    // Upload images
+  //   builder.addCase(uploadImages.pending, (state) => {
+  //     state.isLoading = true;
+  //   });
+  //   builder.addCase(uploadImages.fulfilled, (state, { payload }) => {
+  //     console.log(payload);
+
+  //     state.isLoading = false;
+  //     state.isSuccess = true;
+  //     state.recipes = payload;
+  //   });
+  //   builder.addCase(uploadImages.rejected, (state, { payload }) => {
+  //     state.isLoading = false;
+  //     state.isError = true;
+  //     state.message = payload as string;
+  //   });
   },
 });
 

@@ -22,7 +22,7 @@ const Header = () => {
 
   const handleLogout = () => {
     dispatch(logout());
-    navigate("/");
+    navigate("/login");
   };
 
   const handleDropdown = () => {
@@ -138,10 +138,10 @@ const Header = () => {
                           </li>
                         )}
                         <div
-                          onClick={handleLogout}
+                          
                           className='py-1.5 px-4 hover:bg-teal-400 rounded cursor-pointer flex justify-between'
                         >
-                          <Link to='/login'>Logout</Link>
+                          <Link to='/login' onClick={handleLogout}>Logout</Link>
                           <CiLogout className='w-6 h-6' />
                         </div>
                       </ul>

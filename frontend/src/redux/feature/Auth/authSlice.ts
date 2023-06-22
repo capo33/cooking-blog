@@ -14,7 +14,7 @@ interface AuthState {
 }
 
 const initialState: AuthState = {
-  user: user? user : null,
+  user: user ? user : null,
   isError: false,
   isLoading: false,
   isSuccess: false,
@@ -71,7 +71,29 @@ export const logout = createAsyncThunk("auth/logout", async () => {
   authServices.logout();
 });
 
-
+interface profile {
+  token: string;
+  toast: any;
+}
+// Get user profile
+export const getProfile = createAsyncThunk(
+  "auth/getProfile",
+  async ({ token, toast }: any, { rejectWithValue }) => {
+    try {
+      const response = await authServices.getProfile(token);
+      return response;
+    } catch (error: unknown | any) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      toast.error(message);
+      return rejectWithValue(message);
+    }
+  }
+);
 const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -96,7 +118,7 @@ const authSlice = createSlice({
     builder.addCase(register.rejected, (state, action) => {
       state.isLoading = false;
       state.isError = true;
-      state.message = action.payload  as string;
+      state.message = action.payload as string;
     });
 
     // Login a user
@@ -124,6 +146,21 @@ const authSlice = createSlice({
       state.user = null;
     });
     builder.addCase(logout.rejected, (state, { payload }) => {
+      state.isLoading = false;
+      state.isError = true;
+      state.message = payload as string;
+    });
+
+    // Get user profile
+    builder.addCase(getProfile.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(getProfile.fulfilled, (state, { payload }) => {
+      state.isLoading = false;
+      state.isSuccess = true;
+      state.user = payload;
+    });
+    builder.addCase(getProfile.rejected, (state, { payload }) => {
       state.isLoading = false;
       state.isError = true;
       state.message = payload as string;
