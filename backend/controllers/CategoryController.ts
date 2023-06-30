@@ -2,91 +2,111 @@ import slugify from "slugify";
 import { Request, Response } from "express";
 
 import CategoryModel from "../models/Category";
-import asyncHandler from "../middlewares/asyncHandler";
 
 // @desc    Get all categories
 // @route   GET /api/v1/categories
 // @access  Public
-const getCategories = asyncHandler(async (req: Request, res: Response) => {
-  const categories = await CategoryModel.find({});
+const getCategories = async (req: Request, res: Response) => {
+  try {
+    const categories = await CategoryModel.find({});
 
-  res.status(200).json(categories);
-});
+    res.status(200).json(categories);
+  } catch (error: unknown | any) {
+    res.status(500).json({ message: error.message });
+  }
+};
 
-// @desc    Get a category by id
+// @desc    Get a category by slug
 // @route   GET /api/v1/categories/:slug
 // @access  Public
-const getCategory = asyncHandler(async (req: Request, res: Response) => {
-  const { slug } = req.params;
-  const category = await CategoryModel.findOne({ slug });
+const getCategory = async (req: Request, res: Response) => {
+  try {
+    const { slug } = req.params;
+    const category = await CategoryModel.findOne({ slug });
 
-  if (!category) {
-    res.status(404);
-    throw new Error("Category not found");
+    if (!category) {
+      return res.status(404).json({ message: "Category not found" });
+    }
+
+    res.status(200).json(category);
+  } catch (error: unknown | any) {
+    res.status(500).json({ message: error.message });
   }
-
-  res.status(200).json(category);
-});
+};
 
 // @desc    Create a category
 // @route   POST /api/v1/categories
 // @access  Private/Admin
-const createCategory = asyncHandler(async (req: Request, res: Response) => {
-  const { name } = req.body;
+const createCategory = async (req: Request, res: Response) => {
+  try {
+    const { name, image } = req.body;
+    const category = await CategoryModel.create({
+      name,
+      slug: slugify(name),
+      image,
+    });
 
-  const category = await CategoryModel.create({
-    name,
-    slug: slugify(name, { lower: true }),
-  });
-
-  res.status(201).json({
-    success: true,
-    message: "Category created successfully",
-    category,
-  });
-});
+    res.status(201).json({
+      success: true,
+      message: "Category created successfully",
+      category,
+    });
+  } catch (error: unknown | any) {
+    res.status(500).json({ message: error });
+  }
+};
 
 // @desc    Update a category
 // @route   PUT /api/v1/categories/:id
 // @access  Private/Admin
-const updateCategory = asyncHandler(async (req: Request, res: Response) => {
-  const { id } = req.params;
-  const { name } = req.body;
+const updateCategory = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const category = await CategoryModel.findById(id);
 
-  const updatedCategory = await CategoryModel.findByIdAndUpdate(
-    id,
-    {
-      name,
-      slug: slugify(name, { lower: true }),
-    },
-    { new: true }
-  );
+    if (!category) {
+      return res.status(404).json({ message: "Category not found" });
+    }
 
-  res.status(200).json({
-    success: true,
-    message: "Category updated successfully",
-    updatedCategory,
-  });
-});
+    const updatedCategory = await CategoryModel.findByIdAndUpdate(
+      id,
+      req.body,
+      { new: true }
+    );
+
+    res.status(200).json({
+      success: true,
+      message: "Category updated successfully",
+      updatedCategory,
+    });
+  } catch (error: unknown | any) {
+    res.status(500).json({ message: error.message });
+  }
+};
 
 // @desc    Delete a category
 // @route   DELETE /api/v1/categories/:id
 // @access  Private/Admin
-const deleteCategory = asyncHandler(async (req: Request, res: Response) => {
-  const { id } = req.params;
-  const deletedCat = await CategoryModel.findOne({ _id: id });
+// @access  Private/Admin
+const deleteCategory = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const category = await CategoryModel.findById(id);
 
-  if (!deletedCat) {
-    res.status(404);
-    throw new Error("Category not found");
+    if (!category) {
+      return res.status(404).json({ message: "Category not found" });
+    }
+
+    await category.deleteOne();
+
+    res.status(200).json({
+      success: true,
+      message: "Category deleted successfully",
+    });
+  } catch (error: unknown | any) {
+    res.status(500).json({ message: error.message });
   }
-
-  await deletedCat.deleteOne();
-  res.status(200).json({
-    success: true,
-    message: "Category deleted successfully",
-  });
-});
+};
 
 export {
   getCategories,

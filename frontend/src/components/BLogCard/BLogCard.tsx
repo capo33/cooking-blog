@@ -7,25 +7,24 @@ import { useAppDispatch, useAppSelector } from "../../redux/app/store";
 import { formatDate, subStringFunc, uperCaseFirstLetter } from "../../utils";
 
 import {
-  getAllRecipes, getSavedRecipes,
-  // getSavedRecipes,
-  // saveRecipe,
-  // unsaveRecipe,
+  getAllRecipes,
+  getSavedRecipes,
+  saveRecipe,
+  unsaveRecipe,
 } from "../../redux/feature/Recipe/recipeSlice";
 
-interface Props {
+interface RecipeCardProps {
   recipe: Recipe;
 }
 
-const BLogCard = ({ recipe }: Props) => {
-  const { savedRecipes } = useAppSelector((state) => state.recipe);
-
+const BLogCard = ({ recipe }: RecipeCardProps) => {
   const { user } = useAppSelector((state) => state.auth);
+  const { savedRecipes } = useAppSelector((state) => state.recipe);
 
   const dispatch = useAppDispatch();
 
   const token = user?.token as string;
-  const userID = user?._id as string;
+  const userID = user?.result?._id as string;
   const recipesIDs = savedRecipes?.map((recipe) => recipe._id);
 
   // const isSaved = savedRecipes?.find((item) => item._id === recipe?._id);
@@ -35,30 +34,28 @@ const BLogCard = ({ recipe }: Props) => {
     // dispatch(getAllRecipes());
   }, [dispatch, userID, token]);
 
-  
+  const handleSaveRecipe = (recipeID: string) => {
+    dispatch(
+      saveRecipe({
+        recipeID,
+        userID,
+        token,
+      })
+    );
+  };
 
-  // const handleSaveRecipe = (recipeID: string) => {
-  //   dispatch(
-  //     saveRecipe({
-  //       recipeID,
-  //       userID,
-  //       token,
-  //     })
-  //   );
-  // };
-
-  // const handleUnsaveRecipe = (recipeID: string) => {
-  //   dispatch(
-  //     unsaveRecipe({
-  //       recipeID,
-  //       userID,
-  //       token,
-  //     })
-  //   );
-  // };
+  const handleUnsaveRecipe = (recipeID: string) => {
+    dispatch(
+      unsaveRecipe({
+        recipeID,
+        userID,
+        token,
+      })
+    );
+  };
   return (
     <div key={recipe?._id}>
-        <div className='flex flex-col max-w-lg p-6 space-y-6 overflow-hidden   rounded-lg shadow-lg dark:bg-gray-900 dark:text-gray-100'>
+      <div className='flex flex-col max-w-lg p-6 space-y-6 overflow-hidden   rounded-lg shadow-lg dark:bg-gray-900 dark:text-gray-100'>
         <Link to={`/recipe-details/${recipe?._id}`}>
           <div className='flex space-x-4'>
             <img
@@ -80,7 +77,7 @@ const BLogCard = ({ recipe }: Props) => {
           <div>
             <img
               src={recipe?.image}
-              alt='cards'
+              alt={recipe?.name}
               className='object-cover w-full mb-4 h-60 p-1 rounded-lg sm:h-72 dark:bg-gray-500'
             />
 
@@ -96,11 +93,11 @@ const BLogCard = ({ recipe }: Props) => {
         <div className='flex flex-wrap justify-between'>
           <div className='space-x-2'>
             <button
-              // onClick={() => {
-              //   recipesIDs?.includes(recipe?._id)
-              //     ? handleUnsaveRecipe(recipe?._id as string)
-              //     : handleSaveRecipe(recipe?._id as string);
-              // }}
+              onClick={() => {
+                recipesIDs?.includes(recipe?._id)
+                  ? handleUnsaveRecipe(recipe?._id as string)
+                  : handleSaveRecipe(recipe?._id as string);
+              }}
               type='button'
               disabled={!user}
               style={!user ? { cursor: "not-allowed" } : { cursor: "pointer" }}

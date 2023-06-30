@@ -39,7 +39,7 @@ const UploadPicture = ({ uploading, handleUpload }: UploadPictureProps) => {
                 type='file'
                 name='image'
                 onChange={handleUpload}
-                className='  outline-none'
+                className='outline-none'
               />
             </label>
           </div>

@@ -16,9 +16,9 @@ const Header = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const avatar = user?.avatar;
+  const avatar = user?.result?.avatar;
   const token = user?.token;
-  const admin = user?.isAdmin;
+  const admin = user?.result?.isAdmin;
 
   const handleLogout = () => {
     dispatch(logout());
@@ -87,7 +87,7 @@ const Header = () => {
                       type='button'
                       data-dropdown-toggle='dropdown'
                     >
-                      {user?.name ? uperCaseFirstLetter(user?.name) : null}
+                      {user?.result?.name ? uperCaseFirstLetter(user?.result?.name) : null}
                       {isDropdownOpen ? (
                         <AiOutlineUp className='w-4 h-4 ml-2' />
                       ) : (
@@ -103,10 +103,10 @@ const Header = () => {
                     >
                       <div className='px-4 py-3'>
                         <span className='block text-sm'>
-                          Signed in as {user?.isAdmin ? "Admin" : "User"}
+                          Signed in as {admin ? "Admin" : "User"}
                         </span>
                         <span className='block text-sm font-medium text-gray-900 truncate'>
-                          {user?.email}
+                          {user?.result?.email}
                         </span>
                       </div>
                       <ul className='py-1' aria-labelledby='dropdown'>

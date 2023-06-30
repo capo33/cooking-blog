@@ -14,6 +14,7 @@ import UploadPicture from "../../components/RecipeForm/UploadPicture";
 // import { createRecipe } from "../../redux/feature/Recipe/recipeSlice";
 import { useAppDispatch, useAppSelector } from "../../redux/app/store";
 import { getAllCategories } from "../../redux/feature/Category/categorySlice";
+import { createRecipe } from "../../redux/feature/Recipe/recipeSlice";
 
 const AddRecipe = () => {
   const { user } = useAppSelector((state) => state.auth);
@@ -28,7 +29,7 @@ const AddRecipe = () => {
     category: { _id: "", name: "", slug: "" },
 
     owner: {
-      _id: user?._id as string,
+      _id: user?.result._id as string,
     },
   });
 
@@ -75,7 +76,7 @@ const AddRecipe = () => {
   // Submit handler for form
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // dispatch(createRecipe({ formData: recipe, token }));
+    dispatch(createRecipe({ formData: recipe, token }));
     navigate("/");
     setRecipe({
       name: "",
@@ -85,7 +86,7 @@ const AddRecipe = () => {
       cookingTime: 0,
       category: { _id: "", name: "", slug: "" },
       owner: {
-        _id: user?._id as string,
+        _id: user?.result._id as string,
       },
     });
   };
