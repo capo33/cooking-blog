@@ -8,6 +8,7 @@ import Register from "./pages/Auth/Register";
 import Login from "./pages/Auth/Login";
 import AddRecipe from "./pages/Recipe/AddRecipe";
 import RecipeDetails from "./pages/Recipe/RecipeDetails";
+import Nav from "./components/Nav";
 
 function App() {
   const { user } = useAppSelector((state) => state.auth);
@@ -15,6 +16,7 @@ function App() {
   return (
     <div className='container mx-auto py-10 px-5'>
       <Router>
+        {/* <Nav /> */}
         <Header />
         <Routes>
           <Route path='/' element={<Home />} />

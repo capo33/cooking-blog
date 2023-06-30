@@ -5,16 +5,10 @@ import * as categoryController from "../controllers/CategoryController";
 
 const router = express.Router();
 
-router
-  .route("/")
-  .get(categoryController.getCategories)
-  .post(protect, admin, categoryController.createCategory);
-
+router.get("/", categoryController.getCategories);
 router.get("/:slug", categoryController.getCategory);
-
-router
-  .route("/:id")
-  .put(protect, admin, categoryController.updateCategory)
-  .delete(protect, admin, categoryController.deleteCategory);
+router.post("/", protect, admin, categoryController.createCategory);
+router.put("/:id", protect, admin, categoryController.updateCategory);
+router.delete("/:id", protect, admin, categoryController.deleteCategory);
 
 export default router;

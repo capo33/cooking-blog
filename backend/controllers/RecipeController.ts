@@ -9,302 +9,348 @@ import { IRecipe } from "../interfaces/recipeInterface";
 // @desc    GET all recipes
 // @route   GET /api/v1/recipes
 // @access  Public
-const getRecipes = asyncHandler(async (req: Request, res: Response) => {
-  const recipes = await RecipeModel.find()
-    .populate("owner", "-password")
- 
-  // if (recipes?.length === 0) {
-  //   res.status(404)
-  //   throw new Error("No recipes found");
-  // }
-
-  res.status(200).json(recipes);
-});
+const getRecipes = async (req: Request, res: Response) => {
+  try {
+    const recipes = await RecipeModel.find({})
+      .populate("owner", "name")
+      .populate("category", "name");
+    res.status(200).json(recipes);
+  } catch (error) {
+    if (error instanceof Error) {
+      res.status(500).json({ message: error.message });
+    }
+  }
+};
 
 //@desc     GET a recipe by id
 //@route    GET /api/v1/recipes/:id
 //@access   Public
-const getRecipeById = asyncHandler(async (req: Request, res: Response) => {
-  const { recipeId } = req.params;
-  const recipe = await RecipeModel.findById(recipeId).populate(
-    "owner",
-    "-password"
-  );
+const getRecipeById = async (req: Request, res: Response) => {
+  try {
+    const { recipeId } = req.params;
 
-  if (!recipe) {
-    res.status(404);
-    throw new Error("Recipe not found");
+    const recipe = await RecipeModel.findById(recipeId)
+      .populate("owner", "-password")
+      .populate("category", "name");
+
+    const views: number = recipe?.views || 0;
+    recipe?.set({ views: views + 1 });
+    await recipe?.save();
+
+    if (!recipe) {
+      res.status(404).json({ message: "Recipe not found" });
+    }
+
+    res.status(200).json(recipe);
+  } catch (error) {
+    if (error instanceof Error) {
+      res.status(500).json({ message: error.message });
+    }
   }
-
-  res.status(200).json(recipe);
-});
+};
 
 //@desc     Create a recipe
 //@route    POST /api/v1/recipes
 //@access   Private
-const createRecipe = asyncHandler(async (req: Request, res: Response) => {
-  if (!req.user) {
-    res.status(401);
-    throw new Error("Not authorized");
+const createRecipe = async (req: Request, res: Response) => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    const newRecipe = await RecipeModel.create({
+      ...req.body,
+      owner: req.user._id,
+    });
+
+    res.status(201).json(newRecipe);
+  } catch (error) {
+    if (error instanceof Error) {
+      res.status(500).json({ message: error.message });
+    }
   }
-
-  const newRecipe = await RecipeModel.create({
-    ...req.body,
-    owner: req.user._id,
-  });
-
-  res.status(201).json(newRecipe);
-});
+};
 
 //@desc     Update a recipe
 //@route    PUT /api/v1/recipes/:id
 //@access   Private
-const updateRecipe = asyncHandler(async (req: Request, res: Response) => {
+const updateRecipe = async (req: Request, res: Response) => {
   const { recipeId } = req.params;
-  if (!req.user) {
-    res.status(401);
-    throw new Error("Not authorized");
+  try {
+    if (!req.user) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    const recipe = await RecipeModel.findById(recipeId);
+    if (!recipe) {
+      return res.status(404).json({ message: "Recipe not found" });
+    }
+
+    // Check if the user is the owner of the recipe
+    if (recipe?.owner.toString() !== req.user?._id.toString()) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    const updatedRecipe = await RecipeModel.findByIdAndUpdate(
+      recipeId,
+      req.body,
+      { new: true }
+    );
+
+    res.status(200).json({
+      success: true,
+      message: "Recipe updated successfully",
+      updatedRecipe,
+    });
+  } catch (error) {
+    if (error instanceof Error) {
+      res.status(500).json({ message: error.message });
+    }
   }
-
-  const recipe = await RecipeModel.findById(recipeId);
-
-  if (!recipe) {
-    res.status(404);
-    throw new Error("Recipe not founds");
-  }
-
-  // Check if the user is the owner of the recipe
-  if (recipe?.owner.toString() !== req.user?._id.toString()) {
-    res.status(401);
-    throw new Error("Not authorized");
-  }
-
-  const updatedRecipe = await RecipeModel.findByIdAndUpdate(
-    recipeId,
-    req.body,
-    { new: true }
-  );
-  console.log(updatedRecipe);
-
-  res.status(200).json(updatedRecipe);
-});
+};
 
 //@desc     Delete a recipe
 //@route    DELETE /api/v1/recipes/:id
 //@access   Private
-const deleteRecipe = asyncHandler(async (req: Request, res: Response) => {
-  if (!req.user) {
-    res.status(401);
-    throw new Error("Not authorized");
+const deleteRecipe = async (req: Request, res: Response) => {
+  const { recipeId } = req.params;
+  try {
+    if (!req.user) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    const recipe = await RecipeModel.findById(recipeId);
+    if (!recipe) {
+      return res.status(404).json({ message: "Recipe not found" });
+    }
+
+    // Check if the user is the owner of the recipe
+    if (recipe?.owner.toString() !== req.user?._id.toString()) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    await RecipeModel.findByIdAndDelete(recipeId);
+
+    res.status(200).json({
+      success: true,
+      message: "Recipe deleted successfully",
+    });
+  } catch (error) {
+    if (error instanceof Error) {
+      res.status(500).json({ message: error.message });
+    }
   }
-
-  const recipe = await RecipeModel.findById(req.params.id);
-
-  if (!recipe) {
-    res.status(404);
-    throw new Error("Recipe not found");
-  }
-
-  // Check if the user is the owner of the recipe
-  if (recipe.owner.toString() !== req.user._id.toString()) {
-    res.status(401);
-    throw new Error("Not authorized");
-  }
-
-  await recipe.deleteOne();
-
-  res.status(200).json({ message: "Recipe deleted successfully" });
-});
+};
 
 // @desc    Save a recipe
 // @route   PUT /api/v1/recipes/:id/save
 // @access  Private
-const saveRecipe = asyncHandler(async (req: Request, res: Response) => {
-  if (!req.user) {
-    res.status(401);
-    throw new Error("Not authorized");
+const saveRecipe = async (req: Request, res: Response) => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    const recipe = await RecipeModel.findById(req.body.recipeID);
+    const user = await UserModel.findById(req.body.userID);
+
+    if (!recipe) {
+      return res.status(404).json({ message: "Recipe not found" });
+    }
+
+    // Check if the user is the owner of the recipe
+    // if (recipe.owner.toString() === req?.user?._id.toString()) {
+    //   res.status(401);
+    //   throw new Error("You cannot save your own recipe");
+    // }
+
+    // Check if the recipe is already saved
+    const isSaved = user?.savedRecipes.includes(recipe._id);
+    if (isSaved) {
+      return res.status(400).json({ message: "Recipe already saved" });
+    }
+
+    // Save the recipe
+    await UserModel.findByIdAndUpdate(req.body.userID, {
+      $push: { savedRecipes: recipe._id },
+    });
+
+    // user?.savedRecipes.push(recipe._id);
+
+    // await user?.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Recipe saved successfully",
+      savedRecipes: user?.savedRecipes,
+    });
+  } catch (error) {
+    if (error instanceof Error) {
+      res.status(500).json({ message: error.message });
+    }
   }
-
-  const recipe = await RecipeModel.findById(req.body.recipeID);
-  const user = await UserModel.findById(req.body.userID);
-
-  if (!recipe) {
-    res.status(404);
-    throw new Error("Recipe not found");
-  }
-
-  // Check if the user is the owner of the recipe
-  // if (recipe.owner.toString() === req?.user?._id.toString()) {
-  //   res.status(401);
-  //   throw new Error("You cannot save your own recipe");
-  // }
-
-  // Check if the recipe is already saved
-  const isSaved = user?.savedRecipes.includes(recipe._id);
-  if (isSaved) {
-    res.status(400);
-    throw new Error("Recipe already saved");
-  }
-
-  user?.savedRecipes.push(recipe._id);
-
-  await user?.save();
-
-  res.status(200).json({
-    message: "Recipe saved successfully",
-    savedRecipes: user?.savedRecipes,
-  });
-});
+};
 
 // @desc    Unsave a recipe
 // @route   PUT /api/v1/recipes/:id/unsave
 // @access  Private
-const unsaveRecipe = asyncHandler(async (req: Request, res: Response) => {
-  if (!req.user) {
-    res.status(401);
-    throw new Error("Not authorized");
+const unsaveRecipe = async (req: Request, res: Response) => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+    const recipe = await RecipeModel.findById(req.body.recipeID);
+    const user = await UserModel.findById(req.body.userID);
+
+    if (!recipe) {
+      return res.status(404).json({ message: "Recipe not found" });
+    }
+
+    // Check if the recipe is already saved
+    const isUnsaved = user?.savedRecipes.includes(recipe._id);
+
+    if (!isUnsaved) {
+      return res.status(400).json({ message: "Recipe not saved" });
+    }
+
+    // Unsave the recipe
+    await UserModel.findByIdAndUpdate(req.body.userID, {
+      $pull: { savedRecipes: recipe._id },
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "Recipe unsaved successfully",
+      savedRecipes: user?.savedRecipes,
+    });
+  } catch (error) {
+    if (error instanceof Error) {
+      res.status(500).json({ message: error.message });
+    }
   }
-
-  const recipe = await RecipeModel.findById(req.body.recipeID);
-  const user = await UserModel.findById(req.body.userID);
-
-  if (!recipe) {
-    res.status(404);
-    throw new Error("Recipe not found");
-  }
-
-  // Check if the user is the owner of the recipe
-  // if (recipe.owner.toString() === req.user._id.toString()) {
-  //   res.status(401);
-
-  //   throw new Error("You cannot unsave your own recipe");
-  // }
-
-  // Check if the recipe is already unsaved
-  const isUnsaved = user?.savedRecipes.includes(recipe._id);
-
-  if (!isUnsaved) {
-    res.status(400);
-    throw new Error("Recipe already unsaved");
-  }
-
-  await UserModel.findByIdAndUpdate(req.body.userID, {
-    $pull: { savedRecipes: recipe._id },
-  });
-
-  res.status(200).json({ message: "Recipe unsaved successfully" });
-});
-
-// @desc    Get saved recipes
-// @route   GET /api/v1/recipes/saved
-// @access  Private
-const getSavedRecipes = asyncHandler(async (req: Request, res: Response) => {
-  const { id } = req.params; // user id
-
-  const user = await UserModel.findById(id).select("-password");
-
-  const savedRecipes = await RecipeModel.find({
-    _id: { $in: user?.savedRecipes },
-  });
-
-  res.status(200).json(savedRecipes);
-});
+};
 
 // @desc    Get recipes by user
 // @route   GET /api/v1/recipes/savedRecipes/:userId
 // @access  Public
-const getRecipesByUser = asyncHandler(async (req: Request, res: Response) => {
-  const { id } = req.params; // user id
+const getRecipesByUser = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params; // user id
+    const user = await UserModel.findById(id)
+      .populate("savedRecipes")
+      .select("-password");
 
-  const user = await UserModel.findById(id)
-    .populate("savedRecipes")
-    .select("-password");
-
-  res.status(200).json({ savedRecipes: user?.savedRecipes });
-});
-
-// @desc    Create a review
-// @route   POST /api/v1/recipes/:id/reviews
-// @access  Private
-const addReview = asyncHandler(async (req: Request, res: Response) => {
-  const { id } = req.params; // recipe id
-  const { rating, comment } = req.body;
-
-  const recipe = await RecipeModel.findById(id);
-
-  if (!recipe) {
-    res.status(404);
-    throw new Error("Recipe not found");
+    res.status(201).json(user?.savedRecipes);
+  } catch (error: unknown | any) {
+    res.status(500).json({ message: error.message });
   }
+};
 
-  const alreadyReviewed = recipe.reviews.find(
-    (r) => r?.user?.toString() === req.user?._id.toString()
-  );
-
-  if (alreadyReviewed) {
-    res.status(400);
-    throw new Error("Recipe already reviewed");
-  }
-
-  const review = {
-    name: req.user?.name,
-    rating: Number(rating),
-    comment: comment,
-    user: req.user?._id,
-  };
-
-  recipe.reviews.push(review as IReview);
-
-  recipe.numReviews = recipe.reviews.length;
-
-  recipe.rating =
-    recipe?.reviews?.reduce((acc, item) => Number(item?.rating) + acc, 0) /
-    recipe.reviews.length;
-
-  await recipe.save();
-
-  res.status(201).json({ message: "Review added" });
-});
-
-// @desc    Like a recipe
-// @route   PUT /api/v1/recipes/like
+// @desc    Get saved recipes
+// @route   GET /api/v1/recipes/savedRecipes/ids/:id
 // @access  Private
-const likeRecipe = asyncHandler(async (req: Request, res: Response) => {
-  const recipe = await RecipeModel.findByIdAndUpdate(
-    req.body.recipeID,
-    {
-      $push: { likes: req.user?._id },
-    },
-    { new: true }
-  );
-  if (!recipe) {
-    res.status(404);
-    throw new Error("Recipe not found");
+const getSavedRecipes = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params; // user id
+
+    const user = await UserModel.findById(id)
+      .populate("savedRecipes")
+      .select("-password");
+
+    const savedRecipes = await RecipeModel.find({
+      _id: { $in: user?.savedRecipes },
+    });
+
+    res.status(200).json(savedRecipes);
+  } catch (error) {
+    if (error instanceof Error) {
+      res.status(500).json({ message: error.message });
+    }
   }
+};
 
-  res.status(200).json({
-    message: "Recipe liked successfully",
-    likes: recipe?.likes,
-  });
-});
+// // @desc    Create a review
+// // @route   POST /api/v1/recipes/:id/reviews
+// // @access  Private
+// const addReview = asyncHandler(async (req: Request, res: Response) => {
+//   const { id } = req.params; // recipe id
+//   const { rating, comment } = req.body;
 
-// @desc    Unlike a recipe
-// @route   PUT /api/v1/recipes/unlike
-// @access  Private
-const unlikeRecipe = asyncHandler(async (req: Request, res: Response) => {
-  const recipe = await RecipeModel.findByIdAndUpdate(
-    req.body.recipeID,
-    {
-      $pull: { likes: req.user?._id },
-    },
-    { new: true }
-  );
+//   const recipe = await RecipeModel.findById(id);
 
-  res.status(200).json({
-    message: "Recipe unliked successfully",
-    likes: recipe?.likes,
-  });
-});
+//   if (!recipe) {
+//     res.status(404);
+//     throw new Error("Recipe not found");
+//   }
+
+//   const alreadyReviewed = recipe.reviews.find(
+//     (r) => r?.user?.toString() === req.user?._id.toString()
+//   );
+
+//   if (alreadyReviewed) {
+//     res.status(400);
+//     throw new Error("Recipe already reviewed");
+//   }
+
+//   const review = {
+//     name: req.user?.name,
+//     rating: Number(rating),
+//     comment: comment,
+//     user: req.user?._id,
+//   };
+
+//   recipe.reviews.push(review as IReview);
+
+//   recipe.numReviews = recipe.reviews.length;
+
+//   recipe.rating =
+//     recipe?.reviews?.reduce((acc, item) => Number(item?.rating) + acc, 0) /
+//     recipe.reviews.length;
+
+//   await recipe.save();
+
+//   res.status(201).json({ message: "Review added" });
+// });
+
+// // @desc    Like a recipe
+// // @route   PUT /api/v1/recipes/like
+// // @access  Private
+// const likeRecipe = asyncHandler(async (req: Request, res: Response) => {
+//   const recipe = await RecipeModel.findByIdAndUpdate(
+//     req.body.recipeID,
+//     {
+//       $push: { likes: req.user?._id },
+//     },
+//     { new: true }
+//   );
+//   if (!recipe) {
+//     res.status(404);
+//     throw new Error("Recipe not found");
+//   }
+
+//   res.status(200).json({
+//     message: "Recipe liked successfully",
+//     likes: recipe?.likes,
+//   });
+// });
+
+// // @desc    Unlike a recipe
+// // @route   PUT /api/v1/recipes/unlike
+// // @access  Private
+// const unlikeRecipe = asyncHandler(async (req: Request, res: Response) => {
+//   const recipe = await RecipeModel.findByIdAndUpdate(
+//     req.body.recipeID,
+//     {
+//       $pull: { likes: req.user?._id },
+//     },
+//     { new: true }
+//   );
+
+//   res.status(200).json({
+//     message: "Recipe unliked successfully",
+//     likes: recipe?.likes,
+//   });
+// });
 
 export {
   getRecipes,
@@ -316,7 +362,7 @@ export {
   unsaveRecipe,
   getSavedRecipes,
   getRecipesByUser,
-  addReview,
-  likeRecipe,
-  unlikeRecipe,
+  // addReview,
+  // likeRecipe,
+  // unlikeRecipe,
 };

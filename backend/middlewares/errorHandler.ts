@@ -12,28 +12,16 @@ const errorHandler = (
   res: Response,
   next: NextFunction
 ) => {
-  let statusCode = res.statusCode === 200 ? 500 : res.statusCode;
-  let message = err.message;
-
-  // Check for Mongoose bad ObjectId
-  if (err.message === "CastError" && err.kind === "ObjectId") {
-    message = "Resource not found";
-    statusCode = 404;
-  }
-
+  const statusCode = err.statusCode || 400;
   res.status(statusCode).json({
     message: err.message,
-    stack: process.env.NODE_ENV === "production" ? "🍮" : err.stack,
+    stack: process.env.NODE_ENV === "production" ? "🍮" : err.stack, // only show stack in development mode
   });
 };
 
 const notFound = (req: Request, res: Response, next: NextFunction) => {
   const error = new Error(`Not Found - ${req.originalUrl}`) as ErrnoException;
   error.statusCode = 404;
-  res.status(404).json({
-    message: error.message,
-    stack: process.env.NODE_ENV === "production" ? "🍮" : error.stack, // only show stack in development mode
-  });
   next(error);
 };
 

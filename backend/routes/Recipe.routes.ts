@@ -5,24 +5,15 @@ import * as recipeController from "../controllers/RecipeController";
 
 const router: Router = Router();
 
-router
-  .route("/")
-  .get(recipeController.getRecipes)
-  .post(protect, recipeController.createRecipe);
-
+router.get("/", recipeController.getRecipes);
+router.get("/:recipeId", recipeController.getRecipeById);
 router.put("/saveRecipe", protect, recipeController.saveRecipe);
 router.put("/unsaveRecipe", protect, recipeController.unsaveRecipe);
-router.put("/like", protect, recipeController.likeRecipe);
-router.put("/unlike", protect, recipeController.unlikeRecipe);
+router.post("/", protect, recipeController.createRecipe);
+router.put("/:recipeId", protect, recipeController.updateRecipe);
+router.delete("/:recipeId", protect, recipeController.deleteRecipe);
 
-router
-  .route("/:recipeId")
-  .get(recipeController.getRecipeById)
-  .put(protect, recipeController.updateRecipe)
-  .delete(protect, recipeController.deleteRecipe);
-
-router.post("/:id/reviews", protect, recipeController.addReview);
-router.get("/savedRecipes/:id", recipeController.getRecipesByUser); // Own recipes
 router.get("/savedRecipes/ids/:id", recipeController.getSavedRecipes); // Saved recipes
+router.get("/savedRecipes/:id", recipeController.getRecipesByUser); // Own recipes
 
 export default router;

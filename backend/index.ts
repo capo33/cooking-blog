@@ -5,13 +5,13 @@ import express, { Application } from "express";
 // Load env vars
 dotenv.config();
 
-import { errorHandler, notFound } from "./middlewares/errorHandler";
 import { connectDB } from "./config/db";
-
 import userRoutes from "./routes/Auth.routes";
 import recipeRoutes from "./routes/Recipe.routes";
 import categoryRoutes from "./routes/Category.routes";
 import uploadRoutes from "./routes/Upload.routes";
+
+import { errorHandler, notFound } from "./middlewares/errorHandler";
 
 // Initialize express
 const app: Application = express();
@@ -25,6 +25,12 @@ connectDB();
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+app.get("/", (req, res) => {
+  res.json({
+    message: "API is running...",
+  });
+});
 
 // Routes
 app.use("/api/v1/auth", userRoutes);
@@ -50,7 +56,7 @@ if (process.env.NODE_ENV === "production") {
   app.get("/", (req, res) => {
     res.json({
       message: "API is running...",
-     });
+    });
   });
 }
 
