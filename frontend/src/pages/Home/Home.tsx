@@ -7,24 +7,21 @@ import BLogCard from "../../components/BLogCard/BLogCard";
 import { Recipe } from "../../interfaces/RecipeInterface";
 import { getAllRecipes } from "../../redux/feature/Recipe/recipeSlice";
 import { useAppDispatch, useAppSelector } from "../../redux/app/store";
-import { getProfile } from "../../redux/feature/Auth/authSlice";
-import { toast } from "react-toastify";
-
+ 
 const Home = () => {
   const { recipes } = useAppSelector((state) => state.recipe);
   const { user } = useAppSelector((state) => state.auth);
- 
+
   const dispatch = useAppDispatch();
 
-  const token = user?.token;
-  const userID = user?.result?._id; 
+  const token = user?.token as string;
+  const userID = user?.result?._id;
 
   useEffect(() => {
     dispatch(getAllRecipes());
-    dispatch(getProfile({token , toast}));
   }, [dispatch, token, userID]);
 
-  return (
+   return (
     <>
       <section className='bg-white dark:bg-gray-900 mb-5'>
         <Landing />

@@ -1,9 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { NavigateFunction } from "react-router-dom";
 
 import categoryServices from "./categoryServices";
 
 interface ICategory {
   name: string;
+  image: string;
   slug: string;
   _id: string;
 }
@@ -65,10 +67,13 @@ export const getCategoryBySlug = createAsyncThunk(
 );
 
 interface CategoryCreate {
-  name: string;
+  categoryData: {
+    name: string;
+    image: string;
+  };
   token: string;
   toast: any;
-  navigate: React.Dispatch<React.SetStateAction<string>>;
+  navigate: NavigateFunction;
   id?: string;
 }
 
@@ -76,11 +81,14 @@ interface CategoryCreate {
 export const createCategory = createAsyncThunk(
   "category/createCategory",
   async (
-    { name, token, toast, navigate }: CategoryCreate,
+    { categoryData, token, toast, navigate }: CategoryCreate,
     { rejectWithValue }
   ) => {
     try {
-      const response = await categoryServices.createCategory(name, token);
+      const response = await categoryServices.createCategory(
+        categoryData,
+        token
+      );
       navigate("/admin/category");
       toast.success(response?.message);
       return response;

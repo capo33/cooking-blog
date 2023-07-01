@@ -1,11 +1,11 @@
-import { useState } from "react";
-import { CiLogout } from "react-icons/ci";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { CiLogout } from "react-icons/ci";
 import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
 import { AiOutlineDown, AiOutlineUp } from "react-icons/ai";
 
 import { uperCaseFirstLetter } from "../utils";
-import { logout } from "../redux/feature/Auth/authSlice";
+import { logout, userProfile } from "../redux/feature/Auth/authSlice";
 import { useAppDispatch, useAppSelector } from "../redux/app/store";
 
 const Header = () => {
@@ -16,9 +16,14 @@ const Header = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const avatar = user?.result?.avatar;
-  const token = user?.token;
-  const admin = user?.result?.isAdmin;
+  const avatar = user?.result?.avatar as string;
+
+  const token = user?.token as string;
+  const admin = user?.result?.isAdmin as boolean;
+
+  useEffect(() => {
+    if (token) dispatch(userProfile(token));
+  }, [dispatch, token]);
 
   const handleLogout = () => {
     dispatch(logout());
@@ -65,14 +70,47 @@ const Header = () => {
             }`}
           >
             <ul className='items-center justify-center space-y-8 md:flex md:space-x-6 md:space-y-0'>
-              <li className='hover:text-slate-500  hover:transition-all '>
-                <Link to='/'>Home</Link>
+              <li>
+                <Link
+                  to='/'
+                  className='hover:text-slate-500  hover:transition-all '
+                >
+                  Home
+                </Link>
               </li>
-
               {token ? (
                 <>
-                  <li className='hover:text-slate-500  hover:transition-all '>
-                    <Link to='/profile'>
+                  <li>
+                    <Link
+                      to='/add-recipe'
+                      className='hover:text-slate-500  hover:transition-all'
+                    >
+                      Add Recipe
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to='/saved-recipes'
+                      className='hover:text-slate-500  hover:transition-all'
+                    >
+                      Saved Recipes
+                    </Link>
+                  </li>
+                    {admin && (
+                      <li>
+                        <Link
+                          to='/categories'
+                          className='hover:text-slate-500  hover:transition-all'
+                        >
+                          Categories
+                        </Link>
+                      </li>
+                    )}
+                  <li>
+                    <Link
+                      to='/profile'
+                      className='hover:text-slate-500  hover:transition-all '
+                    >
                       <img
                         src={avatar}
                         alt='avatar'
@@ -80,20 +118,15 @@ const Header = () => {
                       />
                     </Link>
                   </li>
+                 
+                  <div className='py-1.5 px-4 hover:bg-teal-400 rounded cursor-pointer flex justify-between'>
+                    <Link to='/login' onClick={handleLogout}>
+                      Logout
+                    </Link>
+                    <CiLogout className='w-6 h-6' />
+                  </div>
+
                   <div className=' '>
-                    <button
-                      onClick={handleDropdown}
-                      className='text-white bg-emerald-700 hover:bg-emerald-800 focus:ring-4 outline-none   font-medium rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center'
-                      type='button'
-                      data-dropdown-toggle='dropdown'
-                    >
-                      {user?.result?.name ? uperCaseFirstLetter(user?.result?.name) : null}
-                      {isDropdownOpen ? (
-                        <AiOutlineUp className='w-4 h-4 ml-2' />
-                      ) : (
-                        <AiOutlineDown className='w-4 h-4 ml-2' />
-                      )}
-                    </button>
                     {/* This is the dropdown menu */}
                     <div
                       className={`absolute z-10 mt-2 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 ${
@@ -101,50 +134,7 @@ const Header = () => {
                       }`}
                       id='dropdown'
                     >
-                      <div className='px-4 py-3'>
-                        <span className='block text-sm'>
-                          Signed in as {admin ? "Admin" : "User"}
-                        </span>
-                        <span className='block text-sm font-medium text-gray-900 truncate'>
-                          {user?.result?.email}
-                        </span>
-                      </div>
-                      <ul className='py-1' aria-labelledby='dropdown'>
-                        <li>
-                          <Link
-                            to='/add-recipe'
-                            className='text-sm hover:bg-gray-100 text-gray-700 block px-4 py-2'
-                          >
-                            Add Recipe
-                          </Link>
-                        </li>
-                        <li>
-                          <Link
-                            to='/saved-recipes'
-                            className='text-sm hover:bg-gray-100 text-gray-700 block px-4 py-2'
-                          >
-                            Saved Recipes
-                          </Link>
-                        </li>
-
-                        {admin && (
-                          <li>
-                            <Link
-                              to='/categories'
-                              className='text-sm hover:bg-gray-100 text-gray-700 block px-4 py-2'
-                            >
-                              Categories
-                            </Link>
-                          </li>
-                        )}
-                        <div
-                          
-                          className='py-1.5 px-4 hover:bg-teal-400 rounded cursor-pointer flex justify-between'
-                        >
-                          <Link to='/login' onClick={handleLogout}>Logout</Link>
-                          <CiLogout className='w-6 h-6' />
-                        </div>
-                      </ul>
+                      <ul className='py-1' aria-labelledby='dropdown'></ul>
                     </div>
                   </div>
                 </>

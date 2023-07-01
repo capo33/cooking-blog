@@ -8,6 +8,8 @@ declare global {
         _id: Types.ObjectId;
         isAdmin?: string;
         name?: string;
+        email?: string;
+        avatar?: string;
         // username: string;
       } | null;
     }

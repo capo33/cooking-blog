@@ -12,8 +12,9 @@ import { IRecipe } from "../interfaces/recipeInterface";
 const getRecipes = async (req: Request, res: Response) => {
   try {
     const recipes = await RecipeModel.find({})
-      .populate("owner", "name")
-      .populate("category", "name");
+      .populate("owner", "name avatar")
+      .populate("category", "name image");
+
     res.status(200).json(recipes);
   } catch (error) {
     if (error instanceof Error) {
@@ -60,6 +61,7 @@ const createRecipe = async (req: Request, res: Response) => {
 
     const newRecipe = await RecipeModel.create({
       ...req.body,
+
       owner: req.user._id,
     });
 
@@ -257,11 +259,7 @@ const getSavedRecipes = async (req: Request, res: Response) => {
       .populate("savedRecipes")
       .select("-password");
 
-    const savedRecipes = await RecipeModel.find({
-      _id: { $in: user?.savedRecipes },
-    });
-
-    res.status(200).json(savedRecipes);
+    res.status(200).json({ savedRecipes: user?.savedRecipes });
   } catch (error) {
     if (error instanceof Error) {
       res.status(500).json({ message: error.message });

@@ -15,6 +15,7 @@ import UploadPicture from "../../components/RecipeForm/UploadPicture";
 import { useAppDispatch, useAppSelector } from "../../redux/app/store";
 import { getAllCategories } from "../../redux/feature/Category/categorySlice";
 import { createRecipe } from "../../redux/feature/Recipe/recipeSlice";
+import { userProfile } from "../../redux/feature/Auth/authSlice";
 
 const AddRecipe = () => {
   const { user } = useAppSelector((state) => state.auth);
@@ -26,10 +27,10 @@ const AddRecipe = () => {
     instructions: "",
     image: "",
     cookingTime: 0,
-    category: { _id: "", name: "", slug: "" },
+    category: { _id: "", name: "", image: "", slug: "" },
 
     owner: {
-      _id: user?.result._id as string,
+      _id: user?.result?._id as string,
     },
   });
 
@@ -40,7 +41,12 @@ const AddRecipe = () => {
 
   useEffect(() => {
     dispatch(getAllCategories());
-  }, [dispatch]);
+  }, [dispatch, token]);
+
+  // Get user profile
+  useEffect(() => {
+    dispatch(userProfile(token));
+  }, [dispatch, token]);
 
   // Click handler for adding ingredients
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -84,9 +90,9 @@ const AddRecipe = () => {
       instructions: "",
       image: "",
       cookingTime: 0,
-      category: { _id: "", name: "", slug: "" },
+      category: { _id: "", name: "", image: "", slug: "" },
       owner: {
-        _id: user?.result._id as string,
+        _id: user?.result?._id as string,
       },
     });
   };

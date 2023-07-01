@@ -29,12 +29,13 @@ const logout = () => {
 };
 
 // get user profile
-const getProfile = async(token: string) => {
+const getProfile = async (token: string) => {
   const response = await axios.get(`${AUTH_URL}/profile`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   });
+
   return response.data;
 };
 

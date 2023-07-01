@@ -15,11 +15,15 @@ const getCategoryBySlug = async (slug: string) => {
   return response.data;
 };
 
+interface ICategoryData {
+  name: string;
+  image: string;
+}
 // create category
-const createCategory = async (name: string, token: string) => {
+const createCategory = async (categoryData: ICategoryData, token: string) => {
   const response = await axios.post(
     `${CATEGORY_URL}`,
-    { name },
+    { ...categoryData },
     {
       headers: {
         Authorization: `Bearer ${token}`,

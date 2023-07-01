@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
 import { BsEyeSlashFill, BsEyeFill } from "react-icons/bs";
+import { toast } from "react-toastify";
 
 import { AuthUser } from "../../interfaces/AuthInterface";
 import { login } from "../../redux/feature/Auth/authSlice";

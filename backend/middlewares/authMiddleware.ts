@@ -29,12 +29,14 @@ const protect = async (req: Request, res: Response, next: NextFunction) => {
       next();
     } catch (error) {
       console.error(error);
-      res.status(401).json({ msg: "Not authorized, token failed" });
+      res.status(401);
+      throw new Error("Not authorized, token failed");
     }
   }
   // Check if token exists
   if (!token) {
-    res.status(401).json({ msg: "Not authorized, no token" });
+    res.status(401);
+    throw new Error("Not authorized, no token");
   }
 };
 
@@ -43,7 +45,8 @@ const admin = async (req: Request, res: Response, next: NextFunction) => {
   if (req.user && req.user.isAdmin) {
     next();
   } else {
-    res.status(401).json({ msg: "Not authorized as an admin" });
+    res.status(401);
+    throw new Error("Not authorized as an admin");
   }
 };
 

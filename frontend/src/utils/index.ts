@@ -9,8 +9,7 @@ export const formatDate = (date = Date.now()) => {
   const year = newDate.getFullYear();
   const month = newDate.getMonth() + 1;
   const day = newDate.getDate();
-  const hours = newDate.getHours();
-  return `${day}/${month}/${year} ${hours}:00`;
+  return `${day}/${month}/${year} `;
 };
 
 // render details

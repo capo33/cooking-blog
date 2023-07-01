@@ -38,7 +38,7 @@ export const register = createAsyncThunk(
           error.response.data.message) ||
         error.message ||
         error.toString();
-      toast.error(message);
+      toast.error(error.response?.data?.msg);
       return rejectWithValue(message);
     }
   }
@@ -60,7 +60,7 @@ export const login = createAsyncThunk(
           error.response.data.message) ||
         error.message ||
         error.toString();
-      toast.error(error.response?.data?.message);
+      toast.error(error.response?.data?.msg);
       return rejectWithValue(message);
     }
   }
@@ -71,16 +71,13 @@ export const logout = createAsyncThunk("auth/logout", async () => {
   authServices.logout();
 });
 
-interface profile {
-  token: string;
-  toast: any;
-}
 // Get user profile
-export const getProfile = createAsyncThunk(
-  "auth/getProfile",
-  async ({ token, toast }: any, { rejectWithValue }) => {
+export const userProfile = createAsyncThunk(
+  "auth/userProfile",
+  async (token: string, { rejectWithValue }) => {
     try {
       const response = await authServices.getProfile(token);
+       
       return response;
     } catch (error: unknown | any) {
       const message =
@@ -89,7 +86,6 @@ export const getProfile = createAsyncThunk(
           error.response.data.message) ||
         error.message ||
         error.toString();
-      toast.error(message);
       return rejectWithValue(message);
     }
   }
@@ -152,15 +148,15 @@ const authSlice = createSlice({
     });
 
     // Get user profile
-    builder.addCase(getProfile.pending, (state) => {
+    builder.addCase(userProfile.pending, (state) => {
       state.isLoading = true;
     });
-    builder.addCase(getProfile.fulfilled, (state, { payload }) => {
+    builder.addCase(userProfile.fulfilled, (state, { payload }) => {
       state.isLoading = false;
       state.isSuccess = true;
       state.user = payload;
     });
-    builder.addCase(getProfile.rejected, (state, { payload }) => {
+    builder.addCase(userProfile.rejected, (state, { payload }) => {
       state.isLoading = false;
       state.isError = true;
       state.message = payload as string;

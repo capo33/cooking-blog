@@ -125,7 +125,7 @@ const getProfile = async (req: Request, res: Response) => {
       "-password"
     );
 
-    user?.set({ recipes: recipe });
+    user?.set({ recipes: recipe }); 
     // check user existince
     if (!user) {
       return res.status(404).json({ msg: "User not found" });

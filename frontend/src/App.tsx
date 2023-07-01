@@ -8,21 +8,21 @@ import Register from "./pages/Auth/Register";
 import Login from "./pages/Auth/Login";
 import AddRecipe from "./pages/Recipe/AddRecipe";
 import RecipeDetails from "./pages/Recipe/RecipeDetails";
-import Nav from "./components/Nav";
-
+import ComplexNavbar from "./components/ComplexNavbar";
+ 
 function App() {
   const { user } = useAppSelector((state) => state.auth);
 
   return (
     <div className='container mx-auto py-10 px-5'>
       <Router>
-        {/* <Nav /> */}
-        <Header />
+        <ComplexNavbar />
+         {/* <Header /> */}
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/login' element={<Login />} />
           <Route path='/register' element={<Register />} />
-          <Route path='/add-recipe' element={<AddRecipe />} />
+           <Route path='/add-recipe' element={<AddRecipe />} />
           <Route path='/recipe-details/:id' element={<RecipeDetails />} />
         </Routes>
       </Router>
