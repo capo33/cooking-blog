@@ -119,7 +119,7 @@ const BLogCard = ({ recipe }: RecipeCardProps) => {
       <CardFooter className='pt-3'>
         <Button size='lg' fullWidth={true} className='bg-teal-400'>
           <Link
-            to={`/recipe/${recipe?._id}`}
+            to={`/recipe-details/${recipe?._id}`}
             className='flex items-center justify-center gap-2'
           >
             <span>View Recipe</span>
