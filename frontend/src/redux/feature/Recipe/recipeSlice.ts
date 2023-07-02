@@ -174,7 +174,28 @@ export const deleteRecipe = createAsyncThunk(
   }
 );
 
-
+// update a recipe
+export const updateRecipe = createAsyncThunk(
+  "recipe/updateRecipe",
+  async (
+    { recipeID, formData, token ,toast, navigate}: { recipeID: string; formData: any; token: string, toast: any, navigate: any },
+    thunkAPI
+  ) => {
+    try {
+      const response = await recipeServices.updateRecipe(
+        recipeID,
+        formData,
+        token
+      );
+      thunkAPI.dispatch(getAllRecipes());
+      toast.success("Recipe updated successfully");
+      navigate(`/recipe-details/${recipeID}`);
+      return response;
+    } catch (error: unknown | any) {
+      return thunkAPI.rejectWithValue(error.response.data.message);
+    }
+  }
+);
 const recipeSlice = createSlice({
   name: "recipe",
   initialState,

@@ -4,10 +4,10 @@ import { Recipe } from "../../interfaces/RecipeInterface";
 import { AiOutlinePlus } from "react-icons/ai";
 
 type IngredientProps = {
-  recipe: Recipe;
+  recipe: Recipe | null;
+  inputValue: string;
   handleDelete: (ingredient: string) => void;
   handleClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
-  inputValue: string;
   setInputValue: React.Dispatch<React.SetStateAction<string>>;
 };
 
@@ -40,7 +40,7 @@ const Ingredients = ({
 
             <div className='mt-2 sm:mt-0 sm:ml-4'>
               <div className='m-1 flex flex-wrap items-center'>
-                {recipe.ingredients.map((ingredient) => (
+                {recipe?.ingredients?.map((ingredient) => (
                   <span
                     key={ingredient}
                     className='m-1 inline-flex rounded-full border border-gray-200 items-center py-1.5 pl-3 pr-2 text-sm font-medium bg-white text-gray-900'

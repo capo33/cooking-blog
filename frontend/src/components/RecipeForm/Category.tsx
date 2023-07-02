@@ -5,7 +5,7 @@ import { getAllCategories } from "../../redux/feature/Category/categorySlice";
 import { useAppDispatch, useAppSelector } from "../../redux/app/store";
 
 type CategoryProps = {
-  recipe: Recipe;
+  recipe: Recipe | null;
   handleChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 };
 
@@ -26,7 +26,7 @@ const Category = ({ recipe, handleChange }: CategoryProps) => {
       <select
         id='category'
         name='category'
-        value={recipe.category._id}
+        value={recipe?.category._id}
         onChange={handleChange}
         className='shadow-sm p-2 focus:outline-none focus:ring-teal-500 focus:border-teal-500 mt-1 block  border border-gray-300 rounded-md'
       >

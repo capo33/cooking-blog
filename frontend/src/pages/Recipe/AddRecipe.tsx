@@ -153,7 +153,7 @@ const AddRecipe = () => {
                   uploading={uploading}
                 />
               </div>
-              <RecipeButton />
+              <RecipeButton title="Add recipe"/>
             </div>
           </form>
         </div>
