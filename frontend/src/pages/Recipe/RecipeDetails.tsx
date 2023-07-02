@@ -1,20 +1,23 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-// import { AiFillEdit, TrashIcon } from "react-icons/ai";
-import { TrashIcon, PencilSquareIcon } from "@heroicons/react/24/outline";
-
+import {
+  TrashIcon,
+  PencilSquareIcon,
+  BookmarkIcon,
+  BookmarkSlashIcon,
+} from "@heroicons/react/24/outline";
 import {
   getSingleRecipe,
   saveRecipe,
   unsaveRecipe,
 } from "../../redux/feature/Recipe/recipeSlice";
-import { useAppDispatch, useAppSelector } from "../../redux/app/store";
-import { getAllCategories } from "../../redux/feature/Category/categorySlice";
+import { Typography } from "@material-tailwind/react";
 
-import { userProfile } from "../../redux/feature/Auth/authSlice";
-import { Card, Typography } from "@material-tailwind/react";
 import { formatDate } from "../../utils";
 import Modal from "../../components/Modal/Modal";
+import { userProfile } from "../../redux/feature/Auth/authSlice";
+import { useAppDispatch, useAppSelector } from "../../redux/app/store";
+import { getAllCategories } from "../../redux/feature/Category/categorySlice";
 
 const RecipeDetails = () => {
   const { id } = useParams<{ id: string }>();
@@ -38,6 +41,28 @@ const RecipeDetails = () => {
   };
   const handleConfirmDelete = () => {
     setShowModal((prev) => !prev);
+  };
+
+  // Save Recipe
+  const handleSaveRecipe = (recipeID: string) => {
+    dispatch(
+      saveRecipe({
+        recipeID,
+        userID,
+        token,
+      })
+    );
+  };
+
+  // Unsave Recipe
+  const handleUnsaveRecipe = (recipeID: string) => {
+    dispatch(
+      unsaveRecipe({
+        recipeID,
+        userID,
+        token,
+      })
+    );
   };
 
   return (
@@ -69,14 +94,13 @@ const RecipeDetails = () => {
           className='absolute left-0 top-0 w-full h-full z-0 object-cover'
           alt={recipe?.name}
         />
-
         <div className='p-4 absolute bottom-0 left-0 z-20'>
           <span className='inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2'>
             {recipe?.category?.name ? recipe?.category?.name : "No Category"}
           </span>
-          <h2 className='text-4xl font-semibold text-gray-100 leading-tight'>
+          <h3 className='text-3xl font-semibold text-gray-100 leading-tight'>
             {recipe?.name ? recipe?.name : "No Name"}
-          </h2>
+          </h3>
           <div className='flex mt-3'>
             <img
               src={recipe?.owner?.avatar}
@@ -94,8 +118,44 @@ const RecipeDetails = () => {
           </div>
         </div>
       </div>
+
       <div className='px-4 lg:px-0 mt-12 text-gray-700 max-w-screen-md mx-auto text-lg leading-relaxed'>
-        <p
+        {/* Save Recipe */}
+        <div className='flex justify-end'>
+          {recipesIDs?.includes(recipe?._id as string) ? (
+            <BookmarkSlashIcon
+              className='h-5 w-5 cursor-pointer'
+              onClick={() => handleUnsaveRecipe(recipe?._id as string)}
+            />
+          ) : (
+            <BookmarkIcon
+              className='h-5 w-5 cursor-pointer'
+              onClick={() => handleSaveRecipe(recipe?._id as string)}
+            />
+          )}
+        </div>
+
+        {/* Ingredient */}
+        <Typography variant='h5' color='gray'>
+          Ingredients
+        </Typography>
+
+        {recipe?.ingredients?.map((ingredient, index) => (
+          <div
+            id='ingredient'
+            className='flex justify-between items-center border-b border-slate-200 py-3 px-2 border-l-4 border-l-teal-300 bg-gradient-to-r from-teal-100 to-transparent hover:from-teal-200'
+            key={index}
+          >
+            <div>{ingredient}</div>
+          </div>
+        ))}
+
+        {/* Instructions */}
+        <Typography variant='h5' color='gray' className='mt-4'>
+          Instructions
+        </Typography>
+
+        <Typography
           className='pb-6'
           dangerouslySetInnerHTML={{
             __html: recipe?.instructions

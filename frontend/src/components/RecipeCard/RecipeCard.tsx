@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
-  BookmarkIcon,
   ChatBubbleLeftRightIcon,
   StarIcon,
   EyeIcon,
@@ -15,7 +14,6 @@ import {
   Typography,
   Button,
   Tooltip,
-  IconButton,
 } from "@material-tailwind/react";
 import { Chip } from "@material-tailwind/react";
 
@@ -33,6 +31,7 @@ const BLogCard = ({ recipe }: RecipeCardProps) => {
   const { savedRecipes } = useAppSelector((state) => state.recipe);
 
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const token = user?.token as string;
   const userID = user?.result?._id as string;
@@ -53,14 +52,6 @@ const BLogCard = ({ recipe }: RecipeCardProps) => {
         />
 
         <div className='to-bg-black-10 absolute inset-0 h-full w-full bg-gradient-to-tr from-transparent via-transparent to-black/60 ' />
-        <IconButton
-          size='sm'
-          color='amber'
-          variant='text'
-          className='!absolute top-4 right-4 rounded-full'
-        >
-          <BookmarkIcon className='h-6 w-6' />
-        </IconButton>
       </CardHeader>
       <CardBody>
         <div className='mb-3 flex items-center justify-between'>
@@ -117,13 +108,18 @@ const BLogCard = ({ recipe }: RecipeCardProps) => {
         </div>
       </CardBody>
       <CardFooter className='pt-3'>
-        <Button size='lg' fullWidth={true} className='bg-teal-400'>
-          <Link
+        {/* <Link
             to={`/recipe-details/${recipe?._id}`}
             className='flex items-center justify-center gap-2'
           >
-            <span>View Recipe</span>
-          </Link>
+          </Link> */}
+        <Button
+          onClick={() => navigate(`/recipe-details/${recipe?._id}`)}
+          size='lg'
+          fullWidth={true}
+          className='bg-teal-400'
+        >
+          <span>View Recipe</span>
         </Button>
       </CardFooter>
     </Card>
