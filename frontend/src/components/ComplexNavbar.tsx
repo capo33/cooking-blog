@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import {
   Navbar,
-  MobileNav,
+  Collapse,
   Button,
   Menu,
   MenuHandler,
@@ -13,7 +13,7 @@ import {
 import {
   PlusIcon,
   UserIcon,
-   HomeIcon,
+  HomeIcon,
   ChevronDownIcon,
   PowerIcon,
   ArrowRightOnRectangleIcon,
@@ -241,7 +241,7 @@ export default function ComplexNavbar() {
   }, []);
 
   return (
-    <Navbar className='mx-auto max-w-screen-xl p-2 lg:rounded-full lg:pl-6'>
+    <Navbar className='mx-auto  p-2 lg:rounde lg:pl-6 sticky top-0 z-50'>
       <div className='relative mx-auto flex items-center text-blue-gray-900'>
         <Link to='/' className='mr-4 ml-2 cursor-pointer py-1.5 font-medium'>
           Material Tailwind
@@ -260,9 +260,9 @@ export default function ComplexNavbar() {
         </IconButton>
         <ProfileMenu />
       </div>
-      <MobileNav open={isNavOpen} className='overflow-scroll'>
+      <Collapse open={isNavOpen} className='text-blue-gray-800 '>
         <NavList />
-      </MobileNav>
+      </Collapse>
     </Navbar>
   );
 }

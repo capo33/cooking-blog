@@ -1,14 +1,28 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { FaRegComments } from "react-icons/fa";
+import {
+  BookmarkIcon,
+  ChatBubbleLeftRightIcon,
+  StarIcon,
+  EyeIcon,
+  HandThumbUpIcon,
+} from "@heroicons/react/24/outline";
+import {
+  Card,
+  CardHeader,
+  CardBody,
+  CardFooter,
+  Typography,
+  Button,
+  Tooltip,
+  IconButton,
+} from "@material-tailwind/react";
 import { Chip } from "@material-tailwind/react";
 
+import { subStringFunc } from "../../utils";
 import { Recipe } from "../../interfaces/RecipeInterface";
-import { userProfile } from "../../redux/feature/Auth/authSlice";
 import { useAppDispatch, useAppSelector } from "../../redux/app/store";
 import { getSavedRecipes } from "../../redux/feature/Recipe/recipeSlice";
-import { formatDate, subStringFunc, uperCaseFirstLetter } from "../../utils";
-
 
 type RecipeCardProps = {
   recipe: Recipe;
@@ -26,86 +40,93 @@ const BLogCard = ({ recipe }: RecipeCardProps) => {
   const recipesIDs = savedRecipes?.map((recipe) => recipe._id);
 
   useEffect(() => {
-    // if(user){
-    //   dispatch(userProfile(token));
-    // }
     dispatch(getSavedRecipes({ userID, token }));
   }, [dispatch, userID, token, user]);
 
   return (
-    <div key={recipe?._id}>
-      {/* Card Header */}
-      <div className='flex flex-col max-w-lg p-6 space-y-6 overflow-hidden   rounded-lg shadow-lg dark:bg-gray-900 dark:text-gray-100'>
-        <div className='flex space-x-4'>
-          <img
-            alt={recipe?.owner?.name}
-            src={recipe?.owner?.avatar}
-            className='object-cover w-12 h-12 mb-2 rounded-full shadow dark:bg-gray-500'
-          />
-          <div className='flex flex-col space-y-1'>
-            <span className='text-sm font-semibold'>
-              {recipe?.owner?.name
-                ? uperCaseFirstLetter(recipe?.owner?.name)
-                : "Anonymous"}
-            </span>
-            <span className='text-xs dark:text-gray-400'>
-              <time>{formatDate(recipe?.createdAt)}</time>
-            </span>
-          </div>
+    <Card className='w-full max-w-[26rem] shadow-lg' key={recipe?._id}>
+      <CardHeader floated={false} color='blue-gray'>
+        <img
+          src={recipe?.image}
+          alt={recipe?.name}
+          className='object-cover w-full h-48 rounded-t-lg'
+        />
+
+        <div className='to-bg-black-10 absolute inset-0 h-full w-full bg-gradient-to-tr from-transparent via-transparent to-black/60 ' />
+        <IconButton
+          size='sm'
+          color='amber'
+          variant='text'
+          className='!absolute top-4 right-4 rounded-full'
+        >
+          <BookmarkIcon className='h-6 w-6' />
+        </IconButton>
+      </CardHeader>
+      <CardBody>
+        <div className='mb-3 flex items-center justify-between'>
+          <Typography variant='h5' color='blue-gray' className='font-medium'>
+            {recipe?.name}
+          </Typography>
+
+          {recipesIDs?.includes(recipe._id) ? (
+            <Chip variant='ghost' color='green' size='sm' value='Saved' />
+          ) : (
+            <Chip variant='ghost' size='sm' color='red' value='Not Saved' />
+          )}
         </div>
-
-        {/* Card Body */}
-        <Link to={`/recipe-details/${recipe?._id}`}>
-          <div>
-            <img
-              src={recipe?.image}
-              alt={recipe?.name}
-              className='object-cover w-full mb-4 h-60 p-1 rounded-lg sm:h-72 dark:bg-gray-500'
-            />
-
-            <h2 className='mb-1 text-xl font-semibold'>{recipe?.name}</h2>
-            <p
-              dangerouslySetInnerHTML={{
-                __html: subStringFunc(recipe?.instructions, 40),
-              }}
-              className='text-sm dark:text-gray-400'
-            />
-          </div>
-        </Link>
-
-        {/* Card Footer */}
-        <div className='flex flex-wrap justify-between'>
-          <div className='space-x-2'>
-            {recipesIDs?.includes(recipe._id) ? (
-              <Chip variant='ghost' color='green' size='sm' value='Saved' />
-            ) : (
-              <Chip variant='ghost' size='sm' color='red' value='Not Saved' />
-            )}
-          </div>
-          <div className='flex space-x-2 text-sm dark:text-gray-400'>
-            {/* Comments - comming soon */}
-            <div className='flex items-center p-1 space-x-1.5'>
-              <FaRegComments style={{ fontSize: "1.1rem" }} />
-              <span>{recipe?.reviews?.length}</span>
-            </div>
-
-            {/* Views */}
-            <div className='flex items-center p-1 space-x-1.5'>
-              <span>
-                {recipe?.views} {recipe?.views === 1 ? "view" : "views"}
-              </span>
-            </div>
-            {/* Likes */}
-            <div className='flex items-center p-1 space-x-1.5'>
-              <span>
-                {recipe?.likes?.length}{" "}
-                {recipe?.likes?.length === 1 ? "like" : "likes"}
-              </span>
-            </div>
-          </div>
+        <Typography color='gray'>
+          {subStringFunc(recipe?.instructions, 40)}
+        </Typography>
+        <div className='group mt-8 flex justify-around items-center gap-3'>
+          <Tooltip
+            content={`${recipe?.rating} ${
+              recipe?.rating === 1 ? "star" : "stars"
+            }`}
+          >
+            <span className='cursor-pointer rounded-full border border-blue-500/5 bg-blue-500/5 p-3 text-blue-500 transition-colors hover:border-blue-500/10 hover:bg-blue-500/10 hover:!opacity-100 group-hover:opacity-70'>
+              <StarIcon className='h-5 w-5' />
+            </span>
+          </Tooltip>
+          <Tooltip
+            content={`${recipe?.views} ${
+              recipe?.views === 1 ? "view" : "views"
+            }`}
+          >
+            <span className='cursor-pointer rounded-full border border-blue-500/5 bg-blue-500/5 p-3 text-blue-500 transition-colors hover:border-blue-500/10 hover:bg-blue-500/10 hover:!opacity-100 group-hover:opacity-70'>
+              <EyeIcon className='h-5 w-5' />
+            </span>
+          </Tooltip>
+          <Tooltip
+            content={`${recipe?.reviews?.length} ${
+              recipe?.reviews?.length === 1 ? "reviews" : "review"
+            }`}
+          >
+            <span className='cursor-pointer rounded-full border border-blue-500/5 bg-blue-500/5 p-3 text-blue-500 transition-colors hover:border-blue-500/10 hover:bg-blue-500/10 hover:!opacity-100 group-hover:opacity-70'>
+              <ChatBubbleLeftRightIcon className='h-5 w-5' />
+            </span>
+          </Tooltip>
+          <Tooltip
+            content={`${recipe?.likes?.length} ${
+              recipe?.likes?.length === 1 ? "like" : "likes"
+            }`}
+          >
+            <span className='cursor-pointer rounded-full border border-blue-500/5 bg-blue-500/5 p-3 text-blue-500 transition-colors hover:border-blue-500/10 hover:bg-blue-500/10 hover:!opacity-100 group-hover:opacity-70'>
+              <HandThumbUpIcon className='h-5 w-5' />
+            </span>
+          </Tooltip>
         </div>
-      </div>
-    </div>
+      </CardBody>
+      <CardFooter className='pt-3'>
+        <Button size='lg' fullWidth={true} className='bg-teal-400'>
+          <Link
+            to={`/recipe/${recipe?._id}`}
+            className='flex items-center justify-center gap-2'
+          >
+            <span>View Recipe</span>
+          </Link>
+        </Button>
+      </CardFooter>
+    </Card>
   );
 };
 
