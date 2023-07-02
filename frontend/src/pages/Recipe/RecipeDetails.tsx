@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import {
   TrashIcon,
   PencilSquareIcon,
@@ -7,11 +7,13 @@ import {
   BookmarkSlashIcon,
 } from "@heroicons/react/24/outline";
 import {
+  deleteRecipe,
   getSingleRecipe,
   saveRecipe,
   unsaveRecipe,
 } from "../../redux/feature/Recipe/recipeSlice";
 import { Typography } from "@material-tailwind/react";
+import { toast } from "react-toastify";
 
 import { formatDate } from "../../utils";
 import Modal from "../../components/Modal/Modal";
@@ -31,13 +33,21 @@ const RecipeDetails = () => {
   const recipesIDs = savedRecipes?.map((recipe) => recipe._id);
 
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(getSingleRecipe(id as string));
   }, [dispatch, id]);
 
   const handleDeleteBlog = async () => {
-    // dispatch(deleteBlog({ id, token: data?.token, toast, navigate }));
+    dispatch(
+      deleteRecipe({
+        recipeID: recipe?._id as string,
+        token,
+        navigate,
+        toast,
+      })
+    );
   };
   const handleConfirmDelete = () => {
     setShowModal((prev) => !prev);
