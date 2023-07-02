@@ -1,25 +1,23 @@
 import { useEffect, useState } from "react";
-import { Link, useParams, useNavigate } from "react-router-dom";
 import {
   TrashIcon,
   PencilSquareIcon,
   BookmarkIcon,
   BookmarkSlashIcon,
 } from "@heroicons/react/24/outline";
+import { toast } from "react-toastify";
+import { Typography } from "@material-tailwind/react";
+import { Link, useParams, useNavigate } from "react-router-dom";
+
+import { formatDate } from "../../utils";
 import {
   deleteRecipe,
   getSingleRecipe,
   saveRecipe,
   unsaveRecipe,
 } from "../../redux/feature/Recipe/recipeSlice";
-import { Typography } from "@material-tailwind/react";
-import { toast } from "react-toastify";
-
-import { formatDate } from "../../utils";
 import Modal from "../../components/Modal/Modal";
-import { userProfile } from "../../redux/feature/Auth/authSlice";
 import { useAppDispatch, useAppSelector } from "../../redux/app/store";
-import { getAllCategories } from "../../redux/feature/Category/categorySlice";
 
 const RecipeDetails = () => {
   const { id } = useParams<{ id: string }>();
@@ -119,7 +117,7 @@ const RecipeDetails = () => {
             />
             <div>
               <p className='font-semibold text-gray-200 text-sm'>
-                {recipe?.owner?.name ? recipe?.owner?.name : "Anonymous"}
+                by @{recipe?.owner?.name ? recipe?.owner?.name : "Anonymous"}
               </p>
               <p className='font-semibold text-gray-400 text-xs'>
                 {formatDate(recipe?.createdAt)}
@@ -129,26 +127,29 @@ const RecipeDetails = () => {
         </div>
       </div>
 
-      <div className='px-4 lg:px-0 mt-12 text-gray-700 max-w-screen-md mx-auto text-lg leading-relaxed'>
-        {/* Save Recipe */}
-        <div className='flex justify-end'>
-          {recipesIDs?.includes(recipe?._id as string) ? (
+      {/* Save Recipe */}
+      <div className='flex justify-end mb-5 px-4 lg:px-0 mt-5 max-w-screen-md mx-auto text-cyan-900 hover:text-teal-900'>
+        {recipesIDs?.includes(recipe?._id as string) ? (
+          <>
             <BookmarkSlashIcon
               className='h-5 w-5 cursor-pointer'
               onClick={() => handleUnsaveRecipe(recipe?._id as string)}
             />
-          ) : (
+            <span className='badge rounded-pill'>Unsave</span>
+          </>
+        ) : (
+          <>
             <BookmarkIcon
               className='h-5 w-5 cursor-pointer'
               onClick={() => handleSaveRecipe(recipe?._id as string)}
             />
-          )}
-        </div>
-
+            <span className='badge rounded-pill text-bg-warning'>Save</span>
+          </>
+        )}
+      </div>
+      <div className='px-4 lg:px-0 mt-12 max-w-screen-md mx-auto leading-relaxed'>
         {/* Ingredient */}
-        <Typography variant='h5' color='gray'>
-          Ingredients
-        </Typography>
+        <Typography variant='h5'>Ingredients</Typography>
 
         {recipe?.ingredients?.map((ingredient, index) => (
           <div
@@ -161,7 +162,7 @@ const RecipeDetails = () => {
         ))}
 
         {/* Instructions */}
-        <Typography variant='h5' color='gray' className='mt-4'>
+        <Typography variant='h5' className='mt-6'>
           Instructions
         </Typography>
 
@@ -173,8 +174,8 @@ const RecipeDetails = () => {
               : "No Instructions",
           }}
         />
-        <div className='flex justify-between items-center'>
-          <div className='flex items-center'>
+        <div className='flex justify-between'>
+          <div className=''>
             {/* <button
               onClick={handleLikePost}
               className='flex items-center text-gray-700 hover:text-gray-900 focus:outline-none'
@@ -187,7 +188,7 @@ const RecipeDetails = () => {
               <>
                 <Link
                   to={`/update-recipe/${recipe?._id}`}
-                  className='flex items-center text-gray-700 hover:text-gray-900 focus:outline-none'
+                  className='flex items-center text-blue-700 hover:text-blue-900 focus:outline-none'
                 >
                   <PencilSquareIcon className='h-5 w-5 mr-1' />
                   <span className='text-sm'>Edit</span>
@@ -195,7 +196,7 @@ const RecipeDetails = () => {
 
                 <button
                   onClick={handleConfirmDelete}
-                  className='flex items-center text-gray-700 hover:text-gray-900 ml-6 focus:outline-none'
+                  className='flex items-center text-deep-orange-700 hover:text-deep-orange-900 ml-6 focus:outline-none'
                 >
                   <TrashIcon className='h-5 w-5 mr-1' />
                   <span className='text-sm'>Delete</span>
