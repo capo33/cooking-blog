@@ -15,6 +15,7 @@ import { Recipe } from "../../interfaces/RecipeInterface";
 import axios from "axios";
 import { toast } from "react-toastify";
 import RecipeButton from "../../components/RecipeForm/RecipeButton";
+import BackLink from "../../components/BackLink/BackLink";
 
 const UpdateRecipe = () => {
   const { id } = useParams<{ id: string }>();
@@ -136,6 +137,7 @@ const UpdateRecipe = () => {
 
   return (
     <div className='mt-12 mb-5'>
+      <BackLink link='/' name='edit-recipe' />
       <div className='md:grid md:grid-cols-3 md:gap-6'>
         <div className='md:col-span-1'>
           <div className='px-4 sm:px-0'>
