@@ -32,7 +32,7 @@ const getRecipeById = async (req: Request, res: Response) => {
 
     const recipe = await RecipeModel.findById(recipeId)
       .populate("owner", "-password")
-      .populate("category", "name");
+      .populate("category", "name image");
 
     const views: number = recipe?.views || 0;
     recipe?.set({ views: views + 1 });
