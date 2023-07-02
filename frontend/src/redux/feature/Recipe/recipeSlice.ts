@@ -159,7 +159,12 @@ export const unsaveRecipe = createAsyncThunk(
 export const deleteRecipe = createAsyncThunk(
   "recipe/deleteRecipe",
   async (
-    { recipeID, token ,toast, navigate}: { recipeID: string; token: string, toast: any, navigate: any },
+    {
+      recipeID,
+      token,
+      toast,
+      navigate,
+    }: { recipeID: string; token: string; toast: any; navigate: any },
     thunkAPI
   ) => {
     try {
@@ -178,7 +183,19 @@ export const deleteRecipe = createAsyncThunk(
 export const updateRecipe = createAsyncThunk(
   "recipe/updateRecipe",
   async (
-    { recipeID, formData, token ,toast, navigate}: { recipeID: string; formData: any; token: string, toast: any, navigate: any },
+    {
+      recipeID,
+      formData,
+      token,
+      toast,
+      navigate,
+    }: {
+      recipeID: string;
+      formData: any;
+      token: string;
+      toast: any;
+      navigate: any;
+    },
     thunkAPI
   ) => {
     try {
@@ -196,6 +213,36 @@ export const updateRecipe = createAsyncThunk(
     }
   }
 );
+
+ 
+// like a recipe
+export const likeRecipe = createAsyncThunk(
+  "recipe/likeRecipe",
+  async ({ recipeID, token }:  { recipeID: string; token: string }, thunkAPI) => {
+    try {
+      const response = await recipeServices.likeRecipe(recipeID, token);
+      thunkAPI.dispatch(getAllRecipes());
+      return response;
+    } catch (error: unknown | any) {
+      return thunkAPI.rejectWithValue(error.response.data.message);
+    }
+  }
+);
+
+// unlike a recipe
+export const unlikeRecipe = createAsyncThunk(
+  "recipe/unlikeRecipe",
+  async ({ recipeID, token }: { recipeID: string; token: string }, thunkAPI) => {
+    try {
+      const response = await recipeServices.unlikeRecipe(recipeID, token);
+      thunkAPI.dispatch(getAllRecipes());
+      return response;
+    } catch (error: unknown | any) {
+      return thunkAPI.rejectWithValue(error.response.data.message);
+    }
+  }
+);
+
 const recipeSlice = createSlice({
   name: "recipe",
   initialState,
@@ -305,6 +352,68 @@ const recipeSlice = createSlice({
       state.recipes = payload as Recipe[];
     });
     builder.addCase(deleteRecipe.rejected, (state, { payload }) => {
+      state.isLoading = false;
+      state.isError = true;
+      state.message = payload as string;
+    });
+
+    // Update a recipe
+    builder.addCase(updateRecipe.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(updateRecipe.fulfilled, (state, { payload }) => {
+      state.isLoading = false;
+      state.isSuccess = true;
+      state.recipe = payload as Recipe;
+    });
+    builder.addCase(updateRecipe.rejected, (state, { payload }) => {
+      state.isLoading = false;
+      state.isError = true;
+      state.message = payload as string;
+    });
+
+    // Like a recipe
+    builder.addCase(likeRecipe.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(likeRecipe.fulfilled, (state, { payload }) => {
+      state.isLoading = false;
+      state.isSuccess = true;
+      const newdata = state.recipes.map((recipe) => {
+        if (recipe?._id === payload?.data?._id) {
+          return payload?.data;
+        }
+        return recipe;
+      });
+      state.recipes = newdata;
+    });
+    builder.addCase(likeRecipe.rejected, (state, { payload }) => {
+      state.isLoading = false;
+      state.isError = true;
+      state.message = payload as string;
+    });
+
+    // Unlike a recipe
+    builder.addCase(unlikeRecipe.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(unlikeRecipe.fulfilled, (state, { payload }) => {
+      state.isLoading = false;
+      state.isSuccess = true;
+      console.log(payload);
+      
+      const newdata = state.recipes.map((recipe) => {
+        if (recipe?._id === payload?.data?._id) {
+          return payload?.data;
+        }
+        return recipe;
+      });
+      console.log(newdata);
+      
+      state.recipes = newdata;
+    });
+
+    builder.addCase(unlikeRecipe.rejected, (state, { payload }) => {
       state.isLoading = false;
       state.isError = true;
       state.message = payload as string;

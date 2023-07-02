@@ -11,16 +11,21 @@ import {
   CardHeader,
   CardBody,
   CardFooter,
+  Chip,
   Typography,
   Button,
   Tooltip,
+  IconButton,
 } from "@material-tailwind/react";
-import { Chip } from "@material-tailwind/react";
 
 import { subStringFunc } from "../../utils";
+import {
+  getSavedRecipes,
+  likeRecipe,
+  unlikeRecipe,
+} from "../../redux/feature/Recipe/recipeSlice";
 import { Recipe } from "../../interfaces/RecipeInterface";
 import { useAppDispatch, useAppSelector } from "../../redux/app/store";
-import { getSavedRecipes } from "../../redux/feature/Recipe/recipeSlice";
 
 type RecipeCardProps = {
   recipe: Recipe;
@@ -42,8 +47,19 @@ const BLogCard = ({ recipe }: RecipeCardProps) => {
     dispatch(getSavedRecipes({ userID, token }));
   }, [dispatch, userID, token, user]);
 
+  // Like Recipe
+  const handleLike = async (id: string) => {
+    dispatch(likeRecipe({ recipeID: id, token }));
+  };
+
+  // Unlike Recipe
+  const handleUnlike = async (id: string) => {
+    dispatch(unlikeRecipe({ recipeID: id, token }));
+  };
+
   return (
     <Card className='w-full max-w-[26rem] shadow-lg' key={recipe?._id}>
+      {/* CardHeader */}
       <CardHeader floated={false} color='blue-gray'>
         <img
           src={recipe?.image}
@@ -51,8 +67,32 @@ const BLogCard = ({ recipe }: RecipeCardProps) => {
           className='object-cover w-full h-48 rounded-t-lg'
         />
 
+        {/* Background Gradient */}
         <div className='to-bg-black-10 absolute inset-0 h-full w-full bg-gradient-to-tr from-transparent via-transparent to-black/60 ' />
+
+        {/* Like & Unlike */}
+        <IconButton
+          size='sm'
+          color='white'
+          variant='text'
+          className='!absolute top-4 right-4 rounded-full'
+        >
+          {recipe?.likes?.includes(userID) ? (
+            <HandThumbUpIcon
+              onClick={() => handleUnlike(recipe?._id as string)}
+              className='h-5 w-5'
+              fill='white'
+            />
+          ) : (
+            <HandThumbUpIcon
+              onClick={() => handleLike(recipe?._id as string)}
+              className='h-5 w-5'
+            />
+          )}
+        </IconButton>
       </CardHeader>
+
+      {/* CardBody */}
       <CardBody>
         <div className='mb-3 flex items-center justify-between'>
           <Typography variant='h5' color='blue-gray' className='font-medium'>
@@ -65,61 +105,53 @@ const BLogCard = ({ recipe }: RecipeCardProps) => {
             <Chip variant='ghost' size='sm' color='red' value='Not Saved' />
           )}
         </div>
+
         <Typography color='gray'>
           {subStringFunc(recipe?.instructions, 40)}
         </Typography>
+
+        {/* Icons */}
         <div className='group mt-8 flex justify-around items-center gap-3'>
           <Tooltip
             content={`${recipe?.rating} ${
               recipe?.rating === 1 ? "star" : "stars"
             }`}
           >
-            <span className='cursor-pointer rounded-full border border-blue-500/5 bg-blue-500/5 p-3 text-blue-500 transition-colors hover:border-blue-500/10 hover:bg-blue-500/10 hover:!opacity-100 group-hover:opacity-70'>
-              <StarIcon className='h-5 w-5' />
-            </span>
+            <StarIcon className='h-5 w-5' />
           </Tooltip>
           <Tooltip
             content={`${recipe?.views} ${
               recipe?.views === 1 ? "view" : "views"
             }`}
           >
-            <span className='cursor-pointer rounded-full border border-blue-500/5 bg-blue-500/5 p-3 text-blue-500 transition-colors hover:border-blue-500/10 hover:bg-blue-500/10 hover:!opacity-100 group-hover:opacity-70'>
-              <EyeIcon className='h-5 w-5' />
-            </span>
+            <EyeIcon className='h-5 w-5' />
           </Tooltip>
           <Tooltip
             content={`${recipe?.reviews?.length} ${
               recipe?.reviews?.length === 1 ? "reviews" : "review"
             }`}
           >
-            <span className='cursor-pointer rounded-full border border-blue-500/5 bg-blue-500/5 p-3 text-blue-500 transition-colors hover:border-blue-500/10 hover:bg-blue-500/10 hover:!opacity-100 group-hover:opacity-70'>
-              <ChatBubbleLeftRightIcon className='h-5 w-5' />
-            </span>
+            <ChatBubbleLeftRightIcon className='h-5 w-5' />
           </Tooltip>
           <Tooltip
             content={`${recipe?.likes?.length} ${
               recipe?.likes?.length === 1 ? "like" : "likes"
             }`}
           >
-            <span className='cursor-pointer rounded-full border border-blue-500/5 bg-blue-500/5 p-3 text-blue-500 transition-colors hover:border-blue-500/10 hover:bg-blue-500/10 hover:!opacity-100 group-hover:opacity-70'>
-              <HandThumbUpIcon className='h-5 w-5' />
-            </span>
+            <HandThumbUpIcon className='h-5 w-5' />
           </Tooltip>
         </div>
       </CardBody>
+
+      {/* CardFooter */}
       <CardFooter className='pt-3'>
-        {/* <Link
-            to={`/recipe-details/${recipe?._id}`}
-            className='flex items-center justify-center gap-2'
-          >
-          </Link> */}
         <Button
           onClick={() => navigate(`/recipe-details/${recipe?._id}`)}
           size='lg'
           fullWidth={true}
           className='bg-teal-400'
         >
-          <span>View Recipe</span>
+          View Recipe
         </Button>
       </CardFooter>
     </Card>

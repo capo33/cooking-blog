@@ -137,7 +137,7 @@ const UpdateRecipe = () => {
 
   return (
     <div className='mt-12 mb-5'>
-      <BackLink link='/' name='edit-recipe' />
+      <BackLink link={`/recipe-details/${id}`} name='Back to recipe details' />
       <div className='md:grid md:grid-cols-3 md:gap-6'>
         <div className='md:col-span-1'>
           <div className='px-4 sm:px-0'>

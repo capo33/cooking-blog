@@ -114,6 +114,35 @@ const deleteRecipe = async (recipeID: string, token: string) => {
   return response.data;
 };
 
+// Like a recipe
+const likeRecipe = async (recipeID: string, token: string) => {
+  const response = await axios.put(
+    `${RECIPE_URL}/like`,
+    { recipeID },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  return response.data;
+};
+
+// Unlike a recipe
+const unlikeRecipe = async (recipeID: string, token: string) => {
+  const response = await axios.put(
+    `${RECIPE_URL}/unlike`,
+    { recipeID },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  return response.data;
+};
+
 const recipeService = {
   getAllRecipes,
   createRecipe,
@@ -125,6 +154,8 @@ const recipeService = {
   updateRecipe,
   deleteRecipe,
   uploadRecipeImage,
+  likeRecipe,
+  unlikeRecipe,
 };
 
 export default recipeService;

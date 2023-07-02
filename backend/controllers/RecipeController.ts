@@ -310,45 +310,45 @@ const getSavedRecipes = async (req: Request, res: Response) => {
 //   res.status(201).json({ message: "Review added" });
 // });
 
-// // @desc    Like a recipe
-// // @route   PUT /api/v1/recipes/like
-// // @access  Private
-// const likeRecipe = asyncHandler(async (req: Request, res: Response) => {
-//   const recipe = await RecipeModel.findByIdAndUpdate(
-//     req.body.recipeID,
-//     {
-//       $push: { likes: req.user?._id },
-//     },
-//     { new: true }
-//   );
-//   if (!recipe) {
-//     res.status(404);
-//     throw new Error("Recipe not found");
-//   }
+// @desc    Like a recipe
+// @route   PUT /api/v1/recipes/like
+// @access  Private
+const likeRecipe = asyncHandler(async (req: Request, res: Response) => {
+  const recipe = await RecipeModel.findByIdAndUpdate(
+    req.body.recipeID,
+    {
+      $push: { likes: req.user?._id },
+    },
+    { new: true }
+  );
+  if (!recipe) {
+    res.status(404);
+    throw new Error("Recipe not found");
+  }
 
-//   res.status(200).json({
-//     message: "Recipe liked successfully",
-//     likes: recipe?.likes,
-//   });
-// });
+  res.status(200).json({
+    message: "Recipe liked successfully",
+    likes: recipe?.likes,
+  });
+});
 
-// // @desc    Unlike a recipe
-// // @route   PUT /api/v1/recipes/unlike
-// // @access  Private
-// const unlikeRecipe = asyncHandler(async (req: Request, res: Response) => {
-//   const recipe = await RecipeModel.findByIdAndUpdate(
-//     req.body.recipeID,
-//     {
-//       $pull: { likes: req.user?._id },
-//     },
-//     { new: true }
-//   );
+// @desc    Unlike a recipe
+// @route   PUT /api/v1/recipes/unlike
+// @access  Private
+const unlikeRecipe = asyncHandler(async (req: Request, res: Response) => {
+  const recipe = await RecipeModel.findByIdAndUpdate(
+    req.body.recipeID,
+    {
+      $pull: { likes: req.user?._id },
+    },
+    { new: true }
+  );
 
-//   res.status(200).json({
-//     message: "Recipe unliked successfully",
-//     likes: recipe?.likes,
-//   });
-// });
+  res.status(200).json({
+    message: "Recipe unliked successfully",
+    likes: recipe?.likes,
+  });
+});
 
 export {
   getRecipes,
@@ -361,6 +361,6 @@ export {
   getSavedRecipes,
   getRecipesByUser,
   // addReview,
-  // likeRecipe,
-  // unlikeRecipe,
+  likeRecipe,
+  unlikeRecipe,
 };

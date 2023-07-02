@@ -76,7 +76,7 @@ const RecipeDetails = () => {
 
   return (
     <main className='mt-10'>
-      <BackLink link='/' name="recipe-details" />
+      <BackLink link='/' name="Back to Home" />
 
       {showModal ? (
         <>
