@@ -11,6 +11,8 @@ export interface IUser extends Document {
   phone: string;
   isAdmin: boolean;
   address: string;
+  birthday: Date;
+  interests: string[];
   createdAt: Date;
   updatedAt: Date;
 }

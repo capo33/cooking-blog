@@ -11,6 +11,7 @@ import RecipeDetails from "./pages/Recipe/RecipeDetails";
 import { useAppSelector } from "./redux/app/store";
 import UpdateRecipe from "./pages/Recipe/UpdateRecipe";
 import SavedRecipes from "./pages/Recipe/SavedRecipes";
+import UserProfile from "./pages/UserProfile/UserProfile";
 
 function App() {
   const { user } = useAppSelector((state) => state.auth);
@@ -31,6 +32,7 @@ function App() {
           <Route path='/recipe-details/:id' element={<RecipeDetails />} />
           <Route path='/update-recipe/:recipeId' element={<UpdateRecipe />} />
           <Route path='/saved-recipes' element={<SavedRecipes />} />
+          <Route path='/profile' element={<UserProfile />} />
         </Routes>
       </Router>
     </div>

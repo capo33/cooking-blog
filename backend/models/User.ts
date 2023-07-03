@@ -47,6 +47,14 @@ const userSchema = new Schema<IUser>(
       type: String,
       default: "1234 Main St",
     },
+    birthday: {
+      type: Date,
+      default: Date.now,
+    },
+    interests: {
+      type: [String],
+      default: ["example: photography", "example: cooking"],
+    },
   },
   { timestamps: true }
 );

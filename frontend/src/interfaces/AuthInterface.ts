@@ -11,6 +11,8 @@ export interface User {
     phone?: string;
     address?: string;
     savedRecipes?: string[];
+    birthday?: string;
+    interests?: string[];
     _id?: string;
     avatar?: string;
     createdAt?: string;
