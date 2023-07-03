@@ -12,6 +12,12 @@ const categorySchema = new Schema<ICategory>(
       type: String,
       required: true,
     },
+    recipes: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Recipe",
+      },
+    ],
   },
   {
     timestamps: true,

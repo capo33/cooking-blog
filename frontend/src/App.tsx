@@ -16,7 +16,7 @@ function App() {
   const { user } = useAppSelector((state) => state.auth);
 
   return (
-    <div className='container mx-auto py-10 px-5'>
+    <div className='container mx-auto py-10 px-5 bg-white'>
       <Router>
         <ComplexNavbar />
         {/* <Header /> */}
@@ -29,7 +29,7 @@ function App() {
             element={user ? <AddRecipe /> : <Login />}
           />
           <Route path='/recipe-details/:id' element={<RecipeDetails />} />
-          <Route path='/update-recipe/:id' element={<UpdateRecipe />} />
+          <Route path='/update-recipe/:recipeId' element={<UpdateRecipe />} />
           <Route path='/saved-recipes' element={<SavedRecipes />} />
         </Routes>
       </Router>

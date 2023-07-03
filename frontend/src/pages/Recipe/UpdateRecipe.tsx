@@ -18,7 +18,7 @@ import RecipeButton from "../../components/RecipeForm/RecipeButton";
 import BackLink from "../../components/BackLink/BackLink";
 
 const UpdateRecipe = () => {
-  const { id } = useParams<{ id: string }>();
+  const { recipeId } = useParams<{ recipeId: string }>();
   const { user } = useAppSelector((state) => state.auth);
   const { recipe } = useAppSelector((state) => state.recipe);
 
@@ -54,8 +54,8 @@ const UpdateRecipe = () => {
   const [inputValue, setInputValue] = useState("");
 
   useEffect(() => {
-    dispatch(getSingleRecipe(id as string));
-  }, [dispatch, id]);
+    dispatch(getSingleRecipe(recipeId as string));
+  }, [dispatch, recipeId]);
 
   useEffect(() => {
     if (recipe) {
@@ -101,7 +101,7 @@ const UpdateRecipe = () => {
     e.preventDefault();
     dispatch(
       updateRecipe({
-        recipeID: id as string,
+        recipeID: recipeId as string,
         formData: data as Recipe,
         token,
         toast,
@@ -137,7 +137,7 @@ const UpdateRecipe = () => {
 
   return (
     <div className='mt-12 mb-5'>
-      <BackLink link={`/recipe-details/${id}`} name='Back to recipe details' />
+      <BackLink link={`/recipe-details/${recipeId}`} name='Back to recipe details' />
       <div className='md:grid md:grid-cols-3 md:gap-6'>
         <div className='md:col-span-1'>
           <div className='px-4 sm:px-0'>

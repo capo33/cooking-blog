@@ -153,7 +153,12 @@ const saveRecipe = async (req: Request, res: Response) => {
       return res.status(401).json({ message: "Unauthorized" });
     }
 
-    const recipe = await RecipeModel.findById(req.body.recipeID);
+    const recipe = await RecipeModel.findById(req.body.recipeID).populate(
+      "category",
+      "name image"
+    );
+    console.log(recipe);
+
     const user = await UserModel.findById(req.body.userID);
 
     if (!recipe) {
@@ -201,7 +206,10 @@ const unsaveRecipe = async (req: Request, res: Response) => {
     if (!req.user) {
       return res.status(401).json({ message: "Unauthorized" });
     }
-    const recipe = await RecipeModel.findById(req.body.recipeID);
+    const recipe = await RecipeModel.findById(req.body.recipeID).populate(
+      "category",
+      "name"
+    );
     const user = await UserModel.findById(req.body.userID);
 
     if (!recipe) {
@@ -259,7 +267,16 @@ const getSavedRecipes = async (req: Request, res: Response) => {
       .populate("savedRecipes")
       .select("-password");
 
-    res.status(200).json({ savedRecipes: user?.savedRecipes });
+    const savedRecipes = await RecipeModel.find({
+      _id: { $in: user?.savedRecipes }, // find recipes with ids in the savedRecipes array
+    })
+      .populate("category", "name image")
+      .populate("owner", "name");
+
+    res.status(200).json({
+      // savedRecipes: user?.savedRecipes,
+      savedRecipes,
+    });
   } catch (error) {
     if (error instanceof Error) {
       res.status(500).json({ message: error.message });

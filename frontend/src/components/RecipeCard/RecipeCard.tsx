@@ -111,7 +111,7 @@ const BLogCard = ({ recipe }: RecipeCardProps) => {
         </Typography>
 
         {/* Icons */}
-        <div className='group mt-8 flex justify-around items-center gap-3'>
+        <div className='group mt-8 flex justify-around items-center'>
           <Tooltip
             content={`${recipe?.rating} ${
               recipe?.rating === 1 ? "star" : "stars"

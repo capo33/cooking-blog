@@ -97,6 +97,7 @@ export const getSavedRecipes = createAsyncThunk(
   async ({ userID, token }: { userID: string; token: string }, thunkAPI) => {
     try {
       const response = await recipeServices.getRecipesByUserId(userID, token);
+      thunkAPI.dispatch(getAllRecipes());
       return response;
     } catch (error: unknown | any) {
       return thunkAPI.rejectWithValue(error.response.data.message);
@@ -147,7 +148,7 @@ export const unsaveRecipe = createAsyncThunk(
 
       thunkAPI.dispatch(getSavedRecipes({ userID, token }));
       // console.log("response", response); response is the unsaved recipe
-
+        
       return response;
     } catch (error: unknown | any) {
       return thunkAPI.rejectWithValue(error.response.data.message);
@@ -214,11 +215,13 @@ export const updateRecipe = createAsyncThunk(
   }
 );
 
- 
 // like a recipe
 export const likeRecipe = createAsyncThunk(
   "recipe/likeRecipe",
-  async ({ recipeID, token }:  { recipeID: string; token: string }, thunkAPI) => {
+  async (
+    { recipeID, token }: { recipeID: string; token: string },
+    thunkAPI
+  ) => {
     try {
       const response = await recipeServices.likeRecipe(recipeID, token);
       thunkAPI.dispatch(getAllRecipes());
@@ -232,7 +235,10 @@ export const likeRecipe = createAsyncThunk(
 // unlike a recipe
 export const unlikeRecipe = createAsyncThunk(
   "recipe/unlikeRecipe",
-  async ({ recipeID, token }: { recipeID: string; token: string }, thunkAPI) => {
+  async (
+    { recipeID, token }: { recipeID: string; token: string },
+    thunkAPI
+  ) => {
     try {
       const response = await recipeServices.unlikeRecipe(recipeID, token);
       thunkAPI.dispatch(getAllRecipes());
@@ -403,13 +409,13 @@ const recipeSlice = createSlice({
       state.isLoading = false;
       state.isSuccess = true;
       console.log(payload);
-      
+
       const newdata = state.recipes.map((recipe) => {
         if (recipe?._id === payload?.data?._id) {
           return payload?.data;
         }
         return recipe;
-      });      
+      });
       state.recipes = newdata;
     });
 

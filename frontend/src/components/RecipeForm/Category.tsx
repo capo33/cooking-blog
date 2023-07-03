@@ -26,13 +26,13 @@ const Category = ({ recipe, handleChange }: CategoryProps) => {
       <select
         id='category'
         name='category'
-        value={recipe?.category._id}
+        value={recipe?.category?._id}
         onChange={handleChange}
         className='shadow-sm p-2 focus:outline-none focus:ring-teal-500 focus:border-teal-500 mt-1 block  border border-gray-300 rounded-md'
       >
         <option value=''>Select a category</option>
         {categories.map((category) => (
-          <option key={category._id} value={category._id}>
+          <option key={category?._id} value={category?._id}>
             {category.name}
           </option>
         ))}

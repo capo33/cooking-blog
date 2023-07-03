@@ -18,8 +18,8 @@ import {
   unsaveRecipe,
 } from "../../redux/feature/Recipe/recipeSlice";
 import Modal from "../../components/Modal/Modal";
-import { useAppDispatch, useAppSelector } from "../../redux/app/store";
 import BackLink from "../../components/BackLink/BackLink";
+import { useAppDispatch, useAppSelector } from "../../redux/app/store";
 
 const RecipeDetails = () => {
   const { id } = useParams<{ id: string }>();

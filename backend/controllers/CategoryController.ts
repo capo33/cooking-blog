@@ -8,7 +8,7 @@ import CategoryModel from "../models/Category";
 // @access  Public
 const getCategories = async (req: Request, res: Response) => {
   try {
-    const categories = await CategoryModel.find({});
+    const categories = await CategoryModel.find({}).populate("recipes");
 
     res.status(200).json(categories);
   } catch (error: unknown | any) {
