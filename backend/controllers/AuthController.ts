@@ -125,7 +125,7 @@ const getProfile = async (req: Request, res: Response) => {
       "-password"
     );
 
-    user?.set({ recipes: recipe }); 
+    user?.set({ recipes: recipe });
     // check user existince
     if (!user) {
       return res.status(404).json({ msg: "User not found" });
@@ -203,4 +203,129 @@ const forgotPassword = async (req: Request, res: Response) => {
   }
 };
 
-export { register, login, logout, getProfile, forgotPassword };
+// @desc    Update user profile
+// @route   PUT /api/v1/auth/update
+// @access  Private
+const updateProfile = async (req: Request, res: Response) => {
+  try {
+    // Check if user exists
+    const user = await UserModel.findById(req.user?._id); // req.user?._id is set by the auth middleware
+
+    if (!user) {
+      return res.status(404).json({ msg: "User not found" });
+    }
+
+    const updatedUser = await UserModel.findByIdAndUpdate(
+      req.user?._id,
+      { ...req.body },
+      { new: true }
+    );
+    // Create token
+    const token = generateToken(updatedUser?._id);
+
+    res.status(200).json({
+      success: true,
+      message: "User updated successfully",
+      user: updatedUser,
+      token,
+    });
+  } catch (error) {
+    if (error instanceof Error) {
+      res.status(500).json({ msg: "Server error", error: error.message });
+    }
+  }
+};
+
+// @desc    Delete user
+// @route   DELETE /api/v1/auth/user/:id
+// @access  Private/Admin or User
+const deleteUserByUser = async (req: Request, res: Response) => {
+  try {
+    const user = await UserModel.findById(req.user?._id);
+
+    // Check if user exists with the given id
+    if (!user) {
+      return res.status(404).json({ msg: "User not found" });
+    }
+
+    // Check if user is authorized to delete the user
+    if (user?._id.toString() !== req.user?._id.toString() && !user.isAdmin) {
+      return res.status(401).json({ msg: "Not authorized" });
+    }
+
+    // Delete user
+    await user.deleteOne();
+
+    res.status(200).json({
+      success: true,
+      message: "Sad to see you go, user deleted successfully",
+    });
+  } catch (error) {
+    if (error instanceof Error) {
+      res.status(500).json({ msg: "Server error", error: error.message });
+    }
+  }
+};
+
+// @desc    Delete user
+// @route   DELETE /api/v1/auth/user/:id
+// @access  Private/Admin
+const deleteUserByAdmin = async (req: Request, res: Response) => {
+  try {
+    const user = await UserModel.findById(req.params.id);
+
+    // Check if user exists with the given id
+    if (!user) {
+      return res.status(404).json({ msg: "User not found" });
+    }
+
+    // Check if user is authorized to delete the user
+    if (user?._id.toString() !== req.user?._id.toString() && user.isAdmin) {
+      return res.status(401).json({ msg: "Not authorized" });
+    }
+
+    // Delete user
+    await user.deleteOne();
+
+    res.status(200).json({
+      success: true,
+      message: "User deleted successfully",
+    });
+  } catch (error) {
+    if (error instanceof Error) {
+      res.status(500).json({ msg: "Server error", error: error.message });
+    }
+  }
+};
+
+// @desc    Get all users
+// @route   GET /api/v1/auth/users
+// @access  Private/Admin
+const getUsers = async (req: Request, res: Response) => {
+  try {
+    const users = await UserModel.find({}).select("-password");
+
+    res.status(200).json({
+      success: true,
+      message: "All users",
+      users,
+    });
+  } catch (error) {
+    if (error instanceof Error) {
+      res.status(500).json({ msg: "Server error", error: error.message });
+    }
+  }
+};
+
+
+export {
+  register,
+  login,
+  logout,
+  getProfile,
+  forgotPassword,
+  updateProfile,
+  deleteUserByUser,
+  deleteUserByAdmin,
+  getUsers,
+};

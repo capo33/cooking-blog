@@ -28,7 +28,7 @@ const GridItem = ({
   );
 };
 
-const UserProfile = () => {
+const Profile = () => {
   const [showModal, setShowModal] = useState(false);
 
   const { user } = useAppSelector((state) => state.auth);
@@ -256,4 +256,4 @@ const UserProfile = () => {
   );
 };
 
-export default UserProfile;
+export default Profile;

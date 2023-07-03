@@ -10,6 +10,7 @@ declare global {
         name?: string;
         email?: string;
         avatar?: string;
+        password?: string;
         // username: string;
       } | null;
     }
