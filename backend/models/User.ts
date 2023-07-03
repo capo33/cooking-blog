@@ -49,11 +49,11 @@ const userSchema = new Schema<IUser>(
     },
     birthday: {
       type: Date,
-      default: Date.now,
+      default: Date.now(),
     },
     interests: {
       type: [String],
-      default: ["example: photography", "example: cooking"],
+      default: ["example: photography, cooking, etc"],
     },
   },
   { timestamps: true }

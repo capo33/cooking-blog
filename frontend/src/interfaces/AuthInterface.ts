@@ -15,8 +15,8 @@ export interface User {
     interests?: string[];
     _id?: string;
     avatar?: string;
-    createdAt?: string;
-    updatedAt?: string;
+    createdAt?: number;
+    updatedAt?: number;
   };
   token: string;
 }

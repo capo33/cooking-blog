@@ -4,7 +4,7 @@ export const uperCaseFirstLetter = (str:string) => {
 };
 
 // format date
-export const formatDate = (date = Date.now()) => {
+export const formatDate = (date = Date.now() as number) => {
   const newDate = new Date(date);
   const year = newDate.getFullYear();
   const month = newDate.getMonth() + 1;
