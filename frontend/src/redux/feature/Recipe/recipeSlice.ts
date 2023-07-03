@@ -379,6 +379,8 @@ const recipeSlice = createSlice({
     builder.addCase(likeRecipe.fulfilled, (state, { payload }) => {
       state.isLoading = false;
       state.isSuccess = true;
+      console.log(payload);
+
       const newdata = state.recipes.map((recipe) => {
         if (recipe?._id === payload?.data?._id) {
           return payload?.data;
@@ -407,9 +409,7 @@ const recipeSlice = createSlice({
           return payload?.data;
         }
         return recipe;
-      });
-      console.log(newdata);
-      
+      });      
       state.recipes = newdata;
     });
 

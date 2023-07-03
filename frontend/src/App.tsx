@@ -10,6 +10,7 @@ import ComplexNavbar from "./components/ComplexNavbar";
 import RecipeDetails from "./pages/Recipe/RecipeDetails";
 import { useAppSelector } from "./redux/app/store";
 import UpdateRecipe from "./pages/Recipe/UpdateRecipe";
+import SavedRecipes from "./pages/Recipe/SavedRecipes";
 
 function App() {
   const { user } = useAppSelector((state) => state.auth);
@@ -29,6 +30,7 @@ function App() {
           />
           <Route path='/recipe-details/:id' element={<RecipeDetails />} />
           <Route path='/update-recipe/:id' element={<UpdateRecipe />} />
+          <Route path='/saved-recipes' element={<SavedRecipes />} />
         </Routes>
       </Router>
     </div>

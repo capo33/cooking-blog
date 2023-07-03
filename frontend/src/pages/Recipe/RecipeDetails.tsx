@@ -12,6 +12,7 @@ import { Link, useParams, useNavigate } from "react-router-dom";
 import { formatDate } from "../../utils";
 import {
   deleteRecipe,
+  getSavedRecipes,
   getSingleRecipe,
   saveRecipe,
   unsaveRecipe,
@@ -36,7 +37,8 @@ const RecipeDetails = () => {
 
   useEffect(() => {
     dispatch(getSingleRecipe(id as string));
-  }, [dispatch, id]);
+    dispatch(getSavedRecipes({userID, token}));
+  }, [dispatch, id, token, userID]);
 
   const handleDeleteBlog = async () => {
     dispatch(
@@ -76,7 +78,7 @@ const RecipeDetails = () => {
 
   return (
     <main className='mt-10'>
-      <BackLink link='/' name="Back to Home" />
+      <BackLink link='/' name='Back to Home' />
 
       {showModal ? (
         <>
@@ -134,19 +136,19 @@ const RecipeDetails = () => {
       <div className='flex justify-end mb-5 px-4 lg:px-0 mt-5 max-w-screen-md mx-auto text-cyan-900 hover:text-teal-900'>
         {recipesIDs?.includes(recipe?._id as string) ? (
           <>
+            <span className='badge rounded-pill'>Unsave</span>
             <BookmarkSlashIcon
               className='h-5 w-5 cursor-pointer'
               onClick={() => handleUnsaveRecipe(recipe?._id as string)}
             />
-            <span className='badge rounded-pill'>Unsave</span>
           </>
         ) : (
           <>
+            <span className='badge rounded-pill text-bg-warning'>Save</span>
             <BookmarkIcon
               className='h-5 w-5 cursor-pointer'
               onClick={() => handleSaveRecipe(recipe?._id as string)}
             />
-            <span className='badge rounded-pill text-bg-warning'>Save</span>
           </>
         )}
       </div>

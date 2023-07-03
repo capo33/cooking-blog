@@ -20,9 +20,11 @@ import {
   Bars2Icon,
   BookmarkIcon,
 } from "@heroicons/react/24/outline";
-import { logout, userProfile } from "../redux/feature/Auth/authSlice";
-import { useAppDispatch, useAppSelector } from "../redux/app/store";
 import { useNavigate, Link } from "react-router-dom";
+
+import { useAppDispatch, useAppSelector } from "../redux/app/store";
+import { logout, userProfile } from "../redux/feature/Auth/authSlice";
+import { getSavedRecipes } from "../redux/feature/Recipe/recipeSlice";
 
 interface IProfileMenuItems {
   label: string;
@@ -36,8 +38,8 @@ interface IProfileMenuItems {
   link: string;
   onClick?: () => void;
 }
-// profile menu component
 
+// profile menu component
 function ProfileMenu() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const closeMenu = () => setIsMenuOpen(false);
@@ -48,14 +50,13 @@ function ProfileMenu() {
   const navigate = useNavigate();
 
   const avatar = user?.result?.avatar as string;
-
-  const token = user?.token as string;
   const admin = user?.result?.isAdmin as boolean;
 
   const handleLogout = () => {
     dispatch(logout());
     navigate("/login");
   };
+
   const profileMenuItems: IProfileMenuItems[] = [
     {
       label: "My Profile",
@@ -97,10 +98,6 @@ function ProfileMenu() {
       link: "/register",
     },
   ];
-
-  useEffect(() => {
-    if (token) dispatch(userProfile(token));
-  }, [dispatch, token]);
 
   return (
     <Menu open={isMenuOpen} handler={setIsMenuOpen} placement='bottom-end'>
@@ -194,8 +191,19 @@ function ProfileMenu() {
 
 function NavList() {
   const { user } = useAppSelector((state) => state.auth);
+  const { savedRecipes } = useAppSelector((state) => state.recipe);
+
+  const dispatch = useAppDispatch();
 
   const token = user?.token as string;
+  const userID = user?.result?._id as string;
+
+  useEffect(() => {
+    dispatch(getSavedRecipes({ userID, token }));
+    if (token) {
+      dispatch(userProfile(token));
+    }
+  }, [dispatch, token, userID]);
 
   // nav list component
   const navListItems = [
@@ -209,6 +217,7 @@ function NavList() {
           {
             label: "Saved Recipes",
             icon: BookmarkIcon,
+            badge: true,
             link: "/saved-recipes",
           },
         ]
@@ -217,11 +226,16 @@ function NavList() {
 
   return (
     <ul className='mb-4 mt-2 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center'>
-      {navListItems.map(({ label, link, icon }, key) => (
+      {navListItems.map(({ label, link, icon, badge }, key) => (
         <Link to={link} color='blue-gray' className='font-normal' key={label}>
           <MenuItem className='flex items-center gap-2 lg:rounded-full'>
             {React.createElement(icon, { className: "h-[18px] w-[18px]" })}{" "}
             {label}
+            {badge && savedRecipes?.length > 0 && (
+              <span className='flex h-2 w-2 items-center justify-center rounded-full bg-green-500 p-3 text-xs text-white'>
+                {savedRecipes?.length}
+              </span>
+            )}
           </MenuItem>
         </Link>
       ))}
