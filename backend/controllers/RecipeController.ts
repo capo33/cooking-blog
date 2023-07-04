@@ -178,9 +178,13 @@ const saveRecipe = async (req: Request, res: Response) => {
     }
 
     // Save the recipe
-    await UserModel.findByIdAndUpdate(req.body.userID, {
-      $push: { savedRecipes: recipe._id },
-    });
+    await UserModel.findByIdAndUpdate(
+      req.body.userID,
+      {
+        $push: { savedRecipes: recipe._id },
+      },
+      { new: true } // to return the updated document
+    );
 
     // user?.savedRecipes.push(recipe._id);
 
@@ -224,9 +228,13 @@ const unsaveRecipe = async (req: Request, res: Response) => {
     }
 
     // Unsave the recipe
-    await UserModel.findByIdAndUpdate(req.body.userID, {
-      $pull: { savedRecipes: recipe._id },
-    });
+    await UserModel.findByIdAndUpdate(
+      req.body.userID,
+      {
+        $pull: { savedRecipes: recipe._id },
+      },
+      { new: true } // to return the updated document
+    );
 
     res.status(200).json({
       success: true,

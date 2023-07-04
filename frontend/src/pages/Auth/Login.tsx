@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate,useLocation } from "react-router-dom";
 import { BsEyeSlashFill, BsEyeFill } from "react-icons/bs";
 import { toast } from "react-toastify";
 
@@ -23,14 +23,18 @@ const Login = () => {
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
 
+  const redirect = location.search ? location.search.split("=")[1] : "/";
+
+  // Redirect user to home page if user is already logged in
   useEffect(() => {
     if (user) {
-      navigate("/");
+      navigate(redirect);
     } else {
       navigate("/login");
     }
-  }, [user, navigate]);
+  }, [user, navigate, redirect]);
 
   // Change input value
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

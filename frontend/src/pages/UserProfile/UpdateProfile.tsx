@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import axios from "axios";
 
 import {
   updateUserProfile,
   userProfile,
 } from "../../redux/feature/Auth/authSlice";
-import BackLink from "../../components/BackLink/BackLink";
-import { IUpdateProfile } from "../../interfaces/AuthInterface";
-import { useAppDispatch, useAppSelector } from "../../redux/app/store";
-import axios from "axios";
-import UploadPicture from "../../components/RecipeForm/UploadPicture";
 import Input from "../../components/ProfileForm/Input";
+import BackLink from "../../components/BackLink/BackLink";
 import Textarea from "../../components/ProfileForm/Textarea";
+import { IUpdateProfile } from "../../interfaces/AuthInterface";
 import RecipeButton from "../../components/RecipeForm/RecipeButton";
+import { useAppDispatch, useAppSelector } from "../../redux/app/store";
+import UploadPicture from "../../components/RecipeForm/UploadPicture";
 
 const UpdateProfile = () => {
   const { user } = useAppSelector((state) => state.auth);
@@ -103,7 +103,8 @@ const UpdateProfile = () => {
   };
 
   return (
-    <section className='p-6 dark:bg-gray-800 dark:text-gray-50'>
+    <section className='p-6 dark:bg-gray-800 dark:text-gray-50 mt-5 '>
+      <BackLink link='/profile' name='back to prfoile' />
       <form
         className='container flex flex-col mx-auto space-y-12'
         onSubmit={handleSubmit}
@@ -174,7 +175,9 @@ const UpdateProfile = () => {
         <fieldset className='grid grid-cols-4 gap-6 p-6 rounded-md shadow-sm dark:bg-gray-900'>
           <div className='space-y-2 col-span-full lg:col-span-1'>
             <p className='font-medium'>Profile</p>
-            <p className='text-xs'>Adipisci fuga autem eum!</p>
+            <p className='text-xs'>
+              Here you can add your profile picture and write a little about you
+            </p>
           </div>
           <div className='grid grid-cols-6 gap-4 col-span-full lg:col-span-3'>
             <div className='col-span-full'>

@@ -1,15 +1,21 @@
 import React, { useEffect, useState } from "react";
-import { useAppSelector, useAppDispatch } from "../../redux/app/store";
-import { logout, userProfile } from "../../redux/feature/Auth/authSlice";
-import BackLink from "../../components/BackLink/BackLink";
-import Modal from "../../components/Modal/Modal";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   TrashIcon,
   PencilSquareIcon,
   UserIcon,
 } from "@heroicons/react/24/outline";
+import { toast } from "react-toastify";
+
 import { formatDate } from "../../utils";
+import Modal from "../../components/Modal/Modal";
+import BackLink from "../../components/BackLink/BackLink";
+import { useAppSelector, useAppDispatch } from "../../redux/app/store";
+import {
+  logout,
+  userDeleteProfile,
+  userProfile,
+} from "../../redux/feature/Auth/authSlice";
 
 const Profile = () => {
   const [showModal, setShowModal] = useState(false);
@@ -21,10 +27,10 @@ const Profile = () => {
     (recipe) => recipe?.owner?._id === user?.result?._id
   );
 
-  console.log("user", user);
-
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
+  const token = user?.token as string;
   const userData = {
     name: user?.result?.name,
     about: user?.result?.about,
@@ -39,7 +45,6 @@ const Profile = () => {
     userId: user?.result?._id,
     time: user?.result?.createdAt,
   };
-  const token = user?.token;
 
   useEffect(() => {
     if (token) {
@@ -49,6 +54,7 @@ const Profile = () => {
 
   const handleDeleteProfile = async () => {
     dispatch(logout());
+    dispatch(userDeleteProfile({ token, toast, navigate }));
   };
 
   const handleConfirmDelete = () => {

@@ -51,6 +51,14 @@ function ProfileMenu() {
 
   const avatar = user?.result?.image as string;
   const admin = user?.result?.isAdmin as boolean;
+  const token = user?.token as string;
+
+  useEffect(() => {
+    if (token) {
+      dispatch(userProfile(token));
+      // dispatch(getSavedRecipes());
+    }
+  }, [dispatch, token]);
 
   const handleLogout = () => {
     dispatch(logout());
@@ -200,9 +208,6 @@ function NavList() {
 
   useEffect(() => {
     dispatch(getSavedRecipes({ userID, token }));
-    if (token) {
-      dispatch(userProfile(token));
-    }
   }, [dispatch, token, userID]);
 
   // nav list component
@@ -245,6 +250,7 @@ function NavList() {
 
 export default function ComplexNavbar() {
   const [isNavOpen, setIsNavOpen] = React.useState(false);
+
   const toggleIsNavOpen = () => setIsNavOpen((cur) => !cur);
 
   React.useEffect(() => {
