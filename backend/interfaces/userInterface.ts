@@ -5,13 +5,13 @@ export interface IUser extends Document {
   email: string;
   password: string;
   answer: string;
-  avatar: string;
+  image: string;
   about: string;
   savedRecipes: Types.ObjectId[];
   phone: string;
   isAdmin: boolean;
   address: string;
-  birthday: Date;
+  birthday: Date ;
   interests: string[];
   createdAt: Date;
   updatedAt: Date;

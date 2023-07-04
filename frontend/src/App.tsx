@@ -11,8 +11,8 @@ import RecipeDetails from "./pages/Recipe/RecipeDetails";
 import { useAppSelector } from "./redux/app/store";
 import UpdateRecipe from "./pages/Recipe/UpdateRecipe";
 import SavedRecipes from "./pages/Recipe/SavedRecipes";
+ import UpdateProfile from "./pages/UserProfile/UpdateProfile";
 import Profile from "./pages/UserProfile/Profile";
-import UpdateProfile from "./pages/UserProfile/UpdateProfile";
 
 function App() {
   const { user } = useAppSelector((state) => state.auth);

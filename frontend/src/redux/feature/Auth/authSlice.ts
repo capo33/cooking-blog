@@ -1,12 +1,13 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 import authServices from "./authServices";
-import { Auth, User } from "../../../interfaces/AuthInterface";
+import { Auth, IUpdateProfile, User } from "../../../interfaces/AuthInterface";
 
 const user = JSON.parse(localStorage.getItem("user") as string); // user as string because it is stored as a string in local storage
 
 interface AuthState {
   user: User | null;
+  users: User[];
   isError: boolean;
   isLoading: boolean;
   isSuccess: boolean;
@@ -15,6 +16,7 @@ interface AuthState {
 
 const initialState: AuthState = {
   user: user ? user : null,
+  users: [],
   isError: false,
   isLoading: false,
   isSuccess: false,
@@ -77,7 +79,7 @@ export const userProfile = createAsyncThunk(
   async (token: string, { rejectWithValue }) => {
     try {
       const response = await authServices.getProfile(token);
-       
+
       return response;
     } catch (error: unknown | any) {
       const message =
@@ -90,6 +92,116 @@ export const userProfile = createAsyncThunk(
     }
   }
 );
+
+// Update user profile
+export const updateUserProfile = createAsyncThunk(
+  "auth/updateUserProfile",
+  async (
+    {
+      userData,
+      token,
+      toast,
+      navigate,
+    }: { userData: IUpdateProfile; token: string; toast: any; navigate: any },
+    { rejectWithValue }
+  ) => {
+    try {
+      const response = await authServices.updateProfile(userData, token);
+      toast.success(response?.message);
+      navigate("/profile");
+      return response;
+    } catch (error: unknown | any) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      toast.error(message);
+      return rejectWithValue(message);
+    }
+  }
+);
+
+// Delete user profile by user
+export const userDeleteProfile = createAsyncThunk(
+  "auth/userDeleteProfile",
+  async (
+    { token, toast, navigate }: { token: string; toast: any; navigate: any },
+    thunkAPI
+  ) => {
+    try {
+      const response = await authServices.deleteUserProfileByUser(token);
+      toast.success(response?.message);
+      thunkAPI.dispatch(logout());
+      navigate("/login");
+      return response;
+    } catch (error: unknown | any) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      toast.error(message);
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+// Delete user profile by admin
+export const adminDeleteUserProfileBy = createAsyncThunk(
+  "auth/adminDeleteUserProfileBy",
+  async (
+    {
+      token,
+      userId,
+      toast,
+      navigate,
+    }: { token: string; userId: string; toast: any; navigate: any },
+    { rejectWithValue }
+  ) => {
+    try {
+      const response = await authServices.deleteUserProfileByAdmin(
+        token,
+        userId
+      );
+      toast.success(response?.message);
+      navigate("/");
+      return response;
+    } catch (error: unknown | any) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      toast.error(message);
+
+      return rejectWithValue(message);
+    }
+  }
+);
+
+// Get all users by admin
+export const getAllUsers = createAsyncThunk(
+  "auth/getAllUsers",
+  async (token: string, { rejectWithValue }) => {
+    try {
+      const response = await authServices.getAllUsersProfileByAdmin(token);
+      return response;
+    } catch (error: unknown | any) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return rejectWithValue(message);
+    }
+  }
+);
+
 const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -157,6 +269,65 @@ const authSlice = createSlice({
       state.user = payload;
     });
     builder.addCase(userProfile.rejected, (state, { payload }) => {
+      state.isLoading = false;
+      state.isError = true;
+      state.message = payload as string;
+    });
+
+    // Update user profile
+    builder.addCase(updateUserProfile.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(updateUserProfile.fulfilled, (state, { payload }) => {
+      state.isLoading = false;
+      state.isSuccess = true;
+      state.user = payload;
+    });
+    builder.addCase(updateUserProfile.rejected, (state, { payload }) => {
+      state.isLoading = false;
+      state.isError = true;
+      state.message = payload as string;
+    });
+
+    // Delete user profile by user
+    builder.addCase(userDeleteProfile.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(userDeleteProfile.fulfilled, (state) => {
+      state.isLoading = false;
+      state.isSuccess = true;
+      state.user = null;
+    });
+    builder.addCase(userDeleteProfile.rejected, (state, { payload }) => {
+      state.isLoading = false;
+      state.isError = true;
+      state.message = payload as string;
+    });
+
+    // Delete user profile by admin
+    builder.addCase(adminDeleteUserProfileBy.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(adminDeleteUserProfileBy.fulfilled, (state) => {
+      state.isLoading = false;
+      state.isSuccess = true;
+    });
+    builder.addCase(adminDeleteUserProfileBy.rejected, (state, { payload }) => {
+      state.isLoading = false;
+      state.isError = true;
+      state.message = payload as string;
+    });
+
+    // Get all users
+    builder.addCase(getAllUsers.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(getAllUsers.fulfilled, (state, { payload }) => {
+      state.isLoading = false;
+      state.isSuccess = true;
+      state.users = payload;
+    });
+    builder.addCase(getAllUsers.rejected, (state, { payload }) => {
       state.isLoading = false;
       state.isError = true;
       state.message = payload as string;

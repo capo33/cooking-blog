@@ -2,7 +2,7 @@ export interface Owner {
   _id: string;
   name?: string;
   email?: string;
-  avatar?: string;
+  image?: string;
   isAdmin?: boolean;
 }
 

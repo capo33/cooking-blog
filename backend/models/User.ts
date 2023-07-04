@@ -20,7 +20,7 @@ const userSchema = new Schema<IUser>(
       type: String,
       required: [true, "Please enter your answer"],
     },
-    avatar: {
+    image: {
       type: String,
       default:
         "https://t4.ftcdn.net/jpg/03/32/59/65/240_F_332596535_lAdLhf6KzbW6PWXBWeIFTovTii1drkbT.jpg",
@@ -49,7 +49,7 @@ const userSchema = new Schema<IUser>(
     },
     birthday: {
       type: Date,
-      default: Date.now(),
+      default: new Date(),
     },
     interests: {
       type: [String],

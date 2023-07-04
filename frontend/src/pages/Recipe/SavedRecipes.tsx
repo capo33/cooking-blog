@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
-import { TrashIcon } from "@heroicons/react/24/outline";
+ import { TrashIcon } from "@heroicons/react/24/outline";
 
 import {
   getSavedRecipes,

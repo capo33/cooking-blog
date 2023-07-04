@@ -1,32 +1,15 @@
 import React, { useEffect, useState } from "react";
+import { useAppSelector, useAppDispatch } from "../../redux/app/store";
+import { logout, userProfile } from "../../redux/feature/Auth/authSlice";
+import BackLink from "../../components/BackLink/BackLink";
+import Modal from "../../components/Modal/Modal";
 import { Link } from "react-router-dom";
 import {
   TrashIcon,
   PencilSquareIcon,
   UserIcon,
 } from "@heroicons/react/24/outline";
-
 import { formatDate } from "../../utils";
-import Modal from "../../components/Modal/Modal";
-import BackLink from "../../components/BackLink/BackLink";
-import { useAppSelector, useAppDispatch } from "../../redux/app/store";
-import { logout, userProfile } from "../../redux/feature/Auth/authSlice";
-
-// Grid item component
-const GridItem = ({
-  title,
-  value,
-}: {
-  title: string;
-  value: string | number;
-}) => {
-  return (
-    <div className='grid grid-cols-2'>
-      <div className='px-4 py-2 font-semibold'>{title}</div>
-      <div className='px-4 py-2'>{value}</div>
-    </div>
-  );
-};
 
 const Profile = () => {
   const [showModal, setShowModal] = useState(false);
@@ -34,20 +17,21 @@ const Profile = () => {
   const { user } = useAppSelector((state) => state.auth);
   const { recipes } = useAppSelector((state) => state.recipe);
 
-  const dispatch = useAppDispatch();
-
   const ownedRecipes = recipes?.filter(
     (recipe) => recipe?.owner?._id === user?.result?._id
   );
 
-  const token = user?.token;
+  console.log("user", user);
+
+  const dispatch = useAppDispatch();
+
   const userData = {
     name: user?.result?.name,
     about: user?.result?.about,
     phone: user?.result?.phone,
     email: user?.result?.email,
     ownedRecipes: ownedRecipes,
-    avatar: user?.result?.avatar,
+    image: user?.result?.image,
     isAdmin: user?.result?.isAdmin,
     address: user?.result?.address,
     birthday: user?.result?.birthday,
@@ -55,6 +39,7 @@ const Profile = () => {
     userId: user?.result?._id,
     time: user?.result?.createdAt,
   };
+  const token = user?.token;
 
   useEffect(() => {
     if (token) {
@@ -87,7 +72,7 @@ const Profile = () => {
             <div className='bg-white p-3 border-t-4 border-green-600'>
               <img
                 alt={userData?.name}
-                src={userData?.avatar}
+                src={userData?.image}
                 className='shadow-xl rounded-full h-auto align-middle border-none max-w-40-px'
               />
               <div className=' py-5 '>
@@ -162,54 +147,72 @@ const Profile = () => {
               </div>
               <div className='text-gray-700'>
                 <div className='grid md:grid-cols-2 text-sm'>
-                  <GridItem title='Name' value={userData?.name as string} />
-                  <GridItem title='Email' value={userData?.email as string} />
-                  <GridItem title='About' value={userData?.about as string} />
-                  <GridItem
-                    title='Address'
-                    value={userData?.address as string}
-                  />
-                  <GridItem
-                    title='Phone'
-                    value={userData?.phone as string | number}
-                  />
-                  <GridItem
-                    title='Birthday'
-                    value={userData?.birthday as string}
-                  />
+                  <div className='grid grid-cols-2'>
+                    <div className='px-4 py-2 font-semibold'>Name</div>
+                    <div className='px-4 py-2'>{userData?.name}</div>
+                  </div>
 
-                  <GridItem
-                    title='Interests'
-                    value={
-                      userData?.interests && userData?.interests?.length > 0
-                        ? userData?.interests?.map((interest, index) => (
-                            <span key={index}>{interest}</span>
-                          ))
-                        : ("Not Available Yet" as any)
-                    }
-                  />
+                  <div className='grid grid-cols-2'>
+                    <div className='px-4 py-2 font-semibold'>Address</div>
+                    <div className='px-4 py-2'>
+                      {userData?.address
+                        ? userData?.address
+                        : "Not Available Yet"}
+                    </div>
+                  </div>
 
-                  <GridItem
-                    title='Written recipes'
-                    value={
-                      userData?.ownedRecipes?.length > 0
+                  <div className='grid grid-cols-2'>
+                    <div className='px-4 py-2 font-semibold'>Phone</div>
+                    <div className='px-4 py-2'>
+                      {userData?.phone ? userData?.phone : "Not Available Yet"}
+                    </div>
+                  </div>
+
+                  <div className='grid grid-cols-2'>
+                    <div className='px-4 py-2 font-semibold'>Birthday</div>
+                    <div className='px-4 py-2'>
+                      {userData?.birthday?.toString().slice(0, 10)}
+                    </div>
+                  </div>
+
+                  <div className='grid grid-cols-2'>
+                    <div className='px-4 py-2 font-semibold'>Email</div>
+                    <div className='px-4 py-2'>
+                      {userData?.email ? userData?.email : "Not Available Yet"}
+                    </div>
+                  </div>
+                  <div className='grid grid-cols-2'>
+                    <div className='px-4 py-2 font-semibold'>
+                      Written recipes
+                    </div>
+                    <div className='px-4 py-2'>
+                      {userData?.ownedRecipes?.length > 0
                         ? userData?.ownedRecipes?.length +
                             userData?.ownedRecipes?.length >
                           2
                           ? userData?.ownedRecipes?.length + " recipes"
                           : userData?.ownedRecipes?.length + " recipe"
-                        : ("Not Available Yet" as string)
-                    }
-                  />
-
-                  <GridItem
-                    title='Bio'
-                    value={
-                      userData?.about
+                        : "Not Available Yet"}
+                    </div>
+                  </div>
+                  <div className='grid grid-cols-2'>
+                    <div className='px-4 py-2 font-semibold'>Interests</div>
+                    <div className='px-4 py-2'>
+                      {userData?.interests && userData?.interests?.length > 0
+                        ? userData?.interests?.map((interest, index) => (
+                            <span key={index}>{interest}</span>
+                          ))
+                        : "Not Available Yet"}
+                    </div>
+                  </div>
+                  <div className='grid grid-cols'>
+                    <div className='px-4 py-2 font-bold'>Bio</div>
+                    <div className='px-4 py-2'>
+                      {userData?.about
                         ? userData?.about
-                        : ("Update your bio to tell more about yourself." as string)
-                    }
-                  />
+                        : "Update your bio to tell more about yourself."}
+                    </div>
+                  </div>
                 </div>
 
                 <div className='bg-white p-3 hover:shadow'>

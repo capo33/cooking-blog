@@ -10,7 +10,7 @@ type RecipeNameProps = {
 const RecipeName = ({ recipe, handleChange }: RecipeNameProps) => {
   return (
     <div>
-      <label htmlFor='name' className='text-lg leading-6 font-medium '>
+      <label htmlFor='name' className='text-lg leading-6 font-medium'>
         Name
       </label>
 

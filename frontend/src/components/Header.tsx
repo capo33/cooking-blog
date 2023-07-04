@@ -1,24 +1,20 @@
 import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
 import { CiLogout } from "react-icons/ci";
+import { Link, useNavigate } from "react-router-dom";
 import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
-import { AiOutlineDown, AiOutlineUp } from "react-icons/ai";
-
-import { uperCaseFirstLetter } from "../utils";
-import { logout, userProfile } from "../redux/feature/Auth/authSlice";
+ 
 import { useAppDispatch, useAppSelector } from "../redux/app/store";
+import { logout, userProfile } from "../redux/feature/Auth/authSlice";
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const { user } = useAppSelector((state) => state.auth);
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-
-  const avatar = user?.result?.avatar as string;
-
+  
   const token = user?.token as string;
+  const avatar = user?.result?.image as string;
   const admin = user?.result?.isAdmin as boolean;
 
   useEffect(() => {
@@ -28,10 +24,6 @@ const Header = () => {
   const handleLogout = () => {
     dispatch(logout());
     navigate("/login");
-  };
-
-  const handleDropdown = () => {
-    setIsDropdownOpen(!isDropdownOpen);
   };
 
   return (
@@ -96,16 +88,16 @@ const Header = () => {
                       Saved Recipes
                     </Link>
                   </li>
-                    {admin && (
-                      <li>
-                        <Link
-                          to='/categories'
-                          className='hover:text-slate-500  hover:transition-all'
-                        >
-                          Categories
-                        </Link>
-                      </li>
-                    )}
+                  {admin && (
+                    <li>
+                      <Link
+                        to='/categories'
+                        className='hover:text-slate-500  hover:transition-all'
+                      >
+                        Categories
+                      </Link>
+                    </li>
+                  )}
                   <li>
                     <Link
                       to='/profile'
@@ -118,24 +110,12 @@ const Header = () => {
                       />
                     </Link>
                   </li>
-                 
+
                   <div className='py-1.5 px-4 hover:bg-teal-400 rounded cursor-pointer flex justify-between'>
                     <Link to='/login' onClick={handleLogout}>
                       Logout
                     </Link>
                     <CiLogout className='w-6 h-6' />
-                  </div>
-
-                  <div className=' '>
-                    {/* This is the dropdown menu */}
-                    <div
-                      className={`absolute z-10 mt-2 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 ${
-                        isDropdownOpen ? "block" : "hidden"
-                      }`}
-                      id='dropdown'
-                    >
-                      <ul className='py-1' aria-labelledby='dropdown'></ul>
-                    </div>
                   </div>
                 </>
               ) : (

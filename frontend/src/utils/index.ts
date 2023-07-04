@@ -1,5 +1,5 @@
 // uper case first letter
-export const uperCaseFirstLetter = (str:string) => {
+export const uperCaseFirstLetter = (str: string) => {
   return str?.charAt(0).toUpperCase() + str?.slice(1);
 };
 
@@ -11,16 +11,6 @@ export const formatDate = (date = Date.now() as number) => {
   const day = newDate.getDate();
   return `${day}/${month}/${year} `;
 };
-
-// render details
-// export const RenderDetails = ({ name, value }) => {
-//   return (
-//     <div className='text-sm leading-normal mt-0 mb-2 text-orange-600 '>
-//       <span className='mr-2 text-blue-800 text-lg capitalize'>{name}:</span>
-//       <span className='text-lg'>{value ? value : `No ${name}`}</span>
-//     </div>
-//   );
-// };
 
 // sub string
 export const subStringFunc = (str: string, length: number) => {
@@ -47,7 +37,7 @@ export const modules = {
     ["clean"],
     ["code-block"],
   ],
- };
+};
 
 export const formats = [
   "header",

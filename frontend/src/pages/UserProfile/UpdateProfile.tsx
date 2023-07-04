@@ -1,183 +1,225 @@
-import React from 'react'
-import BackLink from '../../components/BackLink/BackLink'
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+
+import {
+  updateUserProfile,
+  userProfile,
+} from "../../redux/feature/Auth/authSlice";
+import BackLink from "../../components/BackLink/BackLink";
+import { IUpdateProfile } from "../../interfaces/AuthInterface";
+import { useAppDispatch, useAppSelector } from "../../redux/app/store";
+import axios from "axios";
+import UploadPicture from "../../components/RecipeForm/UploadPicture";
+import Input from "../../components/ProfileForm/Input";
+import Textarea from "../../components/ProfileForm/Textarea";
+import RecipeButton from "../../components/RecipeForm/RecipeButton";
 
 const UpdateProfile = () => {
-  return (
-    <div className='p-5 mt-5'>
-    {/* back to profile */}
-    <BackLink link='/profile' name='Profile' />
+  const { user } = useAppSelector((state) => state.auth);
 
-      <div className='p-8 rounded border border-gray-200'>
-        <h1 className='font-medium text-3xl'>Update your profile</h1>
-        <form >
-          <div className='mt-8 grid gap-4'>
-            <div>
-              <label
-                htmlFor='name'
-                className='text-sm text-gray-700 block mb-1 font-medium'
-              >
-                Name
-              </label>
-              <input
+  const formData = {
+    result: {
+      name: user?.result?.name,
+      email: user?.result?.email,
+      address: user?.result?.address,
+      phone: user?.result?.phone,
+      about: user?.result?.about,
+      birthday: user?.result?.birthday,
+      image: user?.result?.image,
+      interests: user?.result?.interests,
+    },
+  };
+
+  const [userData, setUserData] = useState<IUpdateProfile>(formData);
+  const [uploading, setUploading] = useState(false);
+
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  const token = user?.token as string;
+
+  // Handle change for all input fields
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
+    const { name, value } = e.target;
+    setUserData((prevUser) => ({
+      ...prevUser,
+      result: { ...prevUser.result, [name]: value },
+    }));
+  };
+
+  useEffect(() => {
+    if (token) {
+      dispatch(userProfile(token));
+    }
+  }, [dispatch, token]);
+
+  useEffect(() => {
+    if (user) {
+      setUserData(user as IUpdateProfile);
+    }
+  }, [user]);
+
+  // Upload image handler
+  const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e?.currentTarget?.files?.[0];
+    const formData = new FormData();
+    formData.append("image", file as Blob);
+    setUploading(true);
+    try {
+      const response = await axios.post("/api/v1/upload", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      setUserData((prevUser) => ({
+        result: { ...prevUser.result, image: response.data.image },
+      }));
+      setUploading(false);
+    } catch (error) {
+      console.error(error);
+      setUploading(false);
+    }
+  };
+
+  // Submit handler
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    dispatch(
+      updateUserProfile({
+        userData: userData.result as IUpdateProfile,
+        token,
+        toast,
+        navigate,
+      })
+    );
+    navigate("/profile");
+  };
+
+  return (
+    <section className='p-6 dark:bg-gray-800 dark:text-gray-50'>
+      <form
+        className='container flex flex-col mx-auto space-y-12'
+        onSubmit={handleSubmit}
+      >
+        <fieldset className='grid grid-cols-4 gap-6 p-6 rounded-md shadow-sm dark:bg-gray-900'>
+          <div className='space-y-2 col-span-full lg:col-span-1'>
+            <p className='font-medium'>Personal Inormation</p>
+            <p className='text-xs'>
+              Add your personal information to complete your profile
+            </p>
+          </div>
+          <div className='grid grid-cols-6 gap-4 col-span-full lg:col-span-3'>
+            <div className='col-span-full sm:col-span-3'>
+              <Input
+                label='Name'
                 type='text'
                 name='name'
-                id='name'
-                // value={name || ""}
-                // onChange={(e) => setName(e.target.value)}
-                className='bg-gray-100 border border-gray-200 rounded py-1 px-3 block focus:ring-blue-500 focus:border-blue-500 text-gray-700 w-full'
-                placeholder='e.g. John Doe'
+                value={userData?.result?.name || ("" as string)}
+                handleChange={handleChange}
+                placeholder='Name'
               />
             </div>
-
-            <div>
-              <label
-                htmlFor='email'
-                className='text-sm text-gray-700 block mb-1 font-medium'
-              >
-                Email
-              </label>
-              <input
-                type='email'
-                name='email'
-                // value={email || ""}
-                // onChange={(e) => setEmail(e.target.value)}
-                id='email'
-                className='bg-gray-100 border border-gray-200 rounded py-1 px-3 block focus:ring-blue-500 focus:border-blue-500 text-gray-700 w-full'
-                placeholder='example@example.com'
-              />
-            </div>
-
-            <div>
-              <label
-                htmlFor='address'
-                className='text-sm text-gray-700 block mb-1 font-medium'
-              >
-                Address
-              </label>
-              <input
+            <div className='col-span-full sm:col-span-3'>
+              <Input
+                label='Address'
                 type='text'
                 name='address'
-                // value={address || ""}
-                // onChange={(e) => setAddress(e.target.value)}
-                id='address'
-                className='bg-gray-100 border border-gray-200 rounded py-1 px-3 block focus:ring-blue-500 focus:border-blue-500 text-gray-700 w-full'
-                placeholder='e.g. 1234 Main St'
+                value={userData?.result?.address || ("" as string)}
+                handleChange={handleChange}
+                placeholder='Address'
               />
             </div>
-            <div>
-              <label
-                htmlFor='phone'
-                className='text-sm text-gray-700 block mb-1 font-medium'
-              >
-                Phone
-              </label>
-              <input
-                type='text'
+            <div className='col-span-full sm:col-span-3'>
+              <Input
+                label='Email'
+                type='email'
+                name='email'
+                value={userData?.result?.email || ("" as string)}
+                handleChange={handleChange}
+                placeholder='Email'
+              />
+            </div>
+            <div className='col-span-full sm:col-span-3'>
+              <Input
+                label='Phone'
+                type='tel'
                 name='phone'
-                // value={phone || ""}
-                // onChange={(e) => setPhone(e.target.value)}
-                id='phone'
-                className='bg-gray-100 border border-gray-200 rounded py-1 px-3 block focus:ring-blue-500 focus:border-blue-500 text-gray-700 w-full'
-                placeholder='e.g. 123-456-7890'
+                value={userData?.result?.phone || ("" as string)}
+                handleChange={handleChange}
+                placeholder='Phone'
               />
             </div>
-            
-            <div>
-              <label
-                htmlFor='about'
-                className='text-sm text-gray-700 block mb-1 font-medium'
-              >
-                About
-              </label>
-              <input
-                type='text'
-                name='about'
-                // value={about || ""}
-                // onChange={(e) => setAbout(e.target.value)}
-                id='about'
-                className='bg-gray-100 border border-gray-200 rounded py-1 px-3 block focus:ring-blue-500 focus:border-blue-500 text-gray-700 w-full'
-                placeholder='e.g. I am a teacher and I love to teach :)'
-              />
-            </div>
-            <div>
-              <label
-                htmlFor='birthday'
-                className='text-sm text-gray-700 block mb-1 font-medium'
-              >
-                Birthday
-              </label>
-              <input
+            <div className='col-span-full sm:col-span-2'>
+              <Input
+                label='Birthday'
                 type='date'
                 name='birthday'
-                // value={birthday || ""}
-                // onChange={(e) => setBirthday(e.target.value)}
-                id='birthday'
-                className='bg-gray-100 border border-gray-200 rounded py-1 px-3 block focus:ring-blue-500 focus:border-blue-500 text-gray-700 w-full'
-                placeholder='e.g. 01/01/2000'
+                value={
+                  userData?.result?.birthday?.toString().slice(0, 10) ||
+                  ("" as string)
+                }
+                handleChange={handleChange}
+                placeholder='Birthday'
               />
             </div>
-            {/* Upload image */}
-            <div>
-              <label
-                htmlFor='avatar'
-                className='flex gap-1 justify-center border bg-transparent rounded-2xl p-2  cursor-pointer text-gray-800'
-              >
-                <input
-                  type='file'
-                  name='avatar'
-                  accept='image/*'
-                  className='py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-600 active:bg-blue-700 disabled:opacity-50'
-                  // onChange={(e) => setAvatar(e.target.files[0])}
-                  id='avatar'
-                  hidden
-                />
-                {/* <SVG
-                  className='w-6 h-6'
-                  d='M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z'
-                /> */}
-                {/* {avatar ? avatar?.name : "Upload Image"} */}
+          </div>
+        </fieldset>
+        <fieldset className='grid grid-cols-4 gap-6 p-6 rounded-md shadow-sm dark:bg-gray-900'>
+          <div className='space-y-2 col-span-full lg:col-span-1'>
+            <p className='font-medium'>Profile</p>
+            <p className='text-xs'>Adipisci fuga autem eum!</p>
+          </div>
+          <div className='grid grid-cols-6 gap-4 col-span-full lg:col-span-3'>
+            <div className='col-span-full'>
+              <Input
+                label='Interests'
+                type='text'
+                name='interests'
+                value={userData?.result?.interests || ([] as string[])}
+                handleChange={handleChange}
+                placeholder='Interests'
+              />
+            </div>
+
+            <div className='col-span-full'>
+              <Textarea
+                label='About Me'
+                name='about'
+                value={userData?.result?.about || ("" as string)}
+                handleChange={handleChange}
+                placeholder='About Me'
+              />
+            </div>
+
+            <div className='col-span-full'>
+              <label htmlFor='bio' className='text-sm'>
+                Photo
               </label>
+              <div className='flex justify-around flex-wrap'>
+                <img
+                  src={userData?.result?.image}
+                  alt=''
+                  className='w-20 h-20 flex justify-center'
+                />
+                <UploadPicture
+                  handleUpload={handleUpload}
+                  uploading={uploading}
+                />
+              </div>
+              <RecipeButton title='Update' />
             </div>
-            {/* {avatar ? (
-              <div className='text-center'> */}
-                {/* <img
-                  // we use URL.createObjectURL to create a temporary URL for the image
-                  src={URL.createObjectURL(avatar)}
-                  alt={avatar?.name}
-                  height='200px'
-                  className='img img-responsive img-thumbnail'
-                /> */}
-              {/* </div>
-            ) : (
-              <img
-                // src={`http://localhost:5000/uploads/${auth?.user?.user?.avatar}`}
-                src={`https://corner-blog-api.onrender.com/uploads/${auth?.user?.user?.avatar}`}
-                alt='Upload '
-                height='200px'
-                className='img img-responsive img-thumbnail'
-              />
-            )} */}
           </div>
+        </fieldset>
+      </form>
+    </section>
+  );
+};
 
-          <div className='space-x-4 mt-8'>
-            <button
-              type='submit'
-              className='py-2 px-4 bg-green-800 text-white rounded hover:bg-green-700 active:bg-green-700 disabled:opacity-50'
-            >
-              Update
-            </button>
-            <button
-              type='reset'
-              // onClick={handleReset}
-              className='py-2 px-4 bg-red-800 text-white rounded hover:bg-red-700 active:bg-red-700 disabled:opacity-50'
-            >
-              Reset
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
-  )
-}
-
-export default UpdateProfile
+export default UpdateProfile;

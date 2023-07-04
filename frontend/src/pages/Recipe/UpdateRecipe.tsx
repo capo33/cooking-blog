@@ -1,21 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import RecipeName from "../../components/RecipeForm/RecipeName";
-import Ingredients from "../../components/RecipeForm/Ingredients";
-import Instructions from "../../components/RecipeForm/Instructions";
-import CookingTime from "../../components/RecipeForm/CookingTime";
-import Category from "../../components/RecipeForm/Category";
-import UploadPicture from "../../components/RecipeForm/UploadPicture";
-import { useAppSelector, useAppDispatch } from "../../redux/app/store";
+import axios from "axios";
+import { toast } from "react-toastify";
+
 import {
   getSingleRecipe,
   updateRecipe,
 } from "../../redux/feature/Recipe/recipeSlice";
 import { Recipe } from "../../interfaces/RecipeInterface";
-import axios from "axios";
-import { toast } from "react-toastify";
-import RecipeButton from "../../components/RecipeForm/RecipeButton";
 import BackLink from "../../components/BackLink/BackLink";
+import Category from "../../components/RecipeForm/Category";
+import RecipeName from "../../components/RecipeForm/RecipeName";
+import Ingredients from "../../components/RecipeForm/Ingredients";
+import CookingTime from "../../components/RecipeForm/CookingTime";
+import RecipeButton from "../../components/RecipeForm/RecipeButton";
+import Instructions from "../../components/RecipeForm/Instructions";
+import UploadPicture from "../../components/RecipeForm/UploadPicture";
+import { useAppSelector, useAppDispatch } from "../../redux/app/store";
 
 const UpdateRecipe = () => {
   const { recipeId } = useParams<{ recipeId: string }>();
@@ -37,16 +38,6 @@ const UpdateRecipe = () => {
     owner: {
       _id: user?.result?._id as string,
     },
-    // name: "",
-    // ingredients: [],
-    // instructions: "",
-    // image: "",
-    // cookingTime: 0,
-    // category: { _id: "", name: "", image: "", slug: "" },
-
-    // owner: {
-    //   _id: user?.result?._id as string,
-    // },
   };
 
   const [data, setData] = useState<Recipe>(recipeData);
@@ -95,8 +86,9 @@ const UpdateRecipe = () => {
       ...prevRecipe,
       ingredients: newIngredients as string[],
     }));
-    console.log(ingredient);
   };
+
+  // Submit handler
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     dispatch(
@@ -137,7 +129,10 @@ const UpdateRecipe = () => {
 
   return (
     <div className='mt-12 mb-5'>
-      <BackLink link={`/recipe-details/${recipeId}`} name='Back to recipe details' />
+      <BackLink
+        link={`/recipe-details/${recipeId}`}
+        name='Back to recipe details'
+      />
       <div className='md:grid md:grid-cols-3 md:gap-6'>
         <div className='md:col-span-1'>
           <div className='px-4 sm:px-0'>
@@ -173,8 +168,9 @@ const UpdateRecipe = () => {
                 />
                 <img src={data?.image} alt='' className='w-1/2 h-1/2' />
               </div>
+
               {/* <RecipeButton /> */}
-              <RecipeButton title='Updata' />
+              <RecipeButton title='Update' />
             </div>
           </form>
         </div>

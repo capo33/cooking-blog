@@ -11,10 +11,10 @@ export interface User {
     phone?: string;
     address?: string;
     savedRecipes?: string[];
-    birthday?: string;
+    birthday?: Date;
     interests?: string[];
     _id?: string;
-    avatar?: string;
+    image?: string;
     createdAt?: number;
     updatedAt?: number;
   };
@@ -31,4 +31,17 @@ export interface Auth {
   formData: AuthUser;
   navigate: any;
   toast?: any;
+}
+
+export interface IUpdateProfile {
+  result: {
+    name?: string;
+    email?: string;
+    address?: string;
+    phone?: string;
+    birthday?:  Date;
+    about?: string;
+    image?: string;
+    interests?: string[];
+  };
 }

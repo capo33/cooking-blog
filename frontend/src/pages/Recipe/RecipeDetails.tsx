@@ -116,7 +116,7 @@ const RecipeDetails = () => {
           </h3>
           <div className='flex mt-3'>
             <img
-              src={recipe?.owner?.avatar}
+              src={recipe?.owner?.image}
               className='h-10 w-10 rounded-full mr-2 object-cover'
               alt={recipe?.owner?.name}
             />

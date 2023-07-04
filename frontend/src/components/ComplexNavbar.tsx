@@ -49,7 +49,7 @@ function ProfileMenu() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const avatar = user?.result?.avatar as string;
+  const avatar = user?.result?.image as string;
   const admin = user?.result?.isAdmin as boolean;
 
   const handleLogout = () => {
