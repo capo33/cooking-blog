@@ -6,7 +6,7 @@ import {
   BookmarkSlashIcon,
 } from "@heroicons/react/24/outline";
 import { toast } from "react-toastify";
-import { Typography } from "@material-tailwind/react";
+import { Tooltip, Typography } from "@material-tailwind/react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 
 import { formatDate } from "../../utils";
@@ -37,7 +37,7 @@ const RecipeDetails = () => {
 
   useEffect(() => {
     dispatch(getSingleRecipe(id as string));
-    dispatch(getSavedRecipes({userID, token}));
+    dispatch(getSavedRecipes({ userID, token }));
   }, [dispatch, id, token, userID]);
 
   const handleDeleteBlog = async () => {
@@ -134,7 +134,33 @@ const RecipeDetails = () => {
 
       {/* Save Recipe */}
       <div className='flex justify-end mb-5 px-4 lg:px-0 mt-5 max-w-screen-md mx-auto text-cyan-900 hover:text-teal-900'>
-        {recipesIDs?.includes(recipe?._id as string) ? (
+        {!user ? (
+          <Tooltip content='Login to save recipe'>
+            <BookmarkIcon className='h-5 w-5' />
+          </Tooltip>
+        ) : (
+          <>
+            {recipesIDs?.includes(recipe?._id as string) ? (
+              <>
+                <span className='badge rounded-pill'>Unsave</span>
+                <BookmarkSlashIcon
+                  className='h-5 w-5 cursor-pointer'
+                  onClick={() => handleUnsaveRecipe(recipe?._id as string)}
+                />
+              </>
+            ) : (
+              <>
+                <span className='badge rounded-pill text-bg-warning'>Save</span>
+                <BookmarkIcon
+                  className='h-5 w-5 cursor-pointer'
+                  onClick={() => handleSaveRecipe(recipe?._id as string)}
+                />
+              </>
+            )}
+          </>
+        )}
+
+        {/* {recipesIDs?.includes(recipe?._id as string) ? (
           <>
             <span className='badge rounded-pill'>Unsave</span>
             <BookmarkSlashIcon
@@ -150,7 +176,7 @@ const RecipeDetails = () => {
               onClick={() => handleSaveRecipe(recipe?._id as string)}
             />
           </>
-        )}
+        )} */}
       </div>
       <div className='px-4 lg:px-0 mt-12 max-w-screen-md mx-auto leading-relaxed'>
         {/* Ingredient */}

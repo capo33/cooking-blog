@@ -71,25 +71,38 @@ const BLogCard = ({ recipe }: RecipeCardProps) => {
         <div className='to-bg-black-10 absolute inset-0 h-full w-full bg-gradient-to-tr from-transparent via-transparent to-black/60 ' />
 
         {/* Like & Unlike */}
-        <IconButton
-          size='sm'
-          color='white'
-          variant='text'
-          className='!absolute top-4 right-4 rounded-full'
-        >
-          {recipe?.likes?.includes(userID) ? (
-            <HandThumbUpIcon
-              onClick={() => handleUnlike(recipe?._id as string)}
-              className='h-5 w-5'
-              fill='white'
-            />
-          ) : (
-            <HandThumbUpIcon
-              onClick={() => handleLike(recipe?._id as string)}
-              className='h-5 w-5'
-            />
-          )}
-        </IconButton>
+        {!user ? (
+          <Tooltip content='Login to like this recipe'>
+            <IconButton
+              size='sm'
+              color='white'
+              variant='text'
+              className='!absolute top-4 right-4 rounded-full'
+            >
+              <HandThumbUpIcon className='h-5 w-5' />
+            </IconButton>
+          </Tooltip>
+        ) : (
+          <IconButton
+            size='sm'
+            color='white'
+            variant='text'
+            className='!absolute top-4 right-4 rounded-full'
+          >
+            {recipe?.likes?.includes(userID) ? (
+              <HandThumbUpIcon
+                onClick={() => handleUnlike(recipe?._id as string)}
+                className='h-5 w-5'
+                fill='white'
+              />
+            ) : (
+              <HandThumbUpIcon
+                onClick={() => handleLike(recipe?._id as string)}
+                className='h-5 w-5'
+              />
+            )}
+          </IconButton>
+        )}
       </CardHeader>
 
       {/* CardBody */}
