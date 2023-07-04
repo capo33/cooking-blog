@@ -1,3 +1,5 @@
+import { Recipe } from "./RecipeInterface";
+
 export interface User {
   result: {
     message: string;
@@ -21,6 +23,30 @@ export interface User {
   token: string;
 }
 
+export interface Guest {
+  // user: User;
+  // recipe : Recipe;
+  user: {
+    message: string;
+    token: string;
+    name: string;
+    email: string;
+    password: string;
+    answer?: string;
+    about?: string;
+    isAdmin?: boolean;
+    phone?: string;
+    address?: string;
+    savedRecipes?: string[];
+    birthday?: Date;
+    interests?: string[];
+    _id?: string;
+    image?: string;
+    createdAt?: number;
+    updatedAt?: number;
+  };
+  recipes : Recipe[];
+}
 export interface AuthUser {
   email: string;
   password: string;

@@ -317,6 +317,27 @@ const getUsers = async (req: Request, res: Response) => {
   }
 };
 
+// @desc    Get a user's profile
+// @route   GET /api/v1/auth/user/:id
+// @access  Public
+const getUserProfile = async (req: Request, res: Response) => {
+  try {
+    const user = await UserModel.findById(req.params.id).select("-password");
+
+    if (!user) {
+      return res.status(404).json({ msg: "User not found" });
+    }
+
+    // Get user's recipes
+    const recipes = await RecipeModel.find({ owner: req.params.id });
+
+    res.status(200).json({ user, recipes });
+  } catch (error) {
+    if (error instanceof Error) {
+      res.status(500).json({ msg: "Server error", error: error.message });
+    }
+  }
+};
 
 export {
   register,
@@ -328,4 +349,5 @@ export {
   deleteUserByUser,
   deleteUserByAdmin,
   getUsers,
+  getUserProfile,
 };

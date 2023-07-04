@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   ChatBubbleLeftRightIcon,
   StarIcon,
@@ -109,7 +109,7 @@ const BLogCard = ({ recipe }: RecipeCardProps) => {
       <CardBody>
         <div className='mb-3 flex items-center justify-between'>
           <Typography variant='h5' color='blue-gray' className='font-medium'>
-            {recipe?.name}
+            <Link to={`/recipe-details/${recipe?._id}`}>{recipe?.name}</Link>
           </Typography>
 
           {recipesIDs?.includes(recipe._id) ? (

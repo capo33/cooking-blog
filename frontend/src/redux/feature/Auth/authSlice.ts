@@ -1,12 +1,18 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 import authServices from "./authServices";
-import { Auth, IUpdateProfile, User } from "../../../interfaces/AuthInterface";
+import {
+  Auth,
+  Guest,
+  IUpdateProfile,
+  User,
+} from "../../../interfaces/AuthInterface";
 
 const user = JSON.parse(localStorage.getItem("user") as string); // user as string because it is stored as a string in local storage
 
 interface AuthState {
   user: User | null;
+  guest: Guest | null;
   users: User[];
   isError: boolean;
   isLoading: boolean;
@@ -16,6 +22,7 @@ interface AuthState {
 
 const initialState: AuthState = {
   user: user ? user : null,
+  guest: null,
   users: [],
   isError: false,
   isLoading: false,
@@ -202,6 +209,26 @@ export const getAllUsers = createAsyncThunk(
   }
 );
 
+// Get user by id
+export const getUserById = createAsyncThunk(
+  "auth/getUserById",
+  async (userId: string, { rejectWithValue }) => {
+    try {
+      const response = await authServices.getUserProfileById(userId);
+
+      return response;
+    } catch (error: unknown | any) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return rejectWithValue(message);
+    }
+  }
+);
+
 const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -328,6 +355,21 @@ const authSlice = createSlice({
       state.users = payload;
     });
     builder.addCase(getAllUsers.rejected, (state, { payload }) => {
+      state.isLoading = false;
+      state.isError = true;
+      state.message = payload as string;
+    });
+
+    // Get user by id
+    builder.addCase(getUserById.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(getUserById.fulfilled, (state, { payload }) => {
+      state.isLoading = false;
+      state.isSuccess = true;
+      state.guest = payload;
+    });
+    builder.addCase(getUserById.rejected, (state, { payload }) => {
       state.isLoading = false;
       state.isError = true;
       state.message = payload as string;

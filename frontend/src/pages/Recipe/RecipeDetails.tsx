@@ -23,6 +23,7 @@ import { useAppDispatch, useAppSelector } from "../../redux/app/store";
 
 const RecipeDetails = () => {
   const { id } = useParams<{ id: string }>();
+
   const [showModal, setShowModal] = useState(false);
   const { user } = useAppSelector((state) => state.auth);
   const { recipe } = useAppSelector((state) => state.recipe);
@@ -30,6 +31,7 @@ const RecipeDetails = () => {
 
   const token = user?.token as string;
   const userID = user?.result?._id as string;
+  const guestID = recipe?.owner?._id as string;
   const recipesIDs = savedRecipes?.map((recipe) => recipe._id);
 
   const dispatch = useAppDispatch();
@@ -90,7 +92,6 @@ const RecipeDetails = () => {
         </>
       ) : null}
 
-      {/* <BackLink link='/' name='Home' /> */}
       <div
         className='mb-4 md:mb-0 w-full max-w-screen-md mx-auto relative'
         style={{ height: "24em" }}
@@ -102,6 +103,7 @@ const RecipeDetails = () => {
               "linear-gradient(180deg,transparent,rgba(0,0,0,.7))",
           }}
         />
+
         <img
           src={recipe?.image}
           className='absolute left-0 top-0 w-full h-full z-0 object-cover'
@@ -115,11 +117,19 @@ const RecipeDetails = () => {
             {recipe?.name ? recipe?.name : "No Name"}
           </h3>
           <div className='flex mt-3'>
-            <img
-              src={recipe?.owner?.image}
-              className='h-10 w-10 rounded-full mr-2 object-cover'
-              alt={recipe?.owner?.name}
-            />
+            <Link
+              to={
+                recipe?.owner?._id !== userID
+                  ? `/user-profile/${guestID}`
+                  : "/profile"
+              }
+            >
+              <img
+                src={recipe?.owner?.image}
+                className='h-10 w-10 rounded-full mr-2 object-cover'
+                alt={recipe?.owner?.name}
+              />
+            </Link>
             <div>
               <p className='font-semibold text-gray-200 text-sm'>
                 by @{recipe?.owner?.name ? recipe?.owner?.name : "Anonymous"}
@@ -159,25 +169,8 @@ const RecipeDetails = () => {
             )}
           </>
         )}
-
-        {/* {recipesIDs?.includes(recipe?._id as string) ? (
-          <>
-            <span className='badge rounded-pill'>Unsave</span>
-            <BookmarkSlashIcon
-              className='h-5 w-5 cursor-pointer'
-              onClick={() => handleUnsaveRecipe(recipe?._id as string)}
-            />
-          </>
-        ) : (
-          <>
-            <span className='badge rounded-pill text-bg-warning'>Save</span>
-            <BookmarkIcon
-              className='h-5 w-5 cursor-pointer'
-              onClick={() => handleSaveRecipe(recipe?._id as string)}
-            />
-          </>
-        )} */}
       </div>
+
       <div className='px-4 lg:px-0 mt-12 max-w-screen-md mx-auto leading-relaxed'>
         {/* Ingredient */}
         <Typography variant='h5'>Ingredients</Typography>

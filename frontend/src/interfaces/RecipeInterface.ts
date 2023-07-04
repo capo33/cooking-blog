@@ -13,7 +13,6 @@ export interface Category {
   _id?: string;
 }
 
-
 export interface Recipe {
   _id?: string;
   name: string;
@@ -30,10 +29,9 @@ export interface Recipe {
   numReviews?: number;
   slug?: string;
   createdAt?: number;
-  
 }
 
-export interface CreateRecipe {
+ export interface CreateRecipe {
   formData: Recipe;
   token: string;
 }

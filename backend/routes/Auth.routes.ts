@@ -11,6 +11,7 @@ router.post("/forgot-password", protect, authController.forgotPassword);
 router.get("/logout", authController.logout);
 router.get("/profile", protect, authController.getProfile);
 router.get("/users", protect, admin, authController.getUsers);
+router.get("/user/:id", authController.getUserProfile);
 router.put("/update-profile", protect, authController.updateProfile);
 router.delete("/user", protect, authController.deleteUserByUser);
 router.delete("/user/:id", protect, admin, authController.deleteUserByAdmin);

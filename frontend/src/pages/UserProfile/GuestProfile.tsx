@@ -1,110 +1,38 @@
-import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import {
-  TrashIcon,
-  PencilSquareIcon,
-  UserIcon,
-} from "@heroicons/react/24/outline";
-import { toast } from "react-toastify";
-
-import { formatDate } from "../../utils";
-import Modal from "../../components/Modal/Modal";
+import React, { useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { getUserById } from "../../redux/feature/Auth/authSlice";
+import { useAppDispatch, useAppSelector } from "../../redux/app/store";
 import BackLink from "../../components/BackLink/BackLink";
-import { useAppSelector, useAppDispatch } from "../../redux/app/store";
-import {
-  logout,
-  userDeleteProfile,
-  userProfile,
-} from "../../redux/feature/Auth/authSlice";
+import { formatDate } from "../../utils";
 
-const Profile = () => {
-  const [showModal, setShowModal] = useState(false);
-
-  const { user } = useAppSelector((state) => state.auth);
-  const { recipes } = useAppSelector((state) => state.recipe);
-
-  const ownedRecipes = recipes?.filter(
-    (recipe) => recipe?.owner?._id === user?.result?._id
-  );
-
+export const GuestProfile = () => {
+  const { guestID } = useParams<{ guestID: string }>();
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-
-  const token = user?.token as string;
-  const userData = {
-    name: user?.result?.name,
-    about: user?.result?.about,
-    phone: user?.result?.phone,
-    email: user?.result?.email,
-    ownedRecipes: ownedRecipes,
-    image: user?.result?.image,
-    isAdmin: user?.result?.isAdmin,
-    address: user?.result?.address,
-    birthday: user?.result?.birthday,
-    interests: user?.result?.interests,
-    userId: user?.result?._id,
-    time: user?.result?.createdAt,
-  };
+  const { guest } = useAppSelector((state) => state.auth);
+  console.log(guest);
 
   useEffect(() => {
-    if (token) {
-      dispatch(userProfile(token));
-    }
-  }, [dispatch, token]);
-
-  const handleDeleteProfile = async () => {
-    dispatch(logout());
-    dispatch(userDeleteProfile({ token, toast, navigate }));
-  };
-
-  const handleConfirmDelete = () => {
-    setShowModal((prev) => !prev);
-  };
+    dispatch(getUserById(guestID as string));
+  }, [dispatch, guestID]);
 
   return (
     <>
       <div className='container mx-auto my-5 p-5'>
         <BackLink link='/' name='Home' />
-        {showModal ? (
-          <Modal
-            setShowModal={setShowModal}
-            handleDelete={handleDeleteProfile}
-            value='profile'
-          />
-        ) : null}
 
         <div className='md:flex no-wrap md:-mx-2 '>
           <div className='w-full md:w-3/12 md:mx-2'>
             <div className='bg-white p-3 border-t-4 border-green-600'>
               <img
-                alt={userData?.name}
-                src={userData?.image}
+                alt={guest?.user?.name}
+                src={guest?.user?.image}
                 className='shadow-xl rounded-full h-auto align-middle border-none max-w-40-px'
               />
-              <div className=' py-5 '>
-                <div className='flex justify-center items-center text-center'>
-                  <div className='flex items-center'>
-                    <Link
-                      to={`/update-profile/${userData?.userId}`}
-                      className='flex items-center text-gray-700 hover:text-gray-900 focus:outline-none'
-                    >
-                      <PencilSquareIcon className='h-5 w-5 mr-1' />
-                      <span className='text-sm'>Edit</span>
-                    </Link>
-                    <button
-                      onClick={handleConfirmDelete}
-                      className='flex items-center text-gray-700 hover:text-gray-900 ml-6 focus:outline-none'
-                    >
-                      <TrashIcon className='h-5 w-5 mr-1' />
-                      <span className='text-sm'>Delete</span>
-                    </button>
-                  </div>
-                </div>
-              </div>
+
               <h1 className='text-gray-900 font-bold text-xl leading-8 my-1'>
-                {userData?.ownedRecipes?.length > 5 ? (
+                {guest?.recipes && guest?.recipes?.length > 5 ? (
                   <span className='text-green-500'> (expert)</span>
-                ) : userData?.ownedRecipes?.length > 0 ? (
+                ) : guest?.recipes && guest?.recipes?.length > 0 ? (
                   <span className='text-blue-500'> (author)</span>
                 ) : (
                   <span className='text-gray-500'> (newbie)</span>
@@ -112,7 +40,7 @@ const Profile = () => {
               </h1>
               <h3 className='text-gray-600 font-lg text-semibold leading-6'>
                 Role
-                {userData?.isAdmin ? (
+                {guest?.user?.isAdmin ? (
                   <span className='text-red-500'> (admin)</span>
                 ) : (
                   <span className='text-blue-500'> (user)</span>
@@ -122,7 +50,7 @@ const Profile = () => {
               <ul className='bg-gray-100 text-gray-600 hover:text-gray-700 hover:shadow py-2 px-3 mt-3 divide-y rounded shadow-sm'>
                 <li className='flex items-center py-3'>
                   <span>Status</span>
-                  {userData?.ownedRecipes?.length > 0 ? (
+                  {guest?.recipes && guest?.recipes?.length > 0 ? (
                     <span className='ml-auto'>
                       <span className='bg-green-600 py-1 px-2 rounded text-white text-sm'>
                         Active
@@ -138,7 +66,9 @@ const Profile = () => {
                 </li>
                 <li className='flex items-center py-3'>
                   <span>Member since:</span>
-                  <span className='ml-auto'>{formatDate(userData?.time)}</span>
+                  <span className='ml-auto'>
+                    {formatDate(guest?.user?.createdAt)}
+                  </span>
                 </li>
               </ul>
             </div>
@@ -147,7 +77,7 @@ const Profile = () => {
             <div className='bg-white p-3 shadow-sm rounded-sm'>
               <div className='flex items-center space-x-2 font-semibold text-gray-900 leading-8'>
                 <span className='text-green-500'>
-                  <UserIcon className='h-4 w-4' />
+                  {/* <UserIcon className='h-4 w-4' /> */}
                 </span>
                 <span className='tracking-wide'>About</span>
               </div>
@@ -155,14 +85,14 @@ const Profile = () => {
                 <div className='grid md:grid-cols-2 text-sm'>
                   <div className='grid grid-cols-2'>
                     <div className='px-4 py-2 font-semibold'>Name</div>
-                    <div className='px-4 py-2'>{userData?.name}</div>
+                    <div className='px-4 py-2'>{guest?.user?.name}</div>
                   </div>
 
                   <div className='grid grid-cols-2'>
                     <div className='px-4 py-2 font-semibold'>Address</div>
                     <div className='px-4 py-2'>
-                      {userData?.address
-                        ? userData?.address
+                      {guest?.user?.address
+                        ? guest?.user?.address
                         : "Not Available Yet"}
                     </div>
                   </div>
@@ -170,21 +100,25 @@ const Profile = () => {
                   <div className='grid grid-cols-2'>
                     <div className='px-4 py-2 font-semibold'>Phone</div>
                     <div className='px-4 py-2'>
-                      {userData?.phone ? userData?.phone : "Not Available Yet"}
+                      {guest?.user?.phone
+                        ? guest?.user?.phone
+                        : "Not Available Yet"}
                     </div>
                   </div>
 
                   <div className='grid grid-cols-2'>
                     <div className='px-4 py-2 font-semibold'>Birthday</div>
                     <div className='px-4 py-2'>
-                      {userData?.birthday?.toString().slice(0, 10)}
+                      {guest?.user?.birthday?.toString().slice(0, 10)}
                     </div>
                   </div>
 
                   <div className='grid grid-cols-2'>
                     <div className='px-4 py-2 font-semibold'>Email</div>
                     <div className='px-4 py-2'>
-                      {userData?.email ? userData?.email : "Not Available Yet"}
+                      {guest?.user?.email
+                        ? guest?.user?.email
+                        : "Not Available Yet"}
                     </div>
                   </div>
                   <div className='grid grid-cols-2'>
@@ -192,20 +126,19 @@ const Profile = () => {
                       Written recipes
                     </div>
                     <div className='px-4 py-2'>
-                      {userData?.ownedRecipes?.length > 0
-                        ? userData?.ownedRecipes?.length +
-                            userData?.ownedRecipes?.length >
-                          2
-                          ? userData?.ownedRecipes?.length + " recipes"
-                          : userData?.ownedRecipes?.length + " recipe"
+                      {guest?.recipes && guest?.recipes?.length > 0
+                        ? guest?.recipes?.length + guest?.recipes?.length > 2
+                          ? guest?.recipes?.length + " recipes"
+                          : guest?.recipes?.length + " recipe"
                         : "Not Available Yet"}
                     </div>
                   </div>
                   <div className='grid grid-cols-2'>
                     <div className='px-4 py-2 font-semibold'>Interests</div>
                     <div className='px-4 py-2'>
-                      {userData?.interests && userData?.interests?.length > 0
-                        ? userData?.interests?.map((interest, index) => (
+                      {guest?.user?.interests &&
+                      guest?.user?.interests?.length > 0
+                        ? guest?.user?.interests?.map((interest, index) => (
                             <span key={index}>{interest}</span>
                           ))
                         : "Not Available Yet"}
@@ -214,8 +147,8 @@ const Profile = () => {
                   <div className='grid grid-cols'>
                     <div className='px-4 py-2 font-bold'>Bio</div>
                     <div className='px-4 py-2'>
-                      {userData?.about
-                        ? userData?.about
+                      {guest?.user?.about
+                        ? guest?.user?.about
                         : "Update your bio to tell more about yourself."}
                     </div>
                   </div>
@@ -242,10 +175,10 @@ const Profile = () => {
                     <span>Own Recipe</span>
                   </div>
                   <div className='flex flex-wrap gap-10'>
-                    {userData?.ownedRecipes?.length > 0
-                      ? userData?.ownedRecipes?.map((recipe, index) => (
+                    {guest?.recipes && guest?.recipes?.length > 0
+                      ? guest?.recipes?.map((recipe, index) => (
                           <div className='text-center my-2' key={index}>
-                            {recipe?.name}
+                            {recipe.name}
                             <img
                               className='h-16 w-16 rounded-full mx-auto'
                               src={recipe?.image}
@@ -253,7 +186,7 @@ const Profile = () => {
                             />
                           </div>
                         ))
-                      : "You have not written any blog yet."}
+                      : "Not Available Yet"}
                   </div>
                 </div>
               </div>
@@ -264,5 +197,3 @@ const Profile = () => {
     </>
   );
 };
-
-export default Profile;

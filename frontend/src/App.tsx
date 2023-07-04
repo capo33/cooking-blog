@@ -6,13 +6,14 @@ import Home from "./pages/Home/Home";
 import Login from "./pages/Auth/Login";
 import Register from "./pages/Auth/Register";
 import AddRecipe from "./pages/Recipe/AddRecipe";
-import ComplexNavbar from "./components/ComplexNavbar";
+import ComplexNavbar from "./components/Navbar/ComplexNavbar";
 import RecipeDetails from "./pages/Recipe/RecipeDetails";
 import UpdateRecipe from "./pages/Recipe/UpdateRecipe";
 import SavedRecipes from "./pages/Recipe/SavedRecipes";
 import UpdateProfile from "./pages/UserProfile/UpdateProfile";
 import Profile from "./pages/UserProfile/Profile";
 import PrivateRoute from "./components/Guards/PrivateRoute";
+import { GuestProfile } from "./pages/UserProfile/GuestProfile";
 
 function App() {
   return (
@@ -25,7 +26,8 @@ function App() {
           <Route path='/register' element={<Register />} />
           <Route path='/recipe-details/:id' element={<RecipeDetails />} />
           <Route path='/saved-recipes' element={<SavedRecipes />} />
-          
+          <Route path='/user-profile/:guestID' element={<GuestProfile />} />
+
           <Route path='' element={<PrivateRoute />}>
             <Route path='/add-recipe' element={<AddRecipe />} />
             <Route path='/profile' element={<Profile />} />

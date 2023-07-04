@@ -83,6 +83,13 @@ const getAllUsersProfileByAdmin = async (token: string) => {
   return response.data;
 };
 
+// get user profile by id
+const getUserProfileById = async (userId: string) => {
+  const response = await axios.get(`${AUTH_URL}/user/${userId}`);
+
+  return response.data;
+};
+
 const authServices = {
   register,
   login,
@@ -92,6 +99,7 @@ const authServices = {
   deleteUserProfileByUser,
   deleteUserProfileByAdmin,
   getAllUsersProfileByAdmin,
+  getUserProfileById,
 };
 
 export default authServices;

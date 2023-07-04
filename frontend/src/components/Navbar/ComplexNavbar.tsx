@@ -22,9 +22,9 @@ import {
 } from "@heroicons/react/24/outline";
 import { useNavigate, Link } from "react-router-dom";
 
-import { useAppDispatch, useAppSelector } from "../redux/app/store";
-import { logout, userProfile } from "../redux/feature/Auth/authSlice";
-import { getSavedRecipes } from "../redux/feature/Recipe/recipeSlice";
+import { useAppDispatch, useAppSelector } from "../../redux/app/store";
+import { logout, userProfile } from "../../redux/feature/Auth/authSlice";
+import { getSavedRecipes } from "../../redux/feature/Recipe/recipeSlice";
 
 interface IProfileMenuItems {
   label: string;
@@ -264,7 +264,7 @@ export default function ComplexNavbar() {
     <Navbar className='mx-auto  p-2 lg:rounde lg:pl-6 sticky top-0 z-50'>
       <div className='relative mx-auto flex items-center text-blue-gray-900'>
         <Link to='/' className='mr-4 ml-2 cursor-pointer py-1.5 font-medium'>
-          Material Tailwind
+          Recipe Blog
         </Link>
         <div className='absolute top-2/4 left-2/4 hidden -translate-x-2/4 -translate-y-2/4 lg:block'>
           <NavList />

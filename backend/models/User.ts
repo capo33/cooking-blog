@@ -27,7 +27,7 @@ const userSchema = new Schema<IUser>(
     },
     about: {
       type: String,
-      default: "example: I am a photographer",
+      default: "No bio yet",
     },
     isAdmin: {
       type: Boolean,
@@ -53,7 +53,7 @@ const userSchema = new Schema<IUser>(
     },
     interests: {
       type: [String],
-      default: ["example: photography, cooking, etc"],
+      default: ["None"],
     },
   },
   { timestamps: true }
