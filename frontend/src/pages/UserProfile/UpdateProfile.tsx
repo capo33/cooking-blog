@@ -82,7 +82,9 @@ const UpdateProfile = () => {
         result: { ...prevUser.result, image: response.data.image },
       }));
       setUploading(false);
-    } catch (error) {
+    } catch (error: any) {
+      toast.error(error.response.data.message);
+
       console.error(error);
       setUploading(false);
     }

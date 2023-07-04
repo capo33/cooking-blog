@@ -49,7 +49,7 @@ const checkFileType = (file: Express.Multer.File, cb: FileFilterCallback) => {
     return cb(null, true);
   } else {
     // cb = callback
-    cb(new Error("Only images are allowed"));
+    cb(new Error("Only jpg, jpeg, png files are allowed!"));
   }
 };
 
@@ -72,6 +72,9 @@ router.post("/", upload.single("image"), (req, res) => {
     });
   } catch (error) {
     console.log(error);
+    if (error instanceof multer.MulterError) {
+      res.status(500).json({ message: "Server Error", error: error.message });
+    }
   }
 });
 
