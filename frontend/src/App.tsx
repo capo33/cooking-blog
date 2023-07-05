@@ -14,6 +14,9 @@ import UpdateProfile from "./pages/UserProfile/UpdateProfile";
 import Profile from "./pages/UserProfile/Profile";
 import PrivateRoute from "./components/Guards/PrivateRoute";
 import { GuestProfile } from "./pages/UserProfile/GuestProfile";
+import Categories from "./pages/Category/Categories";
+import AddCategory from "./pages/Category/AddCategory";
+import AdminRoute from "./components/Guards/AdminRoute";
 
 function App() {
   return (
@@ -27,12 +30,17 @@ function App() {
           <Route path='/recipe-details/:id' element={<RecipeDetails />} />
           <Route path='/saved-recipes' element={<SavedRecipes />} />
           <Route path='/user-profile/:guestID' element={<GuestProfile />} />
+          <Route path='/categories' element={<Categories />} />
 
           <Route path='' element={<PrivateRoute />}>
             <Route path='/add-recipe' element={<AddRecipe />} />
             <Route path='/profile' element={<Profile />} />
             <Route path='/update-recipe/:recipeId' element={<UpdateRecipe />} />
             <Route path='/update-profile/:id' element={<UpdateProfile />} />
+          </Route>
+          
+          <Route path='' element={<AdminRoute />}>
+            <Route path='/add-category' element={<AddCategory />} />
           </Route>
         </Routes>
       </Router>

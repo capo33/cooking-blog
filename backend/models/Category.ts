@@ -12,6 +12,9 @@ const categorySchema = new Schema<ICategory>(
       type: String,
       required: true,
     },
+    image: {
+      type: String,
+    },
     recipes: [
       {
         type: Schema.Types.ObjectId,

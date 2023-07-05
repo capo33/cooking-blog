@@ -28,6 +28,8 @@ const createCategory = async (categoryData: ICategoryData, token: string) => {
       },
     }
   );
+  console.log(response.data);
+  
   return response.data;
 };
 

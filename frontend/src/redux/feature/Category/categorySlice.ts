@@ -80,7 +80,7 @@ export const createCategory = createAsyncThunk(
         categoryData,
         token
       );
-      navigate("/admin/category");
+      navigate("/categories");
       toast.success(response?.message);
       return response;
     } catch (error: unknown | any) {

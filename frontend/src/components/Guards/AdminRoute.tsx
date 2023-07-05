@@ -5,7 +5,7 @@ import { useAppSelector } from "../../redux/app/store";
 const AdminRoute = () => {
   const { user } = useAppSelector((state) => state.auth);
 
-  return user && user?.result.isAdmin ? (
+  return user && user?.result?.isAdmin ? (
     <Outlet />
   ) : (
     <Navigate to='/login' replace />
