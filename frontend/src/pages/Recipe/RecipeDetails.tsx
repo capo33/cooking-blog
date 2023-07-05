@@ -192,21 +192,16 @@ const RecipeDetails = () => {
 
         <Typography
           className='pb-6'
-          dangerouslySetInnerHTML={{
-            __html: recipe?.instructions
-              ? recipe?.instructions
-              : "No Instructions",
-          }}
-        />
+          // dangerouslySetInnerHTML={{
+          //   __html: recipe?.instructions
+          //     ? recipe?.instructions
+          //     : "No Instructions",
+          // }}
+        >
+          {recipe?.instructions ? recipe?.instructions : "No Instructions"}
+        </Typography>
         <div className='flex justify-between'>
-          <div className=''>
-            {/* <button
-              onClick={handleLikePost}
-              className='flex items-center text-gray-700 hover:text-gray-900 focus:outline-none'
-            >
-              <Like likes={likes} auth={auth} />
-            </button> */}
-          </div>
+          <div className=''></div>
           <div className='flex items-center'>
             {recipe?.owner?._id === userID && (
               <>

@@ -1,3 +1,5 @@
+import { Category } from "./CategoryInterface";
+
 export interface Owner {
   _id: string;
   name?: string;
@@ -6,12 +8,6 @@ export interface Owner {
   isAdmin?: boolean;
 }
 
-export interface Category {
-  name: string;
-  image: string;
-  slug?: string;
-  _id?: string;
-}
 
 export interface Recipe {
   _id?: string;

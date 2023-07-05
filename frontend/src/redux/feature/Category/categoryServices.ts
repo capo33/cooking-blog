@@ -1,7 +1,8 @@
 import axios from "axios";
 
 import { CATEGORY_URL } from "../../../constants/constants";
-
+import { ICategoryData } from "../../../interfaces/CategoryInterface";
+ 
 // *************************** Category *************************** //
 // get all categories
 const getAllCategories = async () => {
@@ -15,10 +16,7 @@ const getCategoryBySlug = async (slug: string) => {
   return response.data;
 };
 
-interface ICategoryData {
-  name: string;
-  image: string;
-}
+
 // create category
 const createCategory = async (categoryData: ICategoryData, token: string) => {
   const response = await axios.post(
@@ -34,10 +32,14 @@ const createCategory = async (categoryData: ICategoryData, token: string) => {
 };
 
 // update category
-const updateCategory = async (id: string, name: string, token: string) => {
+const updateCategory = async (
+  id: string,
+  categoryData: ICategoryData,
+  token: string
+) => {
   const response = await axios.put(
     `${CATEGORY_URL}/${id}`,
-    { name },
+    { ...categoryData },
     {
       headers: {
         Authorization: `Bearer ${token}`,

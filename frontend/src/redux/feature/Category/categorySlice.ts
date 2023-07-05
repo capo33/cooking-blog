@@ -1,17 +1,12 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { NavigateFunction } from "react-router-dom";
 
 import categoryServices from "./categoryServices";
+import { Category, ICategoryData } from "../../../interfaces/CategoryInterface";
 
-interface ICategory {
-  name: string;
-  image: string;
-  slug: string;
-  _id: string;
-}
 interface CategoryState {
-  categories: ICategory[];
-  category: ICategory | null;
+  categories: Category[];
+  category: Category | null;
   isError: boolean;
   isLoading: boolean;
   isSuccess: boolean;
@@ -22,7 +17,6 @@ const initialState: CategoryState = {
   categories: [],
   category: null,
   isError: false,
-
   isLoading: false,
   isSuccess: false,
   message: "",
@@ -66,11 +60,8 @@ export const getCategoryBySlug = createAsyncThunk(
   }
 );
 
-interface CategoryCreate {
-  categoryData: {
-    name: string;
-    image: string;
-  };
+interface ICategoryCreate {
+  categoryData: ICategoryData;
   token: string;
   toast: any;
   navigate: NavigateFunction;
@@ -81,7 +72,7 @@ interface CategoryCreate {
 export const createCategory = createAsyncThunk(
   "category/createCategory",
   async (
-    { categoryData, token, toast, navigate }: CategoryCreate,
+    { categoryData, token, toast, navigate }: ICategoryCreate,
     { rejectWithValue }
   ) => {
     try {
@@ -106,26 +97,62 @@ export const createCategory = createAsyncThunk(
 );
 
 // Update category
-// export const updateCategory = createAsyncThunk(
-//   "category/updateCategory",
-//   async ({ name, token, id, toast, navigate }: CategoryCreate, { rejectWithValue }) => {
-//     try {
-//       const response = await categoryServices.updateCategory(id, name, token);
-//       navigate("/categories");
-//       toast.success(response?.message);
-//       return response;
-//     } catch (error: unknown | any) {
-//       const message =
-//         (error.response &&
-//           error.response.data &&
-//           error.response.data.message) ||
-//         error.message ||
-//         error.toString();
-//       toast.error(message);
-//       return rejectWithValue(message);
-//     }
-//   }
-// );
+export const updateCategory = createAsyncThunk(
+  "category/updateCategory",
+  async (
+    { id, categoryData, token, toast, navigate }: ICategoryCreate,
+    { rejectWithValue }
+  ) => {
+    try {
+      const response = await categoryServices.updateCategory(
+        id as string,
+        categoryData,
+        token
+      );
+
+      navigate("/categories");
+      toast.success(response?.message);
+      return response;
+    } catch (error: unknown | any) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      toast.error(message);
+      return rejectWithValue(message);
+    }
+  }
+);
+
+// Delete category
+export const deleteCategory = createAsyncThunk(
+  "category/deleteCategory",
+  async (
+    { id, token, toast, navigate }: ICategoryCreate,
+    { rejectWithValue }
+  ) => {
+    try {
+      const response = await categoryServices.deleteCategory(
+        id as string,
+        token
+      );
+      navigate("/");
+      toast.success(response?.message);
+      return response;
+    } catch (error: unknown | any) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      toast.error(message);
+      return rejectWithValue(message);
+    }
+  }
+);
 
 const categorySlice = createSlice({
   name: "category",
@@ -179,6 +206,36 @@ const categorySlice = createSlice({
       state.category = actions.payload;
     });
     builder.addCase(createCategory.rejected, (state, { payload }) => {
+      state.isLoading = false;
+      state.isError = true;
+      state.message = payload as string;
+    });
+
+    // Update a category
+    builder.addCase(updateCategory.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(updateCategory.fulfilled, (state, actions) => {
+      state.isLoading = false;
+      state.isSuccess = true;
+      state.category = actions.payload;
+    });
+    builder.addCase(updateCategory.rejected, (state, { payload }) => {
+      state.isLoading = false;
+      state.isError = true;
+      state.message = payload as string;
+    });
+
+    // Delete a category
+    builder.addCase(deleteCategory.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(deleteCategory.fulfilled, (state, actions) => {
+      state.isLoading = false;
+      state.isSuccess = true;
+      state.category = actions.payload;
+    });
+    builder.addCase(deleteCategory.rejected, (state, { payload }) => {
       state.isLoading = false;
       state.isError = true;
       state.message = payload as string;
