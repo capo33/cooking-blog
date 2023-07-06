@@ -36,7 +36,7 @@ const UpdateRecipe = () => {
     cookingTime: recipe?.cookingTime as number,
     category: { _id: "", name: "", image: "", slug: "" },
     owner: {
-      _id: user?.result?._id as string,
+      _id: user?._id as string,
     },
   };
 

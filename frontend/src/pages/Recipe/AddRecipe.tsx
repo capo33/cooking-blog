@@ -30,7 +30,7 @@ const AddRecipe = () => {
     category: { _id: "", name: "", image: "", slug: "" },
 
     owner: {
-      _id: user?.result?._id as string,
+      _id: user?._id as string,
     },
   });
 
@@ -92,7 +92,7 @@ const AddRecipe = () => {
       cookingTime: 0,
       category: { _id: "", name: "", image: "", slug: "" },
       owner: {
-        _id: user?.result?._id as string,
+        _id: user?._id as string,
       },
     });
   };
@@ -153,7 +153,7 @@ const AddRecipe = () => {
                   uploading={uploading}
                 />
               </div>
-              <RecipeButton title="Add recipe"/>
+              <RecipeButton title='Add recipe' />
             </div>
           </form>
         </div>

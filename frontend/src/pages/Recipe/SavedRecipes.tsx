@@ -13,13 +13,14 @@ const SavedRecipes = () => {
   const { savedRecipes } = useAppSelector((state) => state.recipe);
 
   const token = user?.token as string;
-  const userID = user?.result?._id as string;
+  const userID = user?._id as string;
+console.log(userID);
 
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(getSavedRecipes({ userID, token }));
     if (token) {
+      dispatch(getSavedRecipes({ userID, token }));
       dispatch(userProfile(token));
     }
   }, [dispatch, token, userID]);

@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { createCategory } from "../../redux/feature/Category/categorySlice";
-import { useAppSelector, useAppDispatch } from "../../redux/app/store";
-import { Category } from "../../interfaces/CategoryInterface";
+import { createCategory } from "../../../redux/feature/Category/categorySlice";
+import { useAppSelector, useAppDispatch } from "../../../redux/app/store";
+import { Category } from "../../../interfaces/CategoryInterface";
 // import Button from "../../components/Button/Button";
 
 const AddCategory = () => {

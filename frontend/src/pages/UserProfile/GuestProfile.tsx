@@ -40,7 +40,7 @@ export const GuestProfile = () => {
               </h1>
               <h3 className='text-gray-600 font-lg text-semibold leading-6'>
                 Role
-                {guest?.user?.isAdmin ? (
+                {guest?.user?.role === "admin" ? (
                   <span className='text-red-500'> (admin)</span>
                 ) : (
                   <span className='text-blue-500'> (user)</span>

@@ -1,4 +1,4 @@
- import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { NavigateFunction } from "react-router-dom";
 
 import categoryServices from "./categoryServices";
@@ -130,16 +130,22 @@ export const updateCategory = createAsyncThunk(
 export const deleteCategory = createAsyncThunk(
   "category/deleteCategory",
   async (
-    { id, token, toast, navigate }: ICategoryCreate,
-    { rejectWithValue }
+    {
+      id,
+      token,
+      toast,
+    }: // navigate,
+    { id: string; token: string; toast: any },
+    thunkAPI
   ) => {
     try {
       const response = await categoryServices.deleteCategory(
         id as string,
         token
       );
-      navigate("/");
+      // navigate("/");
       toast.success(response?.message);
+      thunkAPI.dispatch(getAllCategories());
       return response;
     } catch (error: unknown | any) {
       const message =
@@ -149,7 +155,7 @@ export const deleteCategory = createAsyncThunk(
         error.message ||
         error.toString();
       toast.error(message);
-      return rejectWithValue(message);
+      return thunkAPI.rejectWithValue(message);
     }
   }
 );

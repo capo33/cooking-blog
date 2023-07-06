@@ -2,7 +2,7 @@ import axios from "axios";
 
 import { CATEGORY_URL } from "../../../constants/constants";
 import { ICategoryData } from "../../../interfaces/CategoryInterface";
- 
+
 // *************************** Category *************************** //
 // get all categories
 const getAllCategories = async () => {
@@ -16,7 +16,6 @@ const getCategoryBySlug = async (slug: string) => {
   return response.data;
 };
 
-
 // create category
 const createCategory = async (categoryData: ICategoryData, token: string) => {
   const response = await axios.post(
@@ -29,7 +28,7 @@ const createCategory = async (categoryData: ICategoryData, token: string) => {
     }
   );
   console.log(response.data);
-  
+
   return response.data;
 };
 

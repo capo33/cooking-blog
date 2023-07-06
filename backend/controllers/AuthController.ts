@@ -140,7 +140,7 @@ const getProfile = async (req: Request, res: Response) => {
     res.status(200).json({
       success: true,
       message: "Your profile",
-      result,
+      ...result,
       token,
     });
   } catch (error) {
@@ -249,7 +249,7 @@ const deleteUserByUser = async (req: Request, res: Response) => {
     }
 
     // Check if user is authorized to delete the user
-    if (user?._id.toString() !== req.user?._id.toString() && !user.isAdmin) {
+    if (user?._id.toString() !== req.user?._id.toString()) {
       return res.status(401).json({ msg: "Not authorized" });
     }
 
@@ -280,7 +280,7 @@ const deleteUserByAdmin = async (req: Request, res: Response) => {
     }
 
     // Check if user is authorized to delete the user
-    if (user?._id.toString() !== req.user?._id.toString() && user.isAdmin) {
+    if (user?._id.toString() !== req.user?._id.toString() && user.role === 'admin') {
       return res.status(401).json({ msg: "Not authorized" });
     }
 

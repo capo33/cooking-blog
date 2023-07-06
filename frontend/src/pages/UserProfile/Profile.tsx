@@ -24,7 +24,7 @@ const Profile = () => {
   const { recipes } = useAppSelector((state) => state.recipe);
 
   const ownedRecipes = recipes?.filter(
-    (recipe) => recipe?.owner?._id === user?.result?._id
+    (recipe) => recipe?.owner?._id === user?._id
   );
 
   const dispatch = useAppDispatch();
@@ -32,18 +32,18 @@ const Profile = () => {
 
   const token = user?.token as string;
   const userData = {
-    name: user?.result?.name,
-    about: user?.result?.about,
-    phone: user?.result?.phone,
-    email: user?.result?.email,
+    name: user?.name,
+    about: user?.about,
+    phone: user?.phone,
+    email: user?.email,
     ownedRecipes: ownedRecipes,
-    image: user?.result?.image,
-    isAdmin: user?.result?.isAdmin,
-    address: user?.result?.address,
-    birthday: user?.result?.birthday,
-    interests: user?.result?.interests,
-    userId: user?.result?._id,
-    time: user?.result?.createdAt,
+    image: user?.image,
+    isAdmin: user?.role,
+    address: user?.address,
+    birthday: user?.birthday,
+    interests: user?.interests,
+    userId: user?._id,
+    time: user?.createdAt,
   };
 
   useEffect(() => {

@@ -1,26 +1,27 @@
 import { Recipe } from "./RecipeInterface";
 
 export interface User {
-  result: {
-    message: string;
-    token: string;
-    name: string;
-    email: string;
-    password: string;
-    answer?: string;
-    about?: string;
-    isAdmin?: boolean;
-    phone?: string;
-    address?: string;
-    savedRecipes?: string[];
-    birthday?: Date;
-    interests?: string[];
-    _id?: string;
-    image?: string;
-    createdAt?: number;
-    updatedAt?: number;
-  };
+  // result: {
+  // };
+  message: string;
   token: string;
+  name: string;
+  email: string;
+  password: string;
+  answer?: string;
+  about?: string;
+  // isAdmin?: boolean;
+  role?: string;
+  phone?: string;
+  address?: string;
+  savedRecipes?: string[];
+  birthday?: Date;
+  interests?: string[];
+  _id?: string;
+  image?: string;
+  createdAt?: number;
+  updatedAt?: number;
+  // token: string;
 }
 
 export interface Guest {
@@ -34,7 +35,8 @@ export interface Guest {
     password: string;
     answer?: string;
     about?: string;
-    isAdmin?: boolean;
+    // isAdmin?: boolean;
+    role: string;
     phone?: string;
     address?: string;
     savedRecipes?: string[];
@@ -45,7 +47,7 @@ export interface Guest {
     createdAt?: number;
     updatedAt?: number;
   };
-  recipes : Recipe[];
+  recipes: Recipe[];
 }
 export interface AuthUser {
   email: string;
@@ -60,14 +62,12 @@ export interface Auth {
 }
 
 export interface IUpdateProfile {
-  result: {
-    name?: string;
-    email?: string;
-    address?: string;
-    phone?: string;
-    birthday?:  Date;
-    about?: string;
-    image?: string;
-    interests?: string[];
-  };
+  name?: string;
+  email?: string;
+  address?: string;
+  phone?: string;
+  birthday?: Date;
+  about?: string;
+  image?: string;
+  interests?: string[];
 }

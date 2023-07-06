@@ -14,8 +14,8 @@ const Header = () => {
   const navigate = useNavigate();
   
   const token = user?.token as string;
-  const avatar = user?.result?.image as string;
-  const admin = user?.result?.isAdmin as boolean;
+  const avatar = user?.image as string;
+  const admin = user?.role  
 
   useEffect(() => {
     if (token) dispatch(userProfile(token));

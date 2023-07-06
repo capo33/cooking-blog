@@ -30,7 +30,7 @@ const RecipeDetails = () => {
   const { savedRecipes } = useAppSelector((state) => state.recipe);
 
   const token = user?.token as string;
-  const userID = user?.result?._id as string;
+  const userID = user?._id as string;
   const guestID = recipe?.owner?._id as string;
   const recipesIDs = savedRecipes?.map((recipe) => recipe._id);
 
@@ -39,7 +39,9 @@ const RecipeDetails = () => {
 
   useEffect(() => {
     dispatch(getSingleRecipe(id as string));
-    dispatch(getSavedRecipes({ userID, token }));
+    if (token) {
+      dispatch(getSavedRecipes({ userID, token }));
+    }
   }, [dispatch, id, token, userID]);
 
   const handleDeleteBlog = async () => {

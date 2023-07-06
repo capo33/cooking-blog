@@ -2,27 +2,31 @@ import slugify from "slugify";
 import { Request, Response } from "express";
 
 import CategoryModel from "../models/Category";
+import RecipeModel from "../models/Recipe";
 
 // @desc    Get all categories
 // @route   GET /api/v1/categories
 // @access  Public
 const getCategories = async (req: Request, res: Response) => {
   try {
-    const categories = await CategoryModel.find({}).populate("recipes");
+    const categories = await CategoryModel.find({}).populate("recipes", "name");
 
     res.status(200).json(categories);
   } catch (error: unknown | any) {
     res.status(500).json({ message: error.message });
   }
 };
-
+ 
 // @desc    Get a category by slug
 // @route   GET /api/v1/categories/:slug
 // @access  Public
 const getCategory = async (req: Request, res: Response) => {
   try {
     const { slug } = req.params;
-    const category = await CategoryModel.findOne({ slug });
+    const category = await CategoryModel.findOne({ slug }).populate(
+      "recipes",
+      "name"
+    );
 
     if (!category) {
       return res.status(404).json({ message: "Category not found" });
@@ -110,7 +114,7 @@ const deleteCategory = async (req: Request, res: Response) => {
 
 export {
   getCategories,
-  getCategory,
+   getCategory,
   createCategory,
   updateCategory,
   deleteCategory,

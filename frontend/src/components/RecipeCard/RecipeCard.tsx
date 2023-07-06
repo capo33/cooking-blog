@@ -39,7 +39,7 @@ const BLogCard = ({ recipe }: RecipeCardProps) => {
   const navigate = useNavigate();
 
   const token = user?.token as string;
-  const userID = user?.result?._id as string;
+  const userID = user?._id as string;
 
   const recipesIDs = savedRecipes?.map((recipe) => recipe._id);
 

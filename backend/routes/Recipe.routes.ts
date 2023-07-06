@@ -16,7 +16,7 @@ router.put("/:recipeId", protect, recipeController.updateRecipe);
 router.delete("/:recipeId", protect, recipeController.deleteRecipe);
 
 
-router.get("/savedRecipes/ids/:id", recipeController.getSavedRecipes); // Saved recipes
 router.get("/savedRecipes/:id", recipeController.getRecipesByUser); // Own recipes
+router.get("/savedRecipes/ids/:id", recipeController.getSavedRecipes); // Saved recipes
 
 export default router;

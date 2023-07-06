@@ -155,7 +155,7 @@ const saveRecipe = async (req: Request, res: Response) => {
 
     const recipe = await RecipeModel.findById(req.body.recipeID).populate(
       "category",
-      "name image"
+      "name image recipes"
     );
     console.log(recipe);
 

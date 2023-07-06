@@ -19,16 +19,14 @@ const UpdateProfile = () => {
   const { user } = useAppSelector((state) => state.auth);
 
   const formData = {
-    result: {
-      name: user?.result?.name,
-      email: user?.result?.email,
-      address: user?.result?.address,
-      phone: user?.result?.phone,
-      about: user?.result?.about,
-      birthday: user?.result?.birthday,
-      image: user?.result?.image,
-      interests: user?.result?.interests,
-    },
+    name: user?.name,
+    email: user?.email,
+    address: user?.address,
+    phone: user?.phone,
+    about: user?.about,
+    birthday: user?.birthday,
+    image: user?.image,
+    interests: user?.interests,
   };
 
   const [userData, setUserData] = useState<IUpdateProfile>(formData);
@@ -48,7 +46,7 @@ const UpdateProfile = () => {
     const { name, value } = e.target;
     setUserData((prevUser) => ({
       ...prevUser,
-      result: { ...prevUser.result, [name]: value },
+        [name]: value,
     }));
   };
 
@@ -79,7 +77,8 @@ const UpdateProfile = () => {
       });
 
       setUserData((prevUser) => ({
-        result: { ...prevUser.result, image: response.data.image },
+        ...prevUser,
+        image: response.data.image,
       }));
       setUploading(false);
     } catch (error: any) {
@@ -95,7 +94,7 @@ const UpdateProfile = () => {
     e.preventDefault();
     dispatch(
       updateUserProfile({
-        userData: userData.result as IUpdateProfile,
+        userData: userData as IUpdateProfile,
         token,
         toast,
         navigate,
@@ -124,7 +123,7 @@ const UpdateProfile = () => {
                 label='Name'
                 type='text'
                 name='name'
-                value={userData?.result?.name || ("" as string)}
+                value={userData?.name || ("" as string)}
                 handleChange={handleChange}
                 placeholder='Name'
               />
@@ -134,7 +133,7 @@ const UpdateProfile = () => {
                 label='Address'
                 type='text'
                 name='address'
-                value={userData?.result?.address || ("" as string)}
+                value={userData?.address || ("" as string)}
                 handleChange={handleChange}
                 placeholder='Address'
               />
@@ -144,7 +143,7 @@ const UpdateProfile = () => {
                 label='Email'
                 type='email'
                 name='email'
-                value={userData?.result?.email || ("" as string)}
+                value={userData?.email || ("" as string)}
                 handleChange={handleChange}
                 placeholder='Email'
               />
@@ -154,7 +153,7 @@ const UpdateProfile = () => {
                 label='Phone'
                 type='tel'
                 name='phone'
-                value={userData?.result?.phone || ("" as string)}
+                value={userData?.phone || ("" as string)}
                 handleChange={handleChange}
                 placeholder='Phone'
               />
@@ -165,8 +164,7 @@ const UpdateProfile = () => {
                 type='date'
                 name='birthday'
                 value={
-                  userData?.result?.birthday?.toString().slice(0, 10) ||
-                  ("" as string)
+                  userData?.birthday?.toString().slice(0, 10) || ("" as string)
                 }
                 handleChange={handleChange}
                 placeholder='Birthday'
@@ -187,7 +185,7 @@ const UpdateProfile = () => {
                 label='Interests'
                 type='text'
                 name='interests'
-                value={userData?.result?.interests || ([] as string[])}
+                value={userData?.interests || ([] as string[])}
                 handleChange={handleChange}
                 placeholder='Interests'
               />
@@ -197,7 +195,7 @@ const UpdateProfile = () => {
               <Textarea
                 label='About Me'
                 name='about'
-                value={userData?.result?.about || ("" as string)}
+                value={userData?.about || ("" as string)}
                 handleChange={handleChange}
                 placeholder='About Me'
               />
@@ -209,7 +207,7 @@ const UpdateProfile = () => {
               </label>
               <div className='flex justify-around flex-wrap'>
                 <img
-                  src={userData?.result?.image}
+                  src={userData?.image}
                   alt=''
                   className='w-20 h-20 flex justify-center'
                 />

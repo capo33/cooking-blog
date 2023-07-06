@@ -19,6 +19,7 @@ import {
   ArrowRightOnRectangleIcon,
   Bars2Icon,
   BookmarkIcon,
+  Squares2X2Icon,
 } from "@heroicons/react/24/outline";
 import { useNavigate, Link } from "react-router-dom";
 
@@ -49,8 +50,8 @@ function ProfileMenu() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const avatar = user?.result?.image as string;
-  const admin = user?.result?.isAdmin as boolean;
+  const avatar = user?.image as string;
+  const admin = user?.role
   const token = user?.token as string;
 
   useEffect(() => {
@@ -76,12 +77,17 @@ function ProfileMenu() {
       icon: PlusIcon,
       link: "/add-recipe",
     },
-    ...(admin
+    ...(admin && admin
       ? [
           {
             label: "Add Category",
             icon: PlusIcon,
-            link: "/add-category",
+            link: "/admin/add-category",
+          },
+          {
+            label: "All Categories",
+            icon: Squares2X2Icon,
+            link: "/admin/allcategories",
           },
         ]
       : []),
@@ -204,7 +210,7 @@ function NavList() {
   const dispatch = useAppDispatch();
 
   const token = user?.token as string;
-  const userID = user?.result?._id as string;
+  const userID = user?._id as string;
 
   useEffect(() => {
     dispatch(getSavedRecipes({ userID, token }));
@@ -224,6 +230,11 @@ function NavList() {
             icon: BookmarkIcon,
             badge: true,
             link: "/saved-recipes",
+          },
+          {
+            label: "Categories",
+            icon: Squares2X2Icon,
+            link: "/categories",
           },
         ]
       : []),

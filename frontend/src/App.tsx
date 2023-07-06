@@ -15,10 +15,17 @@ import Profile from "./pages/UserProfile/Profile";
 import PrivateRoute from "./components/Guards/PrivateRoute";
 import { GuestProfile } from "./pages/UserProfile/GuestProfile";
 import Categories from "./pages/Category/Categories";
-import AddCategory from "./pages/Category/AddCategory";
+import AddCategory from "./pages/Category/admin/AddCategory";
 import AdminRoute from "./components/Guards/AdminRoute";
+import CategoryDetails from "./pages/Category/CategoryDetails";
+import AllCategoriesForAdmin from "./pages/Category/admin/AllCategoriesForAdmin";
+import CategoryDetailsForAdmin from "./pages/Category/admin/CategoryDetailsForAdmin";
+import { useAppSelector } from "./redux/app/store";
 
 function App() {
+  const {user} = useAppSelector((state) => state.auth);
+  const admin = user?.role;
+   
   return (
     <div className='container mx-auto py-10 px-5 bg-white min-h-screen'>
       <Router>
@@ -31,6 +38,7 @@ function App() {
           <Route path='/saved-recipes' element={<SavedRecipes />} />
           <Route path='/user-profile/:guestID' element={<GuestProfile />} />
           <Route path='/categories' element={<Categories />} />
+          <Route path='/category/:slug' element={<CategoryDetails />} />
 
           <Route path='' element={<PrivateRoute />}>
             <Route path='/add-recipe' element={<AddRecipe />} />
@@ -38,9 +46,14 @@ function App() {
             <Route path='/update-recipe/:recipeId' element={<UpdateRecipe />} />
             <Route path='/update-profile/:id' element={<UpdateProfile />} />
           </Route>
-          
+
+            <Route path='/admin/allcategories' element={<AllCategoriesForAdmin />} />
           <Route path='' element={<AdminRoute />}>
-            <Route path='/add-category' element={<AddCategory />} />
+            <Route path='/admin/add-category' element={<AddCategory />} />
+            <Route
+              path='/admin/edit-category/:slug'
+              element={<CategoryDetailsForAdmin />}
+            />
           </Route>
         </Routes>
       </Router>
