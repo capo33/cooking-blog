@@ -2,6 +2,7 @@ export interface Category {
   name: string;
   image: string;
   slug?: string;
+  recipes?: string[];
   _id?: string;
 }
 

@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 
 import UserModel from "../models/User";
 import RecipeModel from "../models/Recipe";
+import CategoryModel from "../models/Category";
 import asyncHandler from "../middlewares/asyncHandler";
 import { IReview } from "../interfaces/reviewInterface";
 import { IRecipe } from "../interfaces/recipeInterface";
@@ -61,8 +62,11 @@ const createRecipe = async (req: Request, res: Response) => {
 
     const newRecipe = await RecipeModel.create({
       ...req.body,
-
       owner: req.user._id,
+    });
+
+    await CategoryModel.findByIdAndUpdate(req.body.category, {
+      $push: { recipes: newRecipe._id },
     });
 
     res.status(201).json(newRecipe);

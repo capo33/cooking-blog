@@ -9,24 +9,21 @@ import RecipeModel from "../models/Recipe";
 // @access  Public
 const getCategories = async (req: Request, res: Response) => {
   try {
-    const categories = await CategoryModel.find({}).populate("recipes", "name");
+    const categories = await CategoryModel.find({}).populate("recipes");
 
     res.status(200).json(categories);
   } catch (error: unknown | any) {
     res.status(500).json({ message: error.message });
   }
 };
- 
+
 // @desc    Get a category by slug
 // @route   GET /api/v1/categories/:slug
 // @access  Public
 const getCategory = async (req: Request, res: Response) => {
   try {
     const { slug } = req.params;
-    const category = await CategoryModel.findOne({ slug }).populate(
-      "recipes",
-      "name"
-    );
+    const category = await CategoryModel.findOne({ slug }).populate("recipes");
 
     if (!category) {
       return res.status(404).json({ message: "Category not found" });
@@ -114,7 +111,7 @@ const deleteCategory = async (req: Request, res: Response) => {
 
 export {
   getCategories,
-   getCategory,
+  getCategory,
   createCategory,
   updateCategory,
   deleteCategory,

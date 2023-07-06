@@ -82,6 +82,8 @@ export const createCategory = createAsyncThunk(
       );
       navigate("/categories");
       toast.success(response?.message);
+      console.log('response', response);
+      
       return response;
     } catch (error: unknown | any) {
       const message =
