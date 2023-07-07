@@ -4,6 +4,7 @@ import { Link, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../redux/app/store";
 import { getCategoryBySlug } from "../../redux/feature/Category/categorySlice";
 import { subStringFunc } from "../../utils";
+import BackLink from "../../components/BackLink/BackLink";
 
 const CategoryDetails = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -17,17 +18,17 @@ const CategoryDetails = () => {
 
   return (
     <section className='bg-white container px-6 py-10 mx-auto'>
-      <h1 className='text-center m-5 text-3xl font-semibold text-gray-800 capitalize lg:text-4xl dark:text-white'>
+      <h2 className='text-center m-5 text-3xl font-semibold text-gray-800 capitalize lg:text-4xl dark:text-white'>
         {category?.name}
-      </h1>
-      <div className='flex justify-center'>
+      </h2>
+      <BackLink link='/categories' name='Back to categories' />
+      <div className='flex justify-center mt-10'>
         <img
           className='object-cover max-w-screen-lg w-full h-56 rounded-lg'
           src={category?.image}
           alt={category?.name}
         />
       </div>
-
       <div className='grid grid-cols-1 gap-6 mt-16 md:grid-cols-2'>
         {category?.recipes?.map((recipe) => (
           <div

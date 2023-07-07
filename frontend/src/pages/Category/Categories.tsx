@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { AiFillEdit } from "react-icons/ai";
-
+ 
 import BackLink from "../../components/BackLink/BackLink";
 import { useAppSelector, useAppDispatch } from "../../redux/app/store";
 import { getAllCategories } from "../../redux/feature/Category/categorySlice";
@@ -20,10 +19,13 @@ const Categories = () => {
   };
 
   return (
-    <section className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-4 mb-12'>
+     <section className='bg-white container px-6 py-10 mx-auto'>
+      <h2 className='text-center m-5 text-3xl font-semibold text-gray-800 capitalize lg:text-4xl dark:text-white'>
+        Categories
+      </h2>
+      <BackLink link='/' name='Back to home' />
+      {isLoading && <div>Loading...</div>}
       <article>
-        <h2 className='text-2xl font-extrabold text-gray-900'>Categories</h2>
-        {isLoading && <div>Loading...</div>}
         <section className='mt-6 grid grid-cols-1 md:grid-cols-1 lg:grid-cols-3 gap-x-6 gap-y-8'>
           {categories?.length === 0 && (
             <div className='flex justify-center items-center'>
