@@ -10,11 +10,11 @@ router.get("/:recipeId", recipeController.getRecipeById);
 router.put("/saveRecipe", protect, recipeController.saveRecipe);
 router.put("/unsaveRecipe", protect, recipeController.unsaveRecipe);
 router.post("/", protect, recipeController.createRecipe);
+router.post("/:id/reviews", protect, recipeController.addReview);
 router.put("/like", protect, recipeController.likeRecipe);
 router.put("/unlike", protect, recipeController.unlikeRecipe);
 router.put("/:recipeId", protect, recipeController.updateRecipe);
 router.delete("/:recipeId", protect, recipeController.deleteRecipe);
-
 
 router.get("/savedRecipes/:id", recipeController.getRecipesByUser); // Own recipes
 router.get("/savedRecipes/ids/:id", recipeController.getSavedRecipes); // Saved recipes

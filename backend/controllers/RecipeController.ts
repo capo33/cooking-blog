@@ -296,48 +296,60 @@ const getSavedRecipes = async (req: Request, res: Response) => {
   }
 };
 
-// // @desc    Create a review
-// // @route   POST /api/v1/recipes/:id/reviews
-// // @access  Private
-// const addReview = asyncHandler(async (req: Request, res: Response) => {
-//   const { id } = req.params; // recipe id
-//   const { rating, comment } = req.body;
+// @desc    Create a review
+// @route   POST /api/v1/recipes/:id/reviews
+// @access  Private
+const addReview = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params; // recipe id
 
-//   const recipe = await RecipeModel.findById(id);
+    // we need to get the rating and comment because we are going to send a number rating and a comment
+    const { rating, comment } = req.body;
 
-//   if (!recipe) {
-//     res.status(404);
-//     throw new Error("Recipe not found");
-//   }
+    const recipe = await RecipeModel.findById(id);
 
-//   const alreadyReviewed = recipe.reviews.find(
-//     (r) => r?.user?.toString() === req.user?._id.toString()
-//   );
+    if (!recipe) {
+      return res.status(404).json({ message: "Recipe not found" });
+    }
 
-//   if (alreadyReviewed) {
-//     res.status(400);
-//     throw new Error("Recipe already reviewed");
-//   }
+    // Check if the user already reviewed the recipe before, so we match the review user with the logged in user
+    const alreadyReviewed = recipe.reviews.find(
+      (review) => review?.user?.toString() === req.user?._id.toString()
+    );
 
-//   const review = {
-//     name: req.user?.name,
-//     rating: Number(rating),
-//     comment: comment,
-//     user: req.user?._id,
-//   };
+    if (alreadyReviewed) {
+      return res.status(400).json({ message: "Recipe already reviewed" });
+    }
 
-//   recipe.reviews.push(review as IReview);
+    // if the user has not reviewed the recipe before, we create a new review object
+    const review = {
+      name: req.user?.name,
+      rating: Number(rating),
+      comment: comment,
+      user: req.user?._id,
+    };
 
-//   recipe.numReviews = recipe.reviews.length;
+    // we push the new review to the recipe reviews array
+    recipe.reviews.push(review as IReview);
 
-//   recipe.rating =
-//     recipe?.reviews?.reduce((acc, item) => Number(item?.rating) + acc, 0) /
-//     recipe.reviews.length;
+    // we update the number of reviews and the rating
+    recipe.numReviews = recipe.reviews.length;
 
-//   await recipe.save();
+    // we update/calculate the rating the rating by getting the sum of all the ratings and dividing it by the number of reviews
+    recipe.rating =
+      recipe?.reviews?.reduce((acc, item) => Number(item?.rating) + acc, 0) /
+      recipe?.reviews?.length;
 
-//   res.status(201).json({ message: "Review added" });
-// });
+    // we save the recipe
+    await recipe.save();
+
+    res.status(201).json({ message: "Review added" });
+  } catch (error) {
+    if (error instanceof Error) {
+      res.status(500).json({ message: error.message });
+    }
+  }
+};
 
 // @desc    Like a recipe
 // @route   PUT /api/v1/recipes/like
@@ -389,7 +401,7 @@ export {
   unsaveRecipe,
   getSavedRecipes,
   getRecipesByUser,
-  // addReview,
+  addReview,
   likeRecipe,
   unlikeRecipe,
 };
