@@ -1,54 +1,57 @@
-import React from 'react'
-import { useParams   } from 'react-router-dom'
+import React, { useEffect } from "react";
+import { Link, useParams } from "react-router-dom";
+
+import { useAppDispatch, useAppSelector } from "../../redux/app/store";
+import { getCategoryBySlug } from "../../redux/feature/Category/categorySlice";
+import { subStringFunc } from "../../utils";
 
 const CategoryDetails = () => {
-  const { slug } = useParams<{slug: string}>()
- 
+  const { slug } = useParams<{ slug: string }>();
+  const { category } = useAppSelector((state) => state.category);
+
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(getCategoryBySlug(slug as string));
+  }, [dispatch, slug]);
+
   return (
-    <div className='p-5 mt-10 max-w-md'>
-      <div className='p-8 rounded border border-gray-200'>
-        <h1 className='font-medium text-3xl'>Update Category</h1>
-        <form>
-          <div className='mt-8 grid gap-4'>
-            <div>
-              <label
-                htmlFor='name'
-                className='text-sm text-gray-700 block mb-1 font-medium'
-              >
-                Name
-              </label>
-              <input
-                type='text'
-                name='name'
-                // value={name}
-                // id='name'
-                // onChange={(e) => setName(e.target.value)}
-                className='bg-gray-100 border border-gray-200 rounded py-1 px-3 block focus:ring-blue-500 focus:border-blue-500 text-gray-700 w-full'
-                placeholder='e.g. Sports'
-              />
-            </div>
-          </div>
-
-          <div className='space-x-4 mt-8'>
-            <button
-              type='submit'
-              // onClick={handleUpdateCategory}
-              className='py-2 px-4 bg-green-800 text-white rounded hover:bg-green-700 active:bg-green-700 disabled:opacity-50'
-            >
-              Update
-            </button>
-            <button
-              type='submit'
-              // onClick={handleDeleteCategory}
-              className='py-2 px-4 bg-red-800 text-white rounded hover:bg-red-700 active:bg-red-700 disabled:opacity-50'
-            >
-              Delete
-            </button>
-          </div>
-        </form>
+    <section className='bg-white container px-6 py-10 mx-auto'>
+      <h1 className='text-center m-5 text-3xl font-semibold text-gray-800 capitalize lg:text-4xl dark:text-white'>
+        {category?.name}
+      </h1>
+      <div className='flex justify-center'>
+        <img
+          className='object-cover max-w-screen-lg w-full h-56 rounded-lg'
+          src={category?.image}
+          alt={category?.name}
+        />
       </div>
-    </div>
-  )
-}
 
-export default CategoryDetails
+      <div className='grid grid-cols-1 gap-6 mt-16 md:grid-cols-2'>
+        {category?.recipes?.map((recipe) => (
+          <div
+            className='max-w-xl rounded-lg shadow lg:flex md:flex '
+            key={recipe?._id}
+          >
+            <img
+              className='object-cover w-full md:w-1/2 lg:w-1/3'
+              src={recipe?.image}
+              alt={recipe?.name}
+            />
+            <Link to={`/recipe-details/${recipe?.slug}`}>
+              <div className='px-6 py-4'>
+                <h4 className='mb-3 text-base font-semibold'>{recipe?.name}</h4>
+                <p className='mb-2 text-sm leading-normal text-justify'>
+                  {subStringFunc(recipe?.instructions, 30)}
+                </p>
+              </div>
+            </Link>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+};
+
+export default CategoryDetails;

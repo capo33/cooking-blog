@@ -23,7 +23,14 @@ const getCategories = async (req: Request, res: Response) => {
 const getCategory = async (req: Request, res: Response) => {
   try {
     const { slug } = req.params;
-    const category = await CategoryModel.findOne({ slug }).populate("recipes");
+    // populate recipes with owner name and image
+    const category = await CategoryModel.findOne({ slug }).populate({
+      path: "recipes",
+      populate: {
+        path: "owner",
+        select: "name image",
+      },
+    })
 
     if (!category) {
       return res.status(404).json({ message: "Category not found" });

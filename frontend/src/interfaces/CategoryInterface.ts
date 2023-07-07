@@ -1,8 +1,10 @@
+import { Recipe } from "./RecipeInterface";
+
 export interface Category {
   name: string;
   image: string;
   slug?: string;
-  recipes?: string[];
+  recipes?: Recipe[];
   _id?: string;
 }
 

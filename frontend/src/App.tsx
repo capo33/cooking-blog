@@ -23,9 +23,9 @@ import CategoryDetailsForAdmin from "./pages/Category/admin/CategoryDetailsForAd
 import { useAppSelector } from "./redux/app/store";
 
 function App() {
-  const {user} = useAppSelector((state) => state.auth);
+  const { user } = useAppSelector((state) => state.auth);
   const admin = user?.role;
-   
+
   return (
     <div className='container mx-auto py-10 px-5 bg-white min-h-screen'>
       <Router>
@@ -47,12 +47,15 @@ function App() {
             <Route path='/update-profile/:id' element={<UpdateProfile />} />
           </Route>
 
-            <Route path='/admin/allcategories' element={<AllCategoriesForAdmin />} />
           <Route path='' element={<AdminRoute />}>
             <Route path='/admin/add-category' element={<AddCategory />} />
             <Route
               path='/admin/edit-category/:slug'
               element={<CategoryDetailsForAdmin />}
+            />
+            <Route
+              path='/admin/allcategories'
+              element={<AllCategoriesForAdmin />}
             />
           </Route>
         </Routes>
