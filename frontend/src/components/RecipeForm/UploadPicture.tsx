@@ -4,15 +4,14 @@ type UploadPictureProps = {
   uploading: boolean;
   handleUpload: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
+
 const UploadPicture = ({ uploading, handleUpload }: UploadPictureProps) => {
   return (
     <div className='mt-1'>
       <label className='text-lg leading-6 font-medium text-gray-900'>
         Picture
       </label>
-      <p className='mt-1 text-sm text-gray-500'>
-        Picture of the food after it's complete.
-      </p>
+      <p className='mt-1 text-sm text-gray-500'>Picture after it's complete.</p>
       <div className='mt-4 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md'>
         <div className='space-y-1 text-center'>
           <svg

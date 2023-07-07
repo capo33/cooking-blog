@@ -1,31 +1,25 @@
-import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-// import Header from "./components/Header";
 import Home from "./pages/Home/Home";
 import Login from "./pages/Auth/Login";
 import Register from "./pages/Auth/Register";
 import AddRecipe from "./pages/Recipe/AddRecipe";
-import ComplexNavbar from "./components/Navbar/ComplexNavbar";
-import RecipeDetails from "./pages/Recipe/RecipeDetails";
+import Profile from "./pages/UserProfile/Profile";
+import Categories from "./pages/Category/Categories";
 import UpdateRecipe from "./pages/Recipe/UpdateRecipe";
 import SavedRecipes from "./pages/Recipe/SavedRecipes";
-import UpdateProfile from "./pages/UserProfile/UpdateProfile";
-import Profile from "./pages/UserProfile/Profile";
-import PrivateRoute from "./components/Guards/PrivateRoute";
-import { GuestProfile } from "./pages/UserProfile/GuestProfile";
-import Categories from "./pages/Category/Categories";
-import AddCategory from "./pages/Category/admin/AddCategory";
 import AdminRoute from "./components/Guards/AdminRoute";
+import RecipeDetails from "./pages/Recipe/RecipeDetails";
+import PrivateRoute from "./components/Guards/PrivateRoute";
+import AddCategory from "./pages/Category/admin/AddCategory";
+import UpdateProfile from "./pages/UserProfile/UpdateProfile";
+import ComplexNavbar from "./components/Navbar/ComplexNavbar";
 import CategoryDetails from "./pages/Category/CategoryDetails";
+import { GuestProfile } from "./pages/UserProfile/GuestProfile";
+import UpdateCategory from "./pages/Category/admin/UpdateCategory";
 import AllCategoriesForAdmin from "./pages/Category/admin/AllCategoriesForAdmin";
-import CategoryDetailsForAdmin from "./pages/Category/admin/CategoryDetailsForAdmin";
-import { useAppSelector } from "./redux/app/store";
 
 function App() {
-  const { user } = useAppSelector((state) => state.auth);
-  const admin = user?.role;
-
   return (
     <div className='container mx-auto py-10 px-5 bg-white min-h-screen'>
       <Router>
@@ -40,6 +34,7 @@ function App() {
           <Route path='/categories' element={<Categories />} />
           <Route path='/category/:slug' element={<CategoryDetails />} />
 
+          {/* PrivateRoutes */}
           <Route path='' element={<PrivateRoute />}>
             <Route path='/add-recipe' element={<AddRecipe />} />
             <Route path='/profile' element={<Profile />} />
@@ -47,11 +42,12 @@ function App() {
             <Route path='/update-profile/:id' element={<UpdateProfile />} />
           </Route>
 
+          {/* AdminRoutes */}
           <Route path='' element={<AdminRoute />}>
             <Route path='/admin/add-category' element={<AddCategory />} />
             <Route
               path='/admin/edit-category/:slug'
-              element={<CategoryDetailsForAdmin />}
+              element={<UpdateCategory />}
             />
             <Route
               path='/admin/allcategories'

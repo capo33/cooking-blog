@@ -1,9 +1,8 @@
-import React from "react";
-
 type RecipeButtonProps = {
   title: string;
 };
-const RecipeButton = ({title}:RecipeButtonProps) => {
+
+const RecipeButton = ({ title }: RecipeButtonProps) => {
   return (
     <div className='px-4 py-3 bg-gray-50 text-right sm:px-6'>
       <button
