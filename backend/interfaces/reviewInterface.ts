@@ -5,4 +5,7 @@ export interface IReview extends Document {
   rating?: number;
   comment?: string ;
   user?: Types.ObjectId ;
+  createdAt: Date;
+  updatedAt: Date;
+
  }

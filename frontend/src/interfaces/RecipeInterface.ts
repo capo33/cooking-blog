@@ -8,6 +8,14 @@ export interface Owner {
   isAdmin?: boolean;
 }
 
+export interface Review {
+  rating: number;
+  comment: string;
+  _id?: string;
+  name?: string;
+  createdAt?: number;
+  updatedAt?: number;
+}
 
 export interface Recipe {
   _id?: string;
@@ -20,14 +28,14 @@ export interface Recipe {
   owner: Owner;
   likes?: string[];
   views?: number;
-  reviews?: string[];
+  reviews?: Review[];
   rating?: number;
   numReviews?: number;
   slug?: string;
   createdAt?: number;
 }
 
- export interface CreateRecipe {
+export interface CreateRecipe {
   formData: Recipe;
   token: string;
 }

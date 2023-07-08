@@ -7,6 +7,7 @@ import {
 } from "../../redux/feature/Recipe/recipeSlice";
 import { userProfile } from "../../redux/feature/Auth/authSlice";
 import { useAppSelector, useAppDispatch } from "../../redux/app/store";
+import BackLink from "../../components/BackLink/BackLink";
 
 const SavedRecipes = () => {
   const { user } = useAppSelector((state) => state.auth);
@@ -36,12 +37,19 @@ console.log(userID);
   };
 
   return (
-    <div className='flex flex-col max-w-4xl m-auto p-6 space-y-4 sm:p-10 dark:bg-gray-900 dark:text-gray-100'>
+    <div className='flex flex-col max-w-4xl m-auto p-6 space-y-4 sm:p-10 dark:bg-gray-900 dark:text-gray-100 '>
+      <h2 className='text-center m-5 text-3xl font-semibold text-gray-800 capitalize lg:text-4xl dark:text-white'>
+        Saved Recipes
+      </h2>
+        <BackLink link="/" name="Back to home" />
       <h2 className='text-xl font-semibold'>
         {savedRecipes?.length === 0
           ? "No saved recipes"
           : "My saved recipes"}
       </h2>
+      <div className="">
+
+      </div>
       <ul className='flex flex-col divide-y divide-gray-700'>
         {savedRecipes?.map((myRecipe) => (
           <div key={myRecipe._id}>

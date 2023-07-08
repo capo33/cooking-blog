@@ -1,7 +1,7 @@
 import axios from "axios";
 
 import { RECIPE_URL, UPLOAD_URL } from "../../../constants/constants";
-import { Recipe } from "../../../interfaces/RecipeInterface";
+import { Recipe, Review } from "../../../interfaces/RecipeInterface";
 
 // *************************** Recipe *************************** //
 // get all recipes
@@ -143,6 +143,23 @@ const unlikeRecipe = async (recipeID: string, token: string) => {
   return response.data;
 };
 
+
+// add a review
+const addReview = async (recipeID: string, formData: Review, token: string) => {
+  const response = await axios.post(
+    `${RECIPE_URL}/${recipeID}/reviews`,
+    formData,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  return response.data;
+};
+
+
+
 const recipeService = {
   getAllRecipes,
   createRecipe,
@@ -156,6 +173,7 @@ const recipeService = {
   uploadRecipeImage,
   likeRecipe,
   unlikeRecipe,
+  addReview,
 };
 
 export default recipeService;

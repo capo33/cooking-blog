@@ -20,7 +20,6 @@ import {
 
 import { subStringFunc } from "../../utils";
 import {
-  getSavedRecipes,
   likeRecipe,
   unlikeRecipe,
 } from "../../redux/feature/Recipe/recipeSlice";

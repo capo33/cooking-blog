@@ -1,7 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 import recipeServices from "./recipeServices";
-import { CreateRecipe, Recipe } from "../../../interfaces/RecipeInterface";
+import {
+  CreateRecipe,
+  Recipe,
+  Review,
+} from "../../../interfaces/RecipeInterface";
 
 interface RecipeState {
   recipes: Recipe[];
@@ -148,7 +152,7 @@ export const unsaveRecipe = createAsyncThunk(
 
       thunkAPI.dispatch(getSavedRecipes({ userID, token }));
       // console.log("response", response); response is the unsaved recipe
-        
+
       return response;
     } catch (error: unknown | any) {
       return thunkAPI.rejectWithValue(error.response.data.message);
@@ -244,6 +248,33 @@ export const unlikeRecipe = createAsyncThunk(
       thunkAPI.dispatch(getAllRecipes());
       return response;
     } catch (error: unknown | any) {
+      return thunkAPI.rejectWithValue(error.response.data.message);
+    }
+  }
+);
+
+// add a review
+export const addReview = createAsyncThunk(
+  "recipe/addReview",
+  async (
+    {
+      recipeID,
+      formData,
+      token,
+      toast,
+    }: { recipeID: string; formData: Review; token: string , toast:any},
+    thunkAPI
+  ) => {
+    try {
+      const response = await recipeServices.addReview(
+        recipeID,
+        formData,
+        token
+      );
+      thunkAPI.dispatch(getSingleRecipe(recipeID));
+      return response;
+    } catch (error: unknown | any) {
+      toast.error(error.response.data.message);
       return thunkAPI.rejectWithValue(error.response.data.message);
     }
   }
@@ -385,7 +416,6 @@ const recipeSlice = createSlice({
     builder.addCase(likeRecipe.fulfilled, (state, { payload }) => {
       state.isLoading = false;
       state.isSuccess = true;
-      console.log(payload);
 
       const newdata = state.recipes.map((recipe) => {
         if (recipe?._id === payload?.data?._id) {
@@ -418,8 +448,29 @@ const recipeSlice = createSlice({
       });
       state.recipes = newdata;
     });
-
     builder.addCase(unlikeRecipe.rejected, (state, { payload }) => {
+      state.isLoading = false;
+      state.isError = true;
+      state.message = payload as string;
+    });
+
+    // Add a review
+    builder.addCase(addReview.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(addReview.fulfilled, (state, { payload }) => {
+      state.isLoading = false;
+      state.isSuccess = true;
+
+      const newdata = state.recipes.map((recipe) => {
+        if (recipe?._id === payload?.data?._id) {
+          return payload?.data;
+        }
+        return recipe;
+      });
+      state.recipes = newdata;
+    });
+    builder.addCase(addReview.rejected, (state, { payload }) => {
       state.isLoading = false;
       state.isError = true;
       state.message = payload as string;

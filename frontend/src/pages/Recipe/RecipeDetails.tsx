@@ -6,11 +6,12 @@ import {
   BookmarkSlashIcon,
 } from "@heroicons/react/24/outline";
 import { toast } from "react-toastify";
-import { Tooltip, Typography } from "@material-tailwind/react";
+import { Rating, Tooltip, Typography } from "@material-tailwind/react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 
 import { formatDate } from "../../utils";
 import {
+  addReview,
   deleteRecipe,
   getSavedRecipes,
   getSingleRecipe,
@@ -20,6 +21,9 @@ import {
 import Modal from "../../components/Modal/Modal";
 import BackLink from "../../components/BackLink/BackLink";
 import { useAppDispatch, useAppSelector } from "../../redux/app/store";
+import { Review } from "../../interfaces/RecipeInterface";
+import RecipeButton from "../../components/RecipeForm/RecipeButton";
+import moment from "moment";
 
 const RecipeDetails = () => {
   const { id } = useParams<{ id: string }>();
@@ -28,6 +32,11 @@ const RecipeDetails = () => {
   const { user } = useAppSelector((state) => state.auth);
   const { recipe } = useAppSelector((state) => state.recipe);
   const { savedRecipes } = useAppSelector((state) => state.recipe);
+
+  const [data, setData] = useState<Review>({
+    rating: 0,
+    comment: "",
+  });
 
   const token = user?.token as string;
   const userID = user?._id as string;
@@ -44,6 +53,7 @@ const RecipeDetails = () => {
     }
   }, [dispatch, id, token, userID]);
 
+  // Delete handler for recipe
   const handleDeleteBlog = async () => {
     dispatch(
       deleteRecipe({
@@ -80,10 +90,26 @@ const RecipeDetails = () => {
     );
   };
 
+  // Submit handler for review
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    dispatch(
+      addReview({
+        recipeID: recipe?._id as string,
+        formData: data,
+        token,
+        toast,
+      })
+    );
+    setData({
+      rating: 0,
+      comment: "",
+    });
+  };
+
   return (
     <main className='mt-10'>
       <BackLink link='/' name='Back to Home' />
-
       {showModal ? (
         <>
           <Modal
@@ -94,10 +120,8 @@ const RecipeDetails = () => {
         </>
       ) : null}
 
-      <div
-        className='mb-4 md:mb-0 w-full max-w-screen-md mx-auto relative'
-        style={{ height: "24em" }}
-      >
+      {/* Recipe Image Details */}
+      <div className='mb-4 md:mb-0 w-full h-96 max-w-screen-md mx-auto relative'>
         <div
           className='absolute left-0 bottom-0 w-full h-full z-10'
           style={{
@@ -173,10 +197,10 @@ const RecipeDetails = () => {
         )}
       </div>
 
+      {/* Recipe Details */}
       <div className='px-4 lg:px-0 mt-12 max-w-screen-md mx-auto leading-relaxed'>
         {/* Ingredient */}
         <Typography variant='h5'>Ingredients</Typography>
-
         {recipe?.ingredients?.map((ingredient, index) => (
           <div
             id='ingredient'
@@ -202,8 +226,8 @@ const RecipeDetails = () => {
         >
           {recipe?.instructions ? recipe?.instructions : "No Instructions"}
         </Typography>
+
         <div className='flex justify-between'>
-          <div className=''></div>
           <div className='flex items-center'>
             {recipe?.owner?._id === userID && (
               <>
@@ -225,6 +249,85 @@ const RecipeDetails = () => {
               </>
             )}
           </div>
+        </div>
+
+        <Typography variant='h5' className='mt-6'>
+          Reviews
+        </Typography>
+
+        <form
+          className='max-w-2xl bg-white rounded-lg border p-2 mx-auto mt-5'
+          onSubmit={handleSubmit}
+        >
+          <div className='px-3 mb-2 mt-2'>
+            <div className='flex flex-wrap -mx-3 mb-6'>
+              <select
+                className='w-full bg-gray-100 rounded border border-gray-400 leading-normal resize-none h-10 py-2 px-3 font-medium placeholder-gray-700 focus:outline-none focus:bg-white'
+                value={data.rating}
+                onChange={(e) =>
+                  setData({
+                    ...data,
+                    rating: e.target.value as unknown as number,
+                  })
+                }
+              >
+                <option value=''>Select...</option>
+                <option value='1'>1 - Unacceptable</option>
+                <option value='2'>2 - Needs Improvement</option>
+                <option value='3'>3 - Decent</option>
+                <option value='4'>4 - Good</option>
+                <option value='5'>5 - Very tasty</option>
+              </select>
+            </div>
+            <div className='flex flex-wrap -mx-3 mb-6'>
+              <textarea
+                placeholder='comment'
+                value={data.comment}
+                onChange={(e) =>
+                  setData({ ...data, comment: e.target.value as string })
+                }
+                className='w-full bg-gray-100 rounded border border-gray-400 leading-normal resize-none h-20 py-2 px-3 font-medium placeholder-gray-700 focus:outline-none focus:bg-white'
+              ></textarea>
+            </div>
+          </div>
+          <div className='flex justify-end px-4'>
+            <RecipeButton title='Comment' />
+          </div>
+        </form>
+
+        {recipe?.reviews?.length === 0 && (
+          <div className='flex justify-center items-center'>
+            <p className='text-gray-400'>No reviews yet</p>
+          </div>
+        )}
+
+        {/* Reviews */}
+        <div className='grid grid-cols-1 gap-4 mt-6'>
+          {recipe?.reviews?.map((review) => (
+            <div
+              className='bg-white  rounded-2xl px-10 py-8 shadow-lg hover:shadow-2xl transition duration-500'
+              key={review?._id}
+            >
+              <div className='mt-4'>
+                <h1 className='text-lg text-gray-700 font-semibold hover:underline cursor-pointer'>
+                  {review?.name}
+                </h1>
+                <div className='flex mt-2'>
+                  <Rating value={review?.rating} />
+                </div>
+                <p className='mt-4 text-md text-gray-600'>{review?.comment}</p>
+                <div className='flex justify-between items-center'>
+                  <div className='mt-4 flex items-center space-x-4 py-6'>
+                    <div className='text-sm font-semibold'>
+                      <span className='font-normal'>
+                        {moment(review?.createdAt).fromNow()}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </main>
