@@ -8,6 +8,8 @@ import {
 import { userProfile } from "../../redux/feature/Auth/authSlice";
 import { useAppSelector, useAppDispatch } from "../../redux/app/store";
 import BackLink from "../../components/BackLink/BackLink";
+import { Link } from "react-router-dom";
+import { subStringFunc } from "../../utils";
 
 const SavedRecipes = () => {
   const { user } = useAppSelector((state) => state.auth);
@@ -38,58 +40,51 @@ const SavedRecipes = () => {
   return (
     <section className='bg-white container px-6 py-10 mx-auto'>
       <h2 className='text-center mb-5 text-2xl font-semibold text-gray-800 capitalize lg:text-3xl dark:text-white'>
-        Saved Recipes
+        {savedRecipes?.length === 0 ? "No saved recipes" : "My saved recipes"}
       </h2>
       <BackLink link='/' name='Back to home' />
 
-      <ul className='flex flex-col max-w-4xl m-auto p-6 space-y-4 sm:p-10 dark:bg-gray-900 dark:text-gray-100'>
-        {savedRecipes?.length === 0 ? "No saved recipes" : "My saved recipes"}
+      <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-10'>
         {savedRecipes?.map((myRecipe) => (
-          <li
-            className='flex flex-col py-6 sm:flex-row sm:justify-between'
-            key={myRecipe._id}
+          <div
+            className='  rounded-md shadow-md dark:bg-gray-900 dark:text-gray-100'
+            key={myRecipe?._id}
           >
-            <div className='flex w-full space-x-2 sm:space-x-4'>
-              <img
-                className='flex-shrink-0 object-cover w-20 h-20 dark:border-transparent rounded outline-none sm:w-32 sm:h-32 dark:bg-gray-500'
-                src={myRecipe?.image}
-                alt={myRecipe?.name}
-              />
-              <div className='flex flex-col justify-between w-full pb-4'>
-                <div className='flex justify-between w-full pb-2 space-x-2'>
-                  <div className='space-y-1'>
-                    <h3 className='font-semibold '>{myRecipe?.name}</h3>
-                    <p>
-                      <span className='rounded bg-blue-500 p-1 text-xs text-white'>
-                        {myRecipe?.category?.name}
-                      </span>
-                    </p>
-                    <p>
-                      <span className='rounded bg-blue-gray-600 p-1 text-xs text-white'>
-                        {myRecipe?.owner?.name}
-                      </span>
-                    </p>
-                  </div>
-                  <div className='text-right'>
-                    <div className='flex text-sm'>
-                      <button
-                        type='button'
-                        className='flex items-center px-2 py-1 pl-0 space-x-1'
-                        onClick={() =>
-                          handleUnsaveRecipe(myRecipe._id as string)
-                        }
-                      >
-                        <TrashIcon className='w-4 h-4' />
-                        <span>Remove</span>
-                      </button>
-                    </div>
-                  </div>
-                </div>
+            <img
+              src={myRecipe?.image}
+              alt={myRecipe?.name}
+              className='object-cover object-center w-full rounded-t-md h-72 dark:bg-gray-500'
+            />
+            <div className='flex flex-col justify-between p-6 space-y-8'>
+              <div className='space-y-2'>
+                <h2 className='text-3xl font-semibold tracki'>
+                  {myRecipe?.name}
+                </h2>
+                <p className='dark:text-gray-100'>
+                  {subStringFunc(myRecipe?.instructions as string, 20)}
+                </p>
+              </div>
+              <div className='flex justify-between'>
+                <Link
+                  to={`/recipe-details/${myRecipe._id}`}
+                  className='flex items-center justify-center w-full p-3 font-semibold tracki rounded-md dark:bg-violet-400 dark:text-gray-900'
+                >
+                  View
+                </Link>
+
+                <button
+                  type='button'
+                  className='flex items-center justify-center w-full p-3 rounded-md text-red-900'
+                  onClick={() => handleUnsaveRecipe(myRecipe._id as string)}
+                >
+                  <TrashIcon className='w-4 h-4' />
+                  <span>Remove</span>
+                </button>
               </div>
             </div>
-          </li>
+          </div>
         ))}
-      </ul>
+      </div>
     </section>
   );
 };

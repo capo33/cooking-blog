@@ -34,7 +34,7 @@ const Categories = () => {
           {categories?.map((category) => (
             <div
               key={category._id}
-              className='relative w-full h-64 bg-cover bg-center group rounded-lg overflow-hidden shadow-lg hover:shadow-2xl  transition duration-300 ease-in-out'
+              className='relative w-full h-64 bg-cover bg-center group rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition duration-300 ease-in-out'
               style={{
                 backgroundImage: `url(${category.image})`,
               }}
