@@ -4,9 +4,11 @@ import authServices from "./authServices";
 import {
   Auth,
   Guest,
+  IResetPassword,
   IUpdateProfile,
   User,
 } from "../../../interfaces/AuthInterface";
+import { NavigateFunction } from "react-router-dom";
 
 const user = JSON.parse(localStorage.getItem("user") as string); // user as string because it is stored as a string in local storage
 
@@ -79,6 +81,36 @@ export const login = createAsyncThunk(
 export const logout = createAsyncThunk("auth/logout", async () => {
   authServices.logout();
 });
+
+interface IForgotPassword {
+  formData: IResetPassword;
+  toast: any;
+  navigate: NavigateFunction;
+}
+// forgot password
+export const forgotPassword = createAsyncThunk(
+  "auth/forgotPassword",
+  async (
+    { formData, toast, navigate }: IForgotPassword,
+    { rejectWithValue }
+  ) => {
+    try {
+      const response = await authServices.forgotPassword(formData);
+      toast.success(response?.message);
+      navigate("/login");
+      return response;
+    } catch (error: unknown | any) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      toast.error(error.response?.data?.msg);
+      return rejectWithValue(message);
+    }
+  }
+);
 
 // Get user profile
 export const userProfile = createAsyncThunk(
@@ -284,6 +316,23 @@ const authSlice = createSlice({
       state.isLoading = false;
       state.isError = true;
       state.message = payload as string;
+    });
+
+    // Forgot password
+    builder.addCase(forgotPassword.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(forgotPassword.fulfilled, (state, action) => {
+      state.isError = false;
+      state.isSuccess = true;
+      state.isLoading = false;
+      state.user = action.payload;
+    });
+    builder.addCase(forgotPassword.rejected, (state, action) => {
+      state.isError = true;
+      state.isSuccess = false;
+      state.isLoading = false;
+      state.message = action.payload as string;
     });
 
     // Get user profile

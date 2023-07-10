@@ -30,7 +30,7 @@ const getCategory = async (req: Request, res: Response) => {
         path: "owner",
         select: "name image",
       },
-    })
+    });
 
     if (!category) {
       return res.status(404).json({ message: "Category not found" });

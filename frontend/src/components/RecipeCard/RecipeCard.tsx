@@ -167,6 +167,8 @@ const BLogCard = ({ recipe }: RecipeCardProps) => {
         </Button>
       </CardFooter>
     </Card>
+
+     
   );
 };
 

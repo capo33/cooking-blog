@@ -7,12 +7,14 @@ export interface Owner {
   image?: string;
   isAdmin?: boolean;
 }
-
+ 
+ 
 export interface Review {
   rating: number;
   comment: string;
   _id?: string;
   name?: string;
+  user?: string;
   createdAt?: number;
   updatedAt?: number;
 }

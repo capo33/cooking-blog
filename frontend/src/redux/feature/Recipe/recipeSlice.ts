@@ -262,7 +262,7 @@ export const addReview = createAsyncThunk(
       formData,
       token,
       toast,
-    }: { recipeID: string; formData: Review; token: string , toast:any},
+    }: { recipeID: string; formData: Review; token: string; toast: any },
     thunkAPI
   ) => {
     try {
@@ -463,13 +463,14 @@ const recipeSlice = createSlice({
       state.isSuccess = true;
 
       const newdata = state.recipes.map((recipe) => {
-        if (recipe?._id === payload?.data?._id) {
-          return payload?.data;
+        if (recipe?._id === payload?.recipe?._id) {
+          return payload?.recipe;
         }
         return recipe;
       });
       state.recipes = newdata;
     });
+
     builder.addCase(addReview.rejected, (state, { payload }) => {
       state.isLoading = false;
       state.isError = true;

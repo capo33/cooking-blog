@@ -306,7 +306,15 @@ const addReview = async (req: Request, res: Response) => {
     // we need to get the rating and comment because we are going to send a number rating and a comment
     const { rating, comment } = req.body;
 
-    const recipe = await RecipeModel.findById(id);
+    const recipe = await RecipeModel.findById(id)
+      .sort({ createdAt: -1 })
+      .populate({
+        path: "reviews",
+        populate: {
+          path: "user",
+          select: "name email",
+        },
+      });
 
     if (!recipe) {
       return res.status(404).json({ message: "Recipe not found" });
@@ -317,9 +325,9 @@ const addReview = async (req: Request, res: Response) => {
       (review) => review?.user?.toString() === req.user?._id.toString()
     );
 
-    if (alreadyReviewed) {
-      return res.status(400).json({ message: "Recipe already reviewed" });
-    }
+    // if (alreadyReviewed) {
+    //   return res.status(400).json({ message: "Recipe already reviewed" });
+    // }
 
     // if the user has not reviewed the recipe before, we create a new review object
     const review = {
@@ -343,13 +351,53 @@ const addReview = async (req: Request, res: Response) => {
     // we save the recipe
     await recipe.save();
 
-    res.status(201).json({ message: "Review added" });
+    res.status(201).json({ recipe, message: "Review added" });
   } catch (error) {
     if (error instanceof Error) {
       res.status(500).json({ message: error.message });
     }
   }
 };
+
+// @desc    Delete a review
+// @route   DELETE /api/v1/recipes/:id/reviews/:reviewId
+// @access  Private
+const deleteReview = async (req: Request, res: Response) => {
+  try {
+    const { recipeId, reviewId } = req.params; // recipe id and review id
+
+    const recipe = await RecipeModel.findByIdAndUpdate(
+      recipeId,
+      {
+        $pull: { reviews: { _id: reviewId } },
+      },
+      { new: true }
+    );
+      
+    if (!recipe) {
+      return res.status(404).json({ message: "Recipe not found" });
+    }
+
+    // we update the number of reviews and the rating
+    recipe.numReviews = recipe.reviews.length;
+
+    // we update/calculate the rating the rating by getting the sum of all the ratings and dividing it by the number of reviews
+    recipe.rating =
+      recipe?.reviews?.reduce((acc, item) => Number(item?.rating) + acc, 0) /
+      recipe?.reviews?.length;
+
+    // we save the recipe
+    await recipe.save();
+
+    res.status(200).json({ recipe, message: "Review deleted" });
+  } catch (error) {
+    if (error instanceof Error) {
+      res.status(500).json({ message: error.message });
+    }
+  }
+};
+
+
 
 // @desc    Like a recipe
 // @route   PUT /api/v1/recipes/like
@@ -402,6 +450,7 @@ export {
   getSavedRecipes,
   getRecipesByUser,
   addReview,
+  deleteReview,
   likeRecipe,
   unlikeRecipe,
 };

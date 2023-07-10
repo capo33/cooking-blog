@@ -158,8 +158,9 @@ const forgotPassword = async (req: Request, res: Response) => {
 
   try {
     const existingUser = await UserModel.findOne({ email });
+
     if (!existingUser) {
-      return res.status(400).json({ msg: "Invalid credentials" });
+      return res.status(400).json({ msg: "Email does not exist" });
     }
 
     // Check if email is provided
@@ -174,7 +175,7 @@ const forgotPassword = async (req: Request, res: Response) => {
 
     // Check if newPassword is provided
     if (existingUser.answer !== answer) {
-      return res.status(400).json({ msg: "Invalid credentials" });
+      return res.status(400).json({ msg: "Answer is incorrect" });
     }
 
     // Check if newPassword is empty
@@ -194,7 +195,6 @@ const forgotPassword = async (req: Request, res: Response) => {
     res.status(200).json({
       success: true,
       message: "Password updated successfully",
-      user,
     });
   } catch (error) {
     if (error instanceof Error) {
@@ -280,7 +280,10 @@ const deleteUserByAdmin = async (req: Request, res: Response) => {
     }
 
     // Check if user is authorized to delete the user
-    if (user?._id.toString() !== req.user?._id.toString() && user.role === 'admin') {
+    if (
+      user?._id.toString() !== req.user?._id.toString() &&
+      user.role === "admin"
+    ) {
       return res.status(401).json({ msg: "Not authorized" });
     }
 

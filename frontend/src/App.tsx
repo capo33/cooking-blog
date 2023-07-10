@@ -18,16 +18,22 @@ import CategoryDetails from "./pages/Category/CategoryDetails";
 import { GuestProfile } from "./pages/UserProfile/GuestProfile";
 import UpdateCategory from "./pages/Category/admin/UpdateCategory";
 import AllCategoriesForAdmin from "./pages/Category/admin/AllCategoriesForAdmin";
+import ForgotPassword from "./pages/Auth/ForgotPassword";
+import Header from "./components/Header";
+import  ScrollToTop  from "./components/ScrollToTop/ScrollToTop";
 
 function App() {
   return (
     <div className='container mx-auto py-10 px-5 bg-white min-h-screen'>
       <Router>
+        <ScrollToTop />
         <ComplexNavbar />
-        <Routes>
+        {/* <Header /> */}
+         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/login' element={<Login />} />
           <Route path='/register' element={<Register />} />
+          <Route path='/forgot-password' element={<ForgotPassword />} />
           <Route path='/recipe-details/:id' element={<RecipeDetails />} />
           <Route path='/saved-recipes' element={<SavedRecipes />} />
           <Route path='/user-profile/:guestID' element={<GuestProfile />} />

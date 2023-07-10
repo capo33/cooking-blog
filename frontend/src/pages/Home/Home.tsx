@@ -8,8 +8,7 @@ import { useAppDispatch, useAppSelector } from "../../redux/app/store";
 
 const Home = () => {
   const { recipes, isLoading } = useAppSelector((state) => state.recipe);
-  console.log(recipes);
-
+ 
   const dispatch = useAppDispatch();
 
   useEffect(() => {

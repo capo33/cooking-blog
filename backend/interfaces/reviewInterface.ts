@@ -1,11 +1,10 @@
 import { Document, Types } from "mongoose";
 
 export interface IReview extends Document {
-  name?: string ;
+  name?: string;
   rating?: number;
-  comment?: string ;
-  user?: Types.ObjectId ;
-  createdAt: Date;
-  updatedAt: Date;
-
- }
+  comment?: string;
+  user?: Types.ObjectId;
+  createdAt?: number;
+  updatedAt?: number;
+}

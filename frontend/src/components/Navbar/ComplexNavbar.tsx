@@ -51,7 +51,7 @@ function ProfileMenu() {
   const navigate = useNavigate();
 
   const avatar = user?.image as string;
-  const admin = user?.role
+  const admin = user?.role;
   const token = user?.token as string;
 
   useEffect(() => {
@@ -145,55 +145,68 @@ function ProfileMenu() {
           ? profileMenuItems.map(({ label, link, icon, onClick }, key) => {
               const isLastItem = key === profileMenuItems.length - 1;
               return (
-                <MenuItem
-                  key={label}
-                  onClick={closeMenu}
-                  className={`flex items-center gap-2 rounded ${
-                    isLastItem
-                      ? "hover:bg-red-500/10 focus:bg-red-500/10 active:bg-red-500/10"
-                      : ""
-                  }`}
+                // <MenuItem
+                //   key={label}
+                //   onClick={closeMenu}
+                //   className={`flex items-center gap-2 rounded ${
+                //     isLastItem
+                //       ? "hover:bg-red-500/10 focus:bg-red-500/10 active:bg-red-500/10"
+                //       : ""
+                //   }`}
+                // >
+                //   {React.createElement(icon, {
+                //     className: `h-4 w-4 ${isLastItem ? "text-red-500" : ""}`,
+                //     strokeWidth: 2,
+                //   })}
+                <Link
+                  to={link}
+                  onClick={link === "/login" ? onClick : undefined}
+                  className='font-normal'
+                  color={isLastItem ? "red" : "inherit"}
                 >
-                  {React.createElement(icon, {
-                    className: `h-4 w-4 ${isLastItem ? "text-red-500" : ""}`,
-                    strokeWidth: 2,
-                  })}
-                  <Link
-                    to={link}
-                    onClick={link === "/login" ? onClick : undefined}
-                    className='font-normal'
-                    color={isLastItem ? "red" : "inherit"}
+                  <MenuItem
+                    key={label}
+                    onClick={closeMenu}
+                    className={`flex items-center gap-2 rounded ${
+                      isLastItem
+                        ? "hover:bg-red-500/10 focus:bg-red-500/10 active:bg-red-500/10"
+                        : ""
+                    }`}
                   >
+                    {React.createElement(icon, {
+                      className: `h-4 w-4 ${isLastItem ? "text-red-500" : ""}`,
+                      strokeWidth: 2,
+                    })}
                     {label}
-                  </Link>
-                </MenuItem>
+                  </MenuItem>
+                </Link>
               );
             })
           : authMenuItems.map(({ label, link, icon, onClick }, key) => {
               const isLastItem = key === authMenuItems.length - 1;
               return (
-                <MenuItem
-                  key={label}
-                  onClick={closeMenu}
-                  className={`flex items-center gap-2 rounded ${
-                    isLastItem
-                      ? "hover:bg-red-500/10 focus:bg-red-500/10 active:bg-red-500/10"
-                      : ""
-                  }`}
+                <Link
+                  to={link}
+                  onClick={link === "/login" ? onClick : undefined}
+                  className='font-normal'
+                  color={isLastItem ? "red" : "inherit"}
                 >
-                  {React.createElement(icon, {
-                    className: `h-4 w-4 ${isLastItem ? "text-red-500" : ""}`,
-                    strokeWidth: 2,
-                  })}
-                  <Link
-                    to={link}
-                    onClick={link === "/login" ? onClick : undefined}
-                    className='font-normal'
-                    color={isLastItem ? "red" : "inherit"}
+                  <MenuItem
+                    key={label}
+                    onClick={closeMenu}
+                    className={`flex items-center gap-2 rounded ${
+                      isLastItem
+                        ? "hover:bg-red-500/10 focus:bg-red-500/10 active:bg-red-500/10"
+                        : ""
+                    }`}
                   >
+                    {React.createElement(icon, {
+                      className: `h-4 w-4 ${isLastItem ? "text-red-500" : ""}`,
+                      strokeWidth: 2,
+                    })}
                     {label}
-                  </Link>
-                </MenuItem>
+                  </MenuItem>
+                </Link>
               );
             })}
       </MenuList>
@@ -213,7 +226,7 @@ function NavList() {
   const userID = user?._id as string;
 
   useEffect(() => {
-    dispatch(getSavedRecipes({ userID, token }));
+    if (token) dispatch(getSavedRecipes({ userID, token }));
   }, [dispatch, token, userID]);
 
   // nav list component
@@ -275,9 +288,14 @@ export default function ComplexNavbar() {
     <Navbar className='mx-auto  p-2 lg:rounde lg:pl-6 sticky top-0 z-50'>
       <div className='relative mx-auto flex items-center text-blue-gray-900'>
         <Link to='/' className='mr-4 ml-2 cursor-pointer py-1.5 font-medium'>
-          Recipe Blog
+          <img
+            width='45'
+            height='45'
+            src='https://img.icons8.com/external-becris-lineal-color-becris/64/external-recipe-kitchen-cooking-becris-lineal-color-becris-1.png'
+            alt='external-recipe-kitchen-cooking-becris-lineal-color-becris-1'
+          />
         </Link>
-        <div className='absolute top-2/4 left-2/4 hidden -translate-x-2/4 -translate-y-2/4 lg:block'>
+        <div className='absolute top-2/3 left-2/4 hidden -translate-x-2/4 -translate-y-2/4 lg:block'>
           <NavList />
         </div>
         <IconButton

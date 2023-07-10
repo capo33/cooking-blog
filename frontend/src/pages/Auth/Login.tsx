@@ -25,16 +25,18 @@ const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const token = user?.token;
+
   const redirect = location.search ? location.search.split("=")[1] : "/";
 
   // Redirect user to home page if user is already logged in
   useEffect(() => {
-    if (user) {
+    if (token) {
       navigate(redirect);
     } else {
       navigate("/login");
     }
-  }, [user, navigate, redirect]);
+  }, [token, navigate, redirect]);
 
   // Change input value
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -64,7 +66,7 @@ const Login = () => {
                     Welcome & Login to your account.
                   </p>
                   <div className='mx-auto max-w-lg'>
-                    <div className=''>
+                    <div className='py-2'>
                       <span className='px-1 text-sm text-gray-600'>Email</span>
                       <input
                         type='text'

@@ -53,12 +53,19 @@ export interface AuthUser {
   email: string;
   password: string;
   name?: string;
+  answer?: string;
 }
 
 export interface Auth {
   formData: AuthUser;
   navigate: any;
   toast?: any;
+}
+
+export interface IResetPassword {
+  email: string;
+  answer: string;
+  newPassword: string;
 }
 
 export interface IUpdateProfile {

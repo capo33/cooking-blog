@@ -20,20 +20,19 @@ const Categories = () => {
 
   return (
      <section className='bg-white container px-6 py-10 mx-auto'>
-      <h2 className='text-center m-5 text-3xl font-semibold text-gray-800 capitalize lg:text-4xl dark:text-white'>
+      <h2 className='text-center mb-5 text-2xl font-semibold text-gray-800 capitalize lg:text-3xl dark:text-white'>
         Categories
       </h2>
       <BackLink link='/' name='Back to home' />
       {isLoading && <div>Loading...</div>}
-      <article>
-        <section className='mt-6 grid grid-cols-1 md:grid-cols-1 lg:grid-cols-3 gap-x-6 gap-y-8'>
+         <div className='mt-6 grid grid-cols-1 md:grid-cols-1 lg:grid-cols-3 gap-x-6 gap-y-8'>
           {categories?.length === 0 && (
             <div className='flex justify-center items-center'>
               <h1 className='text-2xl text-gray-500'>No categories found</h1>
             </div>
           )}
           {categories?.map((category) => (
-            <article
+            <div
               key={category._id}
               className='relative w-full h-64 bg-cover bg-center group rounded-lg overflow-hidden shadow-lg hover:shadow-2xl  transition duration-300 ease-in-out'
               style={{
@@ -52,11 +51,10 @@ const Categories = () => {
                   </Link>
                 </h3>
               </div>
-            </article>
+            </div>
           ))}
-        </section>
-      </article>
-    </section>
+        </div>
+     </section>
   );
 };
 

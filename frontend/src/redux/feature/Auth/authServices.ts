@@ -1,7 +1,11 @@
 import axios from "axios";
 
 import { AUTH_URL } from "../../../constants/constants";
-import { AuthUser, IUpdateProfile } from "../../../interfaces/AuthInterface";
+import {
+  AuthUser,
+  IResetPassword,
+  IUpdateProfile,
+} from "../../../interfaces/AuthInterface";
 
 // *************************** Auth *************************** //
 // register
@@ -12,7 +16,7 @@ const register = async (formData: AuthUser) => {
     localStorage.setItem("user", JSON.stringify(response.data));
   }
   console.log(response.data);
-  
+
   return response.data;
 };
 
@@ -28,6 +32,13 @@ const login = async (formData: AuthUser) => {
 // logout
 const logout = () => {
   localStorage.removeItem("user");
+};
+
+// forgot password
+const forgotPassword = async (formData: IResetPassword) => {
+  const response = await axios.post(`${AUTH_URL}/forgot-password`, formData);
+
+  return response.data;
 };
 
 // get user profile
@@ -96,6 +107,7 @@ const authServices = {
   register,
   login,
   logout,
+  forgotPassword,
   getProfile,
   updateProfile,
   deleteUserProfileByUser,
