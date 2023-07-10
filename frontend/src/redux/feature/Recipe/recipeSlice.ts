@@ -280,6 +280,34 @@ export const addReview = createAsyncThunk(
   }
 );
 
+// delete a review
+export const deleteReview = createAsyncThunk(
+  "recipe/deleteReview",
+  async (
+    {
+      recipeID,
+      reviewID,
+      token,
+      toast,
+    }: { recipeID: string; reviewID: string; token: string; toast: any },
+    thunkAPI
+  ) => {
+    try {
+      const response = await recipeServices.deleteReview(
+        recipeID,
+        reviewID,
+        token
+      );
+      toast.success("Review deleted successfully");
+      thunkAPI.dispatch(getSingleRecipe(recipeID));
+      return response;
+    } catch (error: unknown | any) {
+      toast.error(error.response.data.message);
+      return thunkAPI.rejectWithValue(error.response.data.message);
+    }
+  }
+);
+
 const recipeSlice = createSlice({
   name: "recipe",
   initialState,
@@ -477,6 +505,29 @@ const recipeSlice = createSlice({
       state.message = payload as string;
     });
 
+    // Delete a review
+    builder.addCase(deleteReview.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(deleteReview.fulfilled, (state, { payload }) => {
+      state.isLoading = false;
+      state.isSuccess = true;
+
+      const newdata = state.recipes.map((recipe) => {
+        if (recipe?._id === payload?.recipe?._id) {
+          return payload?.recipe;
+        }
+        return recipe;
+      });
+      state.recipes = newdata;
+    });
+
+    builder.addCase(deleteReview.rejected, (state, { payload }) => {
+      state.isLoading = false;
+      state.isError = true;
+      state.message = payload as string;
+    });
+    
     // Upload images
     //   builder.addCase(uploadImages.pending, (state) => {
     //     state.isLoading = true;

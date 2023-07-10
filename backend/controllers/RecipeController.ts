@@ -360,7 +360,7 @@ const addReview = async (req: Request, res: Response) => {
 };
 
 // @desc    Delete a review
-// @route   DELETE /api/v1/recipes/:id/reviews/:reviewId
+// @route   DELETE /api/v1/recipes/reviews/:recipeId/:reviewId
 // @access  Private
 const deleteReview = async (req: Request, res: Response) => {
   try {

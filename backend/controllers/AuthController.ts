@@ -209,7 +209,7 @@ const forgotPassword = async (req: Request, res: Response) => {
 const updateProfile = async (req: Request, res: Response) => {
   try {
     // Check if user exists
-    const user = await UserModel.findById(req.user?._id); // req.user?._id is set by the auth middleware
+    const user = await UserModel.findById(req.user?._id) // req.user?._id is set by the auth middleware
 
     if (!user) {
       return res.status(404).json({ msg: "User not found" });

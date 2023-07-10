@@ -157,6 +157,19 @@ const addReview = async (recipeID: string, formData: Review, token: string) => {
   return response.data;
 };
 
+// delete a review
+const deleteReview = async (recipeID: string, reviewID: string, token: string) => {
+  const response = await axios.delete(
+    `${RECIPE_URL}/reviews/${recipeID}/${reviewID}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  return response.data;
+};
+
 
 const recipeService = {
   getAllRecipes,
@@ -172,6 +185,7 @@ const recipeService = {
   likeRecipe,
   unlikeRecipe,
   addReview,
+  deleteReview
 };
 
 export default recipeService;
