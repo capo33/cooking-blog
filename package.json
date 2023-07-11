@@ -6,13 +6,12 @@
   "author": "mohamed <s2000588@edu.bc.fi>",
   "license": "MIT",
   "scripts": {
-    "start": "node backend/build/index",
+    "start": "node --exec npx ts-node backend/index.ts",
     "start:prod": "npm run build && npm run start",
     "dev": "ts-node-dev --respawn --transpileOnly backend/index.ts --ignore-watch node_modules",
     "server": "nodemon backend/index",
     "client": "npm start --prefix frontend",
-    "build": "npm install && npm install --prefix frontend && npm run build --prefix frontend && npm run build:backend && tsc backend",
-    "build:watch": "tsc -p backend -w"
+    "build": "npm install && npm install --prefix frontend && npm run build --prefix frontend"
   },
   "dependencies": {
     "@types/node": "^20.4.1",
