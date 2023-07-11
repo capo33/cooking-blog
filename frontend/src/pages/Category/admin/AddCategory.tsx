@@ -1,12 +1,14 @@
 import React, { useState } from "react";
+import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import { createCategory } from "../../../redux/feature/Category/categorySlice";
-import { useAppSelector, useAppDispatch } from "../../../redux/app/store";
-import { Category } from "../../../interfaces/CategoryInterface";
-// import Button from "../../components/Button/Button";
 
+import { Category } from "../../../interfaces/CategoryInterface";
+import RecipeButton from "../../../components/RecipeForm/RecipeButton";
+import UploadPicture from "../../../components/RecipeForm/UploadPicture";
+import { useAppSelector, useAppDispatch } from "../../../redux/app/store";
+import { createCategory } from "../../../redux/feature/Category/categorySlice";
+ 
 const AddCategory = () => {
   const [categoryData, setCategoryData] = useState<Category>({
     name: "",
@@ -66,64 +68,42 @@ const AddCategory = () => {
 
   return (
     <>
-      <div className='py-5 text-center'>
-        <h1 className='display-5 fw-bold'>
-          {/* Share your amazing recipies with thousands of web developers accross */}
-          Add Category
-        </h1>
-        <div className='col-lg-6 mx-auto'>
-          <p className='lead'>
-            {/* Share your amazing recipies with thousands of web developers accross
-            the world. Fill our form to get started. */}
-            Create a new category
-          </p>
-        </div>
-      </div>
-
-      <div className='row justify-content-center'>
-        <div className='col-8'>
+      <div className='p-5 mt-10 max-w-md'>
+        <div className='p-8 rounded border border-gray-200'>
+          <h1 className='font-medium text-3xl'>Add Category</h1>
           <form onSubmit={handleSubmit}>
-            <div className='row g-3'>
-              <div className='col-12'>
-                <label htmlFor='name' className='form-label'>
+            <div className='mt-8 grid gap-4'>
+              <div>
+                <label
+                  htmlFor='name'
+                  className='text-sm text-gray-700 block mb-1 font-medium'
+                >
                   Name
                 </label>
                 <input
-                  type='name'
+                  type='text'
                   name='name'
-                  id='name'
                   value={categoryData.name}
+                  id='name'
                   onChange={(e) =>
                     setCategoryData({ ...categoryData, name: e.target.value })
                   }
-                  className='form-control'
+                  className='bg-gray-100 border border-gray-200 rounded py-1 px-3 block focus:ring-blue-500 focus:border-blue-500 text-gray-700 w-full'
+                  placeholder='e.g. Sports'
                 />
               </div>
+            </div>
+            <div className='mt-8'>
+              <img src={categoryData?.image} alt={categoryData?.name} />
+              <UploadPicture
+                handleUpload={handleUpload}
+                uploading={uploading}
+              />
+            </div>
+            {uploading && <p>Uploading image...</p>}
 
-              <div className='col-12'>
-                <label htmlFor='image' className='form-label'>
-                  Image
-                </label>
-                <input
-                  type='file'
-                  className='form-control'
-                  name='image'
-                  accept='image/*'
-                  onChange={handleUpload}
-                />
-              </div>
-              {uploading && <p>Uploading image...</p>}
-
-              <div className='col-12'>
-                {/* <Button
-                  type='submit'
-                  children='Add Category'
-                  className='btn btn-dark'
-                /> */}
-                <button type='submit' className='btn btn-dark'>
-                  Add Category
-                </button>
-              </div>
+            <div className=' mt-8'>
+              <RecipeButton title='Add' />
             </div>
           </form>
         </div>
