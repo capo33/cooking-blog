@@ -6,7 +6,7 @@
   "author": "mohamed <s2000588@edu.bc.fi>",
   "license": "MIT",
   "scripts": {
-    "start": "node backend/index",
+    "start": "node backend/build/index",
     "start:prod": "npm run build && npm run start",
     "dev": "ts-node-dev --respawn --transpileOnly backend/index.ts --ignore-watch node_modules",
     "server": "nodemon backend/index",
