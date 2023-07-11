@@ -12,7 +12,7 @@
     "dev": "nodemon --exec 'ts-node --cache-directory .tscache' backend/index.ts",
     "server": "nodemon backend/index",
     "client": "npm start --prefix frontend",
-    "build": "tsc && npm install && npm install --prefix frontend && npm run build --prefix frontend"
+    "build": "npm install && npm install --prefix frontend && npm run build --prefix frontend"
   },
   "dependencies": {
     "@types/node": "^20.4.1",
