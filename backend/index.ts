@@ -1,5 +1,5 @@
-import path from "path";
 import dotenv from "dotenv";
+import path from "path";
 import express, { Application } from "express";
 
 // Load env vars
@@ -17,7 +17,7 @@ import { errorHandler, notFound } from "./middlewares/errorHandler";
 const app: Application = express();
 
 // Set port
-const PORT = process.env.PORT || 5000;
+const PORT: number = parseInt(process.env.PORT as string, 10) || 5000;
 
 // Connect to MongoDB
 connectDB();

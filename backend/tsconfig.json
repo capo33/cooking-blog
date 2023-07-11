@@ -71,8 +71,10 @@
     "forceConsistentCasingInFileNames": true /* Disallow inconsistently-cased references to the same file. */
   },
   "ts-node": {
-    "esm": true
-  },
+    "esm": true,
+    "experimentalSpecifierResolution": "node"
+  }
+,
   "include": ["./**/*"],
   "exclude": ["../node_modules, ./build", ],
 

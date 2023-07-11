@@ -974,6 +974,13 @@ node-fetch@^2.6.7:
   dependencies:
     whatwg-url "^5.0.0"
 
+node-typescript@^0.1.3:
+  version "0.1.3"
+  resolved "https://registry.npmjs.org/node-typescript/-/node-typescript-0.1.3.tgz"
+  integrity sha512-EK34kMXvdXsVvtzLZVQN3ORdLTQCG0gSnhkQOF8vzrO8beXoXqIUNAGACF9c6N5LDDzEdM8YCXFjbuCE8Mz1Jg==
+  dependencies:
+    typescript "0.8.3"
+
 nopt@^5.0.0:
   version "5.0.0"
   resolved "https://registry.npmjs.org/nopt/-/nopt-5.0.0.tgz"
@@ -1435,6 +1442,11 @@ typescript@*, typescript@^5.1.3, typescript@>=2.7:
   version "5.1.3"
   resolved "https://registry.npmjs.org/typescript/-/typescript-5.1.3.tgz"
   integrity sha512-XH627E9vkeqhlZFQuL+UsyAXEnibT0kWR2FWONlr4sTjvxyJYnyefgrkyECLzM5NenmKzRAy2rR/OlYLA1HkZw==
+
+typescript@0.8.3:
+  version "0.8.3"
+  resolved "https://registry.npmjs.org/typescript/-/typescript-0.8.3.tgz"
+  integrity sha512-42GP2FBgk+/q8Y0MRt0vJoWx6I7ADAKBTnz7gK++gwQtzC3h54Yltqb8z+EFozZ4OHhz6uwLmXFthCn4oDOGxg==
 
 unpipe@~1.0.0, unpipe@1.0.0:
   version "1.0.0"
