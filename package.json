@@ -7,12 +7,12 @@
   "type": "module",
   "license": "MIT",
   "scripts": {
-    "start": "TG_ALLOW_MIXED=ALLOW node backend/buildindex.js",
+    "start": "TG_ALLOW_MIXED=ALLOW node backend/build/index.js",
     "start:prod": "npm run build && npm run start",
     "dev": "nodemon --exec 'ts-node --cache-directory .tscache' backend/index.ts",
     "server": "nodemon backend/index",
     "client": "npm start --prefix frontend",
-    "build": "npm install && npm install --prefix frontend && npm run build --prefix frontend"
+    "build": "tsc && npm install && npm install --prefix frontend && npm run build --prefix frontend"
   },
   "dependencies": {
     "@types/node": "^20.4.1",
