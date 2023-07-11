@@ -166,7 +166,11 @@ const UpdateRecipe = () => {
                   handleUpload={handleUpload}
                   uploading={uploading}
                 />
-                <img src={data?.image} alt='' className='w-1/2 h-1/2' />
+                {data.image ? (
+                  <img src={data?.image} alt='' className='w-1/2 h-1/2' />
+                ) : (
+                  <p>No image uploaded yet</p>
+                )}
               </div>
 
               {/* <RecipeButton /> */}

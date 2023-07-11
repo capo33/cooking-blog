@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 
-import { useAppDispatch, useAppSelector } from "../../redux/app/store";
-import { getCategoryBySlug } from "../../redux/feature/Category/categorySlice";
 import { subStringFunc } from "../../utils";
 import BackLink from "../../components/BackLink/BackLink";
+import { useAppDispatch, useAppSelector } from "../../redux/app/store";
+import { getCategoryBySlug } from "../../redux/feature/Category/categorySlice";
 
 const CategoryDetails = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -40,12 +40,15 @@ const CategoryDetails = () => {
               src={recipe?.image}
               alt={recipe?.name}
             />
-            <Link to={`/recipe-details/${recipe?.slug}`}>
+            <Link to={`/recipe-details/${recipe?._id}`}>
               <div className='px-6 py-4'>
                 <h4 className='mb-3 text-base font-semibold'>{recipe?.name}</h4>
-                <p className='mb-2 text-sm leading-normal text-justify'>
-                  {subStringFunc(recipe?.instructions, 30)}
-                </p>
+                <p
+                  className='mb-2 text-sm leading-normal text-justify'
+                  dangerouslySetInnerHTML={{
+                    __html: subStringFunc(recipe?.instructions as string, 20),
+                  }}
+                />
               </div>
             </Link>
           </div>

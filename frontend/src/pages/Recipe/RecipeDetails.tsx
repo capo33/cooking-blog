@@ -344,7 +344,7 @@ const RecipeDetails = () => {
             Reviews
           </Typography>
 
-          {show && recipe?.reviews && recipe?.reviews?.length === 0 && (
+          {recipe?.reviews && recipe?.reviews?.length === 0 && (
             <Typography
               variant='h6'
               className='mt-6 text-gray-400 flex justify-center items-center'
