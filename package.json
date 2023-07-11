@@ -7,7 +7,7 @@
   "type": "module",
   "license": "MIT",
   "scripts": {
-    "start": "TG_ALLOW_MIXED=ALLOW node backend/build/index.js",
+    "start": "TG_ALLOW_MIXED=ALLOW node backend/index.js",
     "start:prod": "npm run build && npm run start",
     "server": "nodemon backend/index",
     "client": "npm start --prefix frontend",
