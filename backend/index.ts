@@ -42,15 +42,15 @@ const directoryname: string = path.resolve();
 app.use("/uploads", express.static(path.join(directoryname, "/uploads")));
 
 // Make uploads folder static
-if (process.env.NODE_ENV === "production") {
-  const directoryname: string = path.resolve();
-  app.use("/uploads", express.static("/var/data/uploads"));
-  app.use(express.static(path.join(directoryname, "/frontend/build")));
+// const directoryname: string = path.resolve();
+app.use("/uploads", express.static("/var/data/uploads"));
+app.use(express.static(path.join(directoryname, "/frontend/build")));
 
-  // for any route that is not api, redirect to index.html
-  app.get("*", (req, res) =>
-    res.sendFile(path.resolve(directoryname, "frontend", "build", "index.html"))
-  );
+// for any route that is not api, redirect to index.html
+app.get("*", (req, res) =>
+  res.sendFile(path.resolve(directoryname, "frontend", "build", "index.html"))
+);
+if (process.env.NODE_ENV === "production") {
 } else {
   // Welcome route
   app.get("/", (req, res) => {
