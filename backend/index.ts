@@ -38,18 +38,18 @@ app.use("/api/v1/recipes", recipeRoutes);
 app.use("/api/v1/categories", categoryRoutes);
 app.use("/api/v1/upload", uploadRoutes);
 
-const __dirname = path.resolve();
-app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
+const directoryname: string = path.resolve();
+app.use("/uploads", express.static(path.join(directoryname, "/uploads")));
 
 // Make uploads folder static
 if (process.env.NODE_ENV === "production") {
-  const __dirname = path.resolve();
+  const directoryname: string = path.resolve();
   app.use("/uploads", express.static("/var/data/uploads"));
-  app.use(express.static(path.join(__dirname, "/frontend/build")));
+  app.use(express.static(path.join(directoryname, "/frontend/build")));
 
   // for any route that is not api, redirect to index.html
   app.get("*", (req, res) =>
-    res.sendFile(path.resolve(__dirname, "frontend", "build", "index.html"))
+    res.sendFile(path.resolve(directoryname, "frontend", "build", "index.html"))
   );
 } else {
   // Welcome route
