@@ -2,20 +2,21 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import axios from "axios";
+import "react-quill/dist/quill.snow.css";
 
 import { Recipe } from "../../interfaces/RecipeInterface";
 import Category from "../../components/RecipeForm/Category";
 import RecipeName from "../../components/RecipeForm/RecipeName";
+import { userProfile } from "../../redux/feature/Auth/authSlice";
 import CookingTime from "../../components/RecipeForm/CookingTime";
 import Ingredients from "../../components/RecipeForm/Ingredients";
-import Instructions from "../../components/RecipeForm/Instructions";
+// import Instructions from "../../components/RecipeForm/Instructions";
 import RecipeButton from "../../components/RecipeForm/RecipeButton";
-import UploadPicture from "../../components/RecipeForm/UploadPicture";
-// import { createRecipe } from "../../redux/feature/Recipe/recipeSlice";
-import { useAppDispatch, useAppSelector } from "../../redux/app/store";
-import { getAllCategories } from "../../redux/feature/Category/categorySlice";
 import { createRecipe } from "../../redux/feature/Recipe/recipeSlice";
-import { userProfile } from "../../redux/feature/Auth/authSlice";
+import UploadPicture from "../../components/RecipeForm/UploadPicture";
+ import { useAppDispatch, useAppSelector } from "../../redux/app/store";
+import { getAllCategories } from "../../redux/feature/Category/categorySlice";
+import Editor from "../../components/Editor/Editor";
 
 const AddRecipe = () => {
   const { user } = useAppSelector((state) => state.auth);
@@ -145,7 +146,8 @@ const AddRecipe = () => {
                   inputValue={inputValue}
                   setInputValue={setInputValue}
                 />
-                <Instructions recipe={recipe} handleChange={handleChange} />
+                {/* <Instructions recipe={recipe} handleChange={handleChange} /> */}
+                <Editor recipe={recipe} onChange={(value :string) => setRecipe({ ...recipe, instructions: value })} />
                 <CookingTime recipe={recipe} handleChange={handleChange} />
                 <Category recipe={recipe} handleChange={handleChange} />
                 <UploadPicture

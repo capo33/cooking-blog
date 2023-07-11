@@ -161,7 +161,6 @@ const saveRecipe = async (req: Request, res: Response) => {
       "category",
       "name image recipes"
     );
-    console.log(recipe);
 
     const user = await UserModel.findById(req.body.userID);
 
@@ -373,7 +372,7 @@ const deleteReview = async (req: Request, res: Response) => {
       },
       { new: true }
     );
-      
+
     if (!recipe) {
       return res.status(404).json({ message: "Recipe not found" });
     }
@@ -396,8 +395,6 @@ const deleteReview = async (req: Request, res: Response) => {
     }
   }
 };
-
-
 
 // @desc    Like a recipe
 // @route   PUT /api/v1/recipes/like

@@ -119,7 +119,11 @@ const BLogCard = ({ recipe }: RecipeCardProps) => {
         </div>
 
         <Typography color='gray'>
-          {subStringFunc(recipe?.instructions, 40)}
+          <span
+            dangerouslySetInnerHTML={{
+              __html: subStringFunc(recipe?.instructions, 40),
+            }}
+          />
         </Typography>
 
         {/* Icons */}
@@ -167,8 +171,6 @@ const BLogCard = ({ recipe }: RecipeCardProps) => {
         </Button>
       </CardFooter>
     </Card>
-
-     
   );
 };
 

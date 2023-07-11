@@ -229,7 +229,15 @@ const RecipeDetails = () => {
                           : " "
                       }`}
                     >
-                      {desc}
+                      {value === "instructions" ? (
+                        <div
+                          dangerouslySetInnerHTML={{
+                            __html: desc as string,
+                          }}
+                        />
+                      ) : (
+                        <div>{desc}</div>
+                      )}
                     </TabPanel>
                   ))}
                 </TabsBody>

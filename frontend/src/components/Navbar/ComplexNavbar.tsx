@@ -57,7 +57,6 @@ function ProfileMenu() {
   useEffect(() => {
     if (token) {
       dispatch(userProfile(token));
-      // dispatch(getSavedRecipes());
     }
   }, [dispatch, token]);
 
@@ -145,21 +144,9 @@ function ProfileMenu() {
           ? profileMenuItems.map(({ label, link, icon, onClick }, key) => {
               const isLastItem = key === profileMenuItems.length - 1;
               return (
-                // <MenuItem
-                //   key={label}
-                //   onClick={closeMenu}
-                //   className={`flex items-center gap-2 rounded ${
-                //     isLastItem
-                //       ? "hover:bg-red-500/10 focus:bg-red-500/10 active:bg-red-500/10"
-                //       : ""
-                //   }`}
-                // >
-                //   {React.createElement(icon, {
-                //     className: `h-4 w-4 ${isLastItem ? "text-red-500" : ""}`,
-                //     strokeWidth: 2,
-                //   })}
                 <Link
                   to={link}
+                  key={label}
                   onClick={link === "/login" ? onClick : undefined}
                   className='font-normal'
                   color={isLastItem ? "red" : "inherit"}
@@ -187,6 +174,7 @@ function ProfileMenu() {
               return (
                 <Link
                   to={link}
+                  key={label}
                   onClick={link === "/login" ? onClick : undefined}
                   className='font-normal'
                   color={isLastItem ? "red" : "inherit"}
