@@ -4,6 +4,7 @@
   "description": "cooking blog",
   "main": "index.js",
   "author": "mohamed <s2000588@edu.bc.fi>",
+  "type": "module",
   "license": "MIT",
   "scripts": {
     "start": "node --exec npx ts-node backend/index.ts",
