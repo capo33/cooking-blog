@@ -189,12 +189,16 @@ const RecipeDetails = () => {
               <h2 className='text-4xl font-semibold text-gray-800 leading-tight'>
                 {recipe?.name}
               </h2>
-              <Link
-                to={`/category/${recipe?.category?.name}`}
-                className='py-2 text-green-700 inline-flex items-center justify-center mb-2'
-              >
-                {recipe?.category?.name}
-              </Link>
+              {recipe?.category?.name ? (
+                <Link
+                  to={`/category/${recipe?.category?.name}`}
+                  className='py-2 text-green-700 inline-flex items-center justify-center mb-2'
+                >
+                  {recipe?.category?.name}
+                </Link>
+              ) : (
+                "No Category"
+              )}
             </div>
             <img
               src={recipe?.image}

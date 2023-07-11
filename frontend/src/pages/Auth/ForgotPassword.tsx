@@ -43,7 +43,7 @@ const ForgotPassword = () => {
     e.preventDefault();
 
     dispatch(forgotPassword({ formData, toast, navigate }));
-    //  resetForm();
+    resetForm();
   };
 
   return (
@@ -106,7 +106,15 @@ const ForgotPassword = () => {
                       </div>
                     </div>
                   </div>
-
+                  <p className='mt-3 font-light text-gray-500 dark:text-gray-400'>
+                    Remember your password?{" "}
+                    <Link
+                      to='/login'
+                      className='font-medium text-gray-800 dark:text-gray-200 hover:underline'
+                    >
+                      Login
+                    </Link>
+                  </p>
                   <button
                     className='mt-3 text-lg font-semibold bg-gray-800 w-full text-white rounded-lg px-6 py-3 block shadow-xl hover:text-white hover:bg-black'
                     type='submit'

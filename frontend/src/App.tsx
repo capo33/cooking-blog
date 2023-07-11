@@ -9,6 +9,7 @@ import Categories from "./pages/Category/Categories";
 import UpdateRecipe from "./pages/Recipe/UpdateRecipe";
 import SavedRecipes from "./pages/Recipe/SavedRecipes";
 import AdminRoute from "./components/Guards/AdminRoute";
+import ForgotPassword from "./pages/Auth/ForgotPassword";
 import RecipeDetails from "./pages/Recipe/RecipeDetails";
 import PrivateRoute from "./components/Guards/PrivateRoute";
 import AddCategory from "./pages/Category/admin/AddCategory";
@@ -16,11 +17,9 @@ import UpdateProfile from "./pages/UserProfile/UpdateProfile";
 import ComplexNavbar from "./components/Navbar/ComplexNavbar";
 import CategoryDetails from "./pages/Category/CategoryDetails";
 import { GuestProfile } from "./pages/UserProfile/GuestProfile";
+import ScrollToTop from "./components/ScrollToTop/ScrollToTop";
 import UpdateCategory from "./pages/Category/admin/UpdateCategory";
 import AllCategoriesForAdmin from "./pages/Category/admin/AllCategoriesForAdmin";
-import ForgotPassword from "./pages/Auth/ForgotPassword";
-import Header from "./components/Header";
-import  ScrollToTop  from "./components/ScrollToTop/ScrollToTop";
 
 function App() {
   return (
@@ -28,8 +27,7 @@ function App() {
       <Router>
         <ScrollToTop />
         <ComplexNavbar />
-        {/* <Header /> */}
-         <Routes>
+        <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/login' element={<Login />} />
           <Route path='/register' element={<Register />} />

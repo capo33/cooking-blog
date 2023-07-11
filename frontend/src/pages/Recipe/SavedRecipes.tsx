@@ -42,7 +42,7 @@ const SavedRecipes = () => {
       <h2 className='text-center mb-5 text-2xl font-semibold text-gray-800 capitalize lg:text-3xl dark:text-white'>
         {savedRecipes?.length === 0 ? "No saved recipes" : "My saved recipes"}
       </h2>
-      <BackLink link='/' name='Back to home' />
+      <BackLink link='/' name='Back to saved recipe' />
 
       <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-10'>
         {savedRecipes?.map((myRecipe) => (
@@ -60,9 +60,15 @@ const SavedRecipes = () => {
                 <h2 className='text-3xl font-semibold tracki'>
                   {myRecipe?.name}
                 </h2>
-                <p className='dark:text-gray-100'>
-                  {subStringFunc(myRecipe?.instructions as string, 20)}
-                </p>
+                <p
+                  className='dark:text-gray-100'
+                  dangerouslySetInnerHTML={{
+                    __html: subStringFunc(
+                      myRecipe?.instructions as string,
+                      25
+                    ),
+                  }}
+                />
               </div>
               <div className='flex justify-between'>
                 <Link

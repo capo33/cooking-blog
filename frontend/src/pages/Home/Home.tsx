@@ -7,7 +7,7 @@ import { getAllRecipes } from "../../redux/feature/Recipe/recipeSlice";
 import { useAppDispatch, useAppSelector } from "../../redux/app/store";
 
 const Home = () => {
-  const { recipes, isLoading } = useAppSelector((state) => state.recipe);
+  const { recipes } = useAppSelector((state) => state.recipe);
  
   const dispatch = useAppDispatch();
 

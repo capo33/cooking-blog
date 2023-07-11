@@ -20,6 +20,7 @@ import {
 
 import { subStringFunc } from "../../utils";
 import {
+  getSavedRecipes,
   likeRecipe,
   unlikeRecipe,
 } from "../../redux/feature/Recipe/recipeSlice";
@@ -43,7 +44,8 @@ const BLogCard = ({ recipe }: RecipeCardProps) => {
   const recipesIDs = savedRecipes?.map((recipe) => recipe._id);
 
   useEffect(() => {
-    // dispatch(getSavedRecipes({ userID, token }));
+    if(token)
+    dispatch(getSavedRecipes({ userID, token }));
   }, [dispatch, userID, token, user]);
 
   // Like Recipe
