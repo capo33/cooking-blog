@@ -11,7 +11,8 @@
     "dev": "ts-node-dev --respawn --transpileOnly backend/index.ts --ignore-watch node_modules",
     "server": "nodemon backend/index",
     "client": "npm start --prefix frontend",
-    "build": "npm install && npm install --prefix frontend && npm run build --prefix frontend"
+    "build": "npm install && npm install --prefix frontend && npm run build --prefix frontend && npm run build:backend && tsc -p backend",
+    "build:watch": "tsc -p backend -w"
   },
   "dependencies": {
     "@types/node": "^20.4.1",
