@@ -4,10 +4,10 @@
   "description": "cooking blog",
   "main": "index.js",
   "author": "mohamed <s2000588@edu.bc.fi>",
-  "type": "module",
   "license": "MIT",
   "scripts": {
     "start": "node backend/index",
+    "dev": "ts-node-dev --respawn --transpileOnly backend/index.ts --ignore-watch node_modules",
     "server": "nodemon backend/index",
     "client": "npm start --prefix frontend",
     "build": "npm install && npm install --prefix frontend && npm run build --prefix frontend"
