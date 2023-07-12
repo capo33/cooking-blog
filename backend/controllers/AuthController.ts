@@ -118,7 +118,6 @@ const logout = async (req: Request, res: Response) => {
 const getProfile = async (req: Request, res: Response) => {
   try {
     // get user from req.user
-
     const user = await UserModel.findById(req.user?._id).select("-password");
     const recipe = await RecipeModel.find({ owner: req.user?._id }).populate(
       "owner",
@@ -150,7 +149,7 @@ const getProfile = async (req: Request, res: Response) => {
   }
 };
 
-// @desc    Forgot password
+  // @desc    Forgot password
 // @route   POST /api/v1/auth/forgot-password
 // @access  Public
 const forgotPassword = async (req: Request, res: Response) => {
@@ -209,7 +208,7 @@ const forgotPassword = async (req: Request, res: Response) => {
 const updateProfile = async (req: Request, res: Response) => {
   try {
     // Check if user exists
-    const user = await UserModel.findById(req.user?._id) // req.user?._id is set by the auth middleware
+    const user = await UserModel.findById(req.user?._id); // req.user?._id is set by the auth middleware
 
     if (!user) {
       return res.status(404).json({ msg: "User not found" });

@@ -29,10 +29,6 @@ const userSchema = new Schema<IUser>(
       type: String,
       default: "No bio yet",
     },
-    // isAdmin: {
-    //   type: Boolean,
-    //   default: false,
-    // },
     role: {
       type: String,
       default: "user",
