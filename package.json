@@ -6,8 +6,8 @@
   "author": "mohamed <s2000588@edu.bc.fi>",
   "license": "MIT",
   "scripts": {
-    "compile": "tsc",
-    "start": "npm run compile && node ./build/index.js",
+    "compile": "tsc -p backend/tsconfig.json",
+    "start": "node backend/build/index.js",
     "tsc": "tsc -w backend/index.ts",
     "dev": "tsx watch backend/index.ts",
     "server": "nodemon backend/index.ts",
