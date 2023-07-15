@@ -1,5 +1,5 @@
-import dotenv from "dotenv";
-import path from "path";
+import * as dotenv from "dotenv";
+import * as path from "path";
 import express, { Application } from "express";
 
 // Load env vars
@@ -43,14 +43,14 @@ app.use("/uploads", express.static(path.join(directoryname, "/uploads")));
 
 // Make uploads folder static
 // const directoryname: string = path.resolve();
-app.use("/uploads", express.static("/var/data/uploads"));
-app.use(express.static(path.join(directoryname, "/frontend/build")));
-
-// for any route that is not api, redirect to index.html
-app.get("*", (req, res) =>
-  res.sendFile(path.resolve(directoryname, "frontend", "build", "index.html"))
-);
 if (process.env.NODE_ENV === "production") {
+  app.use("/uploads", express.static("/var/data/uploads"));
+  app.use(express.static(path.join(directoryname, "/frontend/build")));
+  
+  // for any route that is not api, redirect to index.html
+  app.get("*", (req, res) =>
+    res.sendFile(path.resolve(directoryname, "frontend", "build", "index.html"))
+  );
 } else {
   // Welcome route
   app.get("/", (req, res) => {

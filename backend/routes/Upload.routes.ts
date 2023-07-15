@@ -1,6 +1,8 @@
-import multer, { FileFilterCallback } from "multer";
-import express, { Request } from "express";
-import path from "path";
+import  { FileFilterCallback } from "multer";
+import multer from "multer";
+import * as express from "express";
+import  { Request } from "express";
+import * as path from "path";
 
 const router = express.Router();
 

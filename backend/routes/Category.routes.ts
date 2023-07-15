@@ -1,4 +1,4 @@
-import express from "express";
+import * as express from "express";
 
 import { protect, admin } from "../middlewares/authMiddleware";
 import * as categoryController from "../controllers/CategoryController";

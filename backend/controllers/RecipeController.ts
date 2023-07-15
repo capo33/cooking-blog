@@ -56,13 +56,13 @@ const getRecipeById = async (req: Request, res: Response) => {
 //@access   Private
 const createRecipe = async (req: Request, res: Response) => {
   try {
-    if (!req.user) {
+    if (!req?.user) {
       return res.status(401).json({ message: "Unauthorized" });
     }
 
     const newRecipe = await RecipeModel.create({
       ...req.body,
-      owner: req.user._id,
+      owner: req?.user?._id,
     });
 
     await CategoryModel.findByIdAndUpdate(req.body.category, {

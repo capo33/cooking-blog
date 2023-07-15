@@ -3,8 +3,8 @@ import * as express from "express";
 
 declare global {
   namespace Express {
-    interface Request {
-      user?: {
+    export interface Request {
+      user: {
         _id: Types.ObjectId;
         // isAdmin?: string;
         role?: string;
@@ -42,5 +42,3 @@ declare global {
     }
   }
 }
-
-export {};

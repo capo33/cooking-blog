@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 
-import jwt, { Secret } from "jsonwebtoken";
+import { Secret } from "jsonwebtoken";
+import * as jwt from "jsonwebtoken";
 
 import UserModel from "../models/User";
 import { IPayload } from "../interfaces/authInterface";

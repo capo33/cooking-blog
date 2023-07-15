@@ -1,4 +1,5 @@
-import jwt, { Secret } from "jsonwebtoken";
+import * as jwt from "jsonwebtoken";
+import { Secret } from "jsonwebtoken";
 import { Types } from "mongoose";
 
 // Generate token for user

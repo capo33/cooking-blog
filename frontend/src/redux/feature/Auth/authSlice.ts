@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { NavigateFunction } from "react-router-dom";
 
-import authServices from "./authServices";
 import {
   Auth,
   Guest,
@@ -8,7 +8,7 @@ import {
   IUpdateProfile,
   User,
 } from "../../../interfaces/AuthInterface";
-import { NavigateFunction } from "react-router-dom";
+import authServices from "./authServices";
 
 const user = JSON.parse(localStorage.getItem("user") as string); // user as string because it is stored as a string in local storage
 
