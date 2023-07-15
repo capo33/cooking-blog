@@ -2,7 +2,6 @@ import slugify from "slugify";
 import { Request, Response } from "express";
 
 import CategoryModel from "../models/Category";
-import RecipeModel from "../models/Recipe";
 
 // @desc    Get all categories
 // @route   GET /api/v1/categories
@@ -12,8 +11,10 @@ const getCategories = async (req: Request, res: Response) => {
     const categories = await CategoryModel.find({}).populate("recipes");
 
     res.status(200).json(categories);
-  } catch (error: unknown | any) {
-    res.status(500).json({ message: error.message });
+  } catch (error) {
+    if (error instanceof Error) {
+      res.status(500).json({ message: error.message });
+    }
   }
 };
 
@@ -37,8 +38,10 @@ const getCategory = async (req: Request, res: Response) => {
     }
 
     res.status(200).json(category);
-  } catch (error: unknown | any) {
-    res.status(500).json({ message: error.message });
+  } catch (error) {
+    if (error instanceof Error) {
+      res.status(500).json({ message: error.message });
+    }
   }
 };
 
@@ -59,8 +62,10 @@ const createCategory = async (req: Request, res: Response) => {
       message: "Category created successfully",
       category,
     });
-  } catch (error: unknown | any) {
-    res.status(500).json({ message: error });
+  } catch (error) {
+    if (error instanceof Error) {
+      res.status(500).json({ message: error });
+    }
   }
 };
 
@@ -87,14 +92,15 @@ const updateCategory = async (req: Request, res: Response) => {
       message: "Category updated successfully",
       updatedCategory,
     });
-  } catch (error: unknown | any) {
-    res.status(500).json({ message: error.message });
+  } catch (error) {
+    if (error instanceof Error) {
+      res.status(500).json({ message: error.message });
+    }
   }
 };
 
 // @desc    Delete a category
 // @route   DELETE /api/v1/categories/:id
-// @access  Private/Admin
 // @access  Private/Admin
 const deleteCategory = async (req: Request, res: Response) => {
   try {
@@ -111,8 +117,10 @@ const deleteCategory = async (req: Request, res: Response) => {
       success: true,
       message: "Category deleted successfully",
     });
-  } catch (error: unknown | any) {
-    res.status(500).json({ message: error.message });
+  } catch (error) {
+    if (error instanceof Error) {
+      res.status(500).json({ message: error.message });
+    }
   }
 };
 

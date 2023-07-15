@@ -8,7 +8,7 @@ import RecipeButton from "../../../components/RecipeForm/RecipeButton";
 import UploadPicture from "../../../components/RecipeForm/UploadPicture";
 import { useAppSelector, useAppDispatch } from "../../../redux/app/store";
 import { createCategory } from "../../../redux/feature/Category/categorySlice";
- 
+
 const AddCategory = () => {
   const [categoryData, setCategoryData] = useState<Category>({
     name: "",

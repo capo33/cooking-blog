@@ -1,13 +1,13 @@
 import React, { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 
-import { subStringFunc } from "../../utils";
 import BackLink from "../../components/BackLink/BackLink";
 import { useAppDispatch, useAppSelector } from "../../redux/app/store";
 import { getCategoryBySlug } from "../../redux/feature/Category/categorySlice";
 
 const CategoryDetails = () => {
   const { slug } = useParams<{ slug: string }>();
+
   const { category } = useAppSelector((state) => state.category);
 
   const dispatch = useAppDispatch();
@@ -30,25 +30,27 @@ const CategoryDetails = () => {
         />
       </div>
       <div className='grid grid-cols-1 gap-6 mt-16 md:grid-cols-2'>
+        {category?.recipes?.length === 0 && (
+          <div className='text-center'>
+            <h2 className='text-2xl font-semibold text-gray-800 capitalize dark:text-white'>
+              No recipes found
+            </h2>
+          </div>
+        )}
         {category?.recipes?.map((recipe) => (
           <div
-            className='max-w-xl rounded-lg shadow lg:flex md:flex '
+            className='max-w-xs p-6 rounded-md shadow-md dark:bg-gray-900 dark:text-gray-50'
             key={recipe?._id}
           >
-            <img
-              className='object-cover w-full md:w-1/2 lg:w-1/3'
-              src={recipe?.image}
-              alt={recipe?.name}
-            />
             <Link to={`/recipe-details/${recipe?._id}`}>
+              <img
+                src={recipe?.image}
+                alt={recipe?.name}
+                loading='lazy'
+                className='object-cover w-full h-56 rounded-md dark:bg-gray-500'
+              />
               <div className='px-6 py-4'>
-                <h4 className='mb-3 text-base font-semibold'>{recipe?.name}</h4>
-                <p
-                  className='mb-2 text-sm leading-normal text-justify'
-                  dangerouslySetInnerHTML={{
-                    __html: subStringFunc(recipe?.instructions as string, 20),
-                  }}
-                />
+                <h2 className='text-xl font-semibold tracki'>{recipe?.name}</h2>
               </div>
             </Link>
           </div>

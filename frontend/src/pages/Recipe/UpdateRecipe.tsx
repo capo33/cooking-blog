@@ -2,11 +2,14 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 
 import {
   getSingleRecipe,
   updateRecipe,
 } from "../../redux/feature/Recipe/recipeSlice";
+import { formats, modules } from "../../utils/index";
 import { Recipe } from "../../interfaces/RecipeInterface";
 import BackLink from "../../components/BackLink/BackLink";
 import Category from "../../components/RecipeForm/Category";
@@ -14,7 +17,6 @@ import RecipeName from "../../components/RecipeForm/RecipeName";
 import Ingredients from "../../components/RecipeForm/Ingredients";
 import CookingTime from "../../components/RecipeForm/CookingTime";
 import RecipeButton from "../../components/RecipeForm/RecipeButton";
-import Instructions from "../../components/RecipeForm/Instructions";
 import UploadPicture from "../../components/RecipeForm/UploadPicture";
 import { useAppSelector, useAppDispatch } from "../../redux/app/store";
 
@@ -24,7 +26,7 @@ const UpdateRecipe = () => {
   const { recipe } = useAppSelector((state) => state.recipe);
 
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
+  const navigate = useNavigate(); 
 
   const token = user?.token as string;
 
@@ -159,7 +161,31 @@ const UpdateRecipe = () => {
                   setInputValue={setInputValue}
                 />
 
-                <Instructions recipe={data} handleChange={handleChange} />
+                {/* <Instructions recipe={data} handleChange={handleChange} /> */}
+                <div className='mb-5'>
+                  <label
+                    htmlFor='instructions'
+                    className='block text-sm font-medium text-gray-700'
+                  >
+                    Instructions
+                  </label>
+                  <div className='mt-1'>
+                    <ReactQuill
+                      theme='snow'
+                      value={data?.instructions || ""}
+                      onChange={(value) =>
+                        setData((prevRecipe) => ({
+                          ...prevRecipe,
+                          instructions: value,
+                        }))
+                      }
+                      modules={modules}
+                      formats={formats}
+                      bounds={".app"}
+                      placeholder={"Write something awesome..."}
+                    />
+                  </div>
+                </div>
                 <CookingTime recipe={data} handleChange={handleChange} />
                 <Category recipe={data} handleChange={handleChange} />
                 <UploadPicture
@@ -167,7 +193,11 @@ const UpdateRecipe = () => {
                   uploading={uploading}
                 />
                 {data.image ? (
-                  <img src={data?.image} alt='' className='w-1/2 h-1/2' />
+                  <img
+                    src={data?.image || "https://via.placeholder.com/150"}
+                    alt={data?.name || "Recipe image"}
+                    className='w-1/2 h-1/2'
+                  />
                 ) : (
                   <p>No image uploaded yet</p>
                 )}

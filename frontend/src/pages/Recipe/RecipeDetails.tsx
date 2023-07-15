@@ -173,13 +173,11 @@ const RecipeDetails = () => {
         <BackLink link='/' name='Back to Home' />
 
         {showModal ? (
-          <>
-            <Modal
-              setShowModal={setShowModal}
-              handleDelete={handleDeleteBlog}
-              value='recipe'
-            />
-          </>
+          <Modal
+            setShowModal={setShowModal}
+            handleDelete={handleDeleteBlog}
+            value='recipe'
+          />
         ) : null}
 
         {/* Recipe contents*/}
@@ -229,8 +227,8 @@ const RecipeDetails = () => {
                       value={value}
                       className={`${
                         value === "instructions"
-                          ? "border-l-4 border-teal-500 pl-4 m-4 italic rounded text-gray-700  "
-                          : " "
+                          ? "border-l-4 border-teal-500 pl-4 m-4 italic rounded text-gray-700"
+                          : ""
                       }`}
                     >
                       {value === "instructions" ? (
@@ -310,31 +308,29 @@ const RecipeDetails = () => {
                   )}
                 </div>
               </div>
-              <div className='p-4 border-t border-b md:border md:rounded mt-10 bg-blue-gray-50'>
-                <div className='flex justify-around '>
-                  <div className='flex items-center'>
-                    {recipe?.owner?._id === userID && (
-                      <>
-                        <Link
-                          to={`/update-recipe/${recipe?._id}`}
-                          className='flex items-center text-blue-700 hover:text-blue-900 focus:outline-none'
-                        >
-                          <PencilSquareIcon className='h-5 w-5 mr-1' />
-                          <span className='text-sm'>Edit</span>
-                        </Link>
+              {recipe?.owner?._id === userID && (
+                <div className='p-4 border-t border-b md:border md:rounded mt-10 bg-blue-gray-50'>
+                  <div className='flex justify-around '>
+                    <div className='flex items-center'>
+                      <Link
+                        to={`/update-recipe/${recipe?._id}`}
+                        className='flex items-center text-blue-700 hover:text-blue-900 focus:outline-none'
+                      >
+                        <PencilSquareIcon className='h-5 w-5 mr-1' />
+                        <span className='text-sm'>Edit</span>
+                      </Link>
 
-                        <button
-                          onClick={handleConfirmDelete}
-                          className='flex items-center text-deep-orange-700 hover:text-deep-orange-900 ml-6 focus:outline-none'
-                        >
-                          <TrashIcon className='h-5 w-5 mr-1' />
-                          <span className='text-sm'>Delete</span>
-                        </button>
-                      </>
-                    )}
+                      <button
+                        onClick={handleConfirmDelete}
+                        className='flex items-center text-deep-orange-700 hover:text-deep-orange-900 ml-6 focus:outline-none'
+                      >
+                        <TrashIcon className='h-5 w-5 mr-1' />
+                        <span className='text-sm'>Delete</span>
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
+              )}
             </div>
           </div>
         </div>

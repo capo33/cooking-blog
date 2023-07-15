@@ -112,7 +112,7 @@ const Profile = () => {
               </h1>
               <h3 className='text-gray-600 font-lg text-semibold leading-6'>
                 Role
-                {userData?.isAdmin ? (
+                {userData?.isAdmin === "admin" ? (
                   <span className='text-red-500'> (admin)</span>
                 ) : (
                   <span className='text-blue-500'> (user)</span>

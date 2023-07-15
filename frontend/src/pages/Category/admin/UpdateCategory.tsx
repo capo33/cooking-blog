@@ -15,19 +15,19 @@ import { useAppDispatch, useAppSelector } from "../../../redux/app/store";
 const UpdateCategory = () => {
   const { slug } = useParams<{ slug: string }>();
 
-  const { category } = useAppSelector((state) => state.category);
   const { user } = useAppSelector((state) => state.auth);
+  const { category } = useAppSelector((state) => state.category);
 
   const categoryData = {
     name: (category?.name as string) || "",
     image: (category?.image as string) || "",
   };
 
-  const [data, setData] = useState<ICategoryData>(categoryData);
   const [uploading, setUploading] = useState(false);
+  const [data, setData] = useState<ICategoryData>(categoryData);
 
-  const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   const token = user?.token as string;
 

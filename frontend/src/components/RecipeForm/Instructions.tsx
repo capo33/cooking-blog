@@ -17,7 +17,7 @@ const Instructions = ({ recipe, handleChange }: InstructionsProps) => {
       <div className='mt-1'>
         <textarea
           name='instructions'
-          value={recipe.instructions}
+          value={recipe.instructions ? recipe.instructions : ""}
           onChange={handleChange}
           id='desc'
           rows={3}

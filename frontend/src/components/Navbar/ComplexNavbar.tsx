@@ -224,6 +224,11 @@ function NavList() {
       icon: HomeIcon,
       link: "/",
     },
+    {
+      label: "Categories",
+      icon: Squares2X2Icon,
+      link: "/categories",
+    },
     ...(token
       ? [
           {
@@ -231,11 +236,6 @@ function NavList() {
             icon: BookmarkIcon,
             badge: true,
             link: "/saved-recipes",
-          },
-          {
-            label: "Categories",
-            icon: Squares2X2Icon,
-            link: "/categories",
           },
         ]
       : []),

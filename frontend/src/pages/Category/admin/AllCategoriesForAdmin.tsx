@@ -11,8 +11,8 @@ import { useAppSelector, useAppDispatch } from "../../../redux/app/store";
 import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
 
 const AllCategoriesForAdmin = () => {
-  const { categories, isLoading } = useAppSelector((state) => state.category);
   const { user } = useAppSelector((state) => state.auth);
+  const { categories, isLoading } = useAppSelector((state) => state.category);
 
   const token = user?.token as string;
 

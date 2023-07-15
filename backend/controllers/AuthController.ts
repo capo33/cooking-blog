@@ -15,18 +15,18 @@ const register = async (req: Request, res: Response) => {
     // Check if user already exists
     const existingUser = await UserModel.findOne({ email });
     if (existingUser) {
-      return res.status(400).json({ msg: "User already exists" });
+      return res.status(400).json({ message: "User already exists" });
     }
     // Check the length of the password
     if (password.length < 6) {
       return res
         .status(400)
-        .json({ msg: "Password must be at least 6 characters" });
+        .json({ message: "Password must be at least 6 characters" });
     }
 
     // Check if fields are empty
     if (!name || !email || !password) {
-      return res.status(400).json({ msg: "Please fill all fields" });
+      return res.status(400).json({ message: "Please fill all fields" });
     }
 
     // generate salt to hash password
@@ -55,7 +55,7 @@ const register = async (req: Request, res: Response) => {
     });
   } catch (error) {
     if (error instanceof Error) {
-      res.status(500).json({ msg: "Server error", error: error.message });
+      res.status(500).json({ message: "Server error", error: error.message });
     }
   }
 };
@@ -70,14 +70,14 @@ const login = async (req: Request, res: Response) => {
     const existingUser = await UserModel.findOne({ email });
 
     if (!existingUser) {
-      return res.status(400).json({ msg: "Invalid credentials" });
+      return res.status(400).json({ message: "Invalid credentials" });
     }
 
     // Check if password matches
     const isMatch = await bcrypt.compare(password, existingUser.password);
 
     if (!isMatch) {
-      return res.status(400).json({ msg: "Invalid credentials" });
+      return res.status(400).json({ message: "Invalid credentials" });
     }
     // generate token
     const token = generateToken(existingUser?._id);
@@ -94,7 +94,7 @@ const login = async (req: Request, res: Response) => {
     });
   } catch (error) {
     if (error instanceof Error) {
-      res.status(500).json({ msg: "Server error", error: error.message });
+      res.status(500).json({ message: "Server error", error: error.message });
     }
   }
 };
@@ -107,7 +107,7 @@ const logout = async (req: Request, res: Response) => {
     res.status(200).json({ success: true, message: "User logged out" });
   } catch (error) {
     if (error instanceof Error) {
-      res.status(500).json({ msg: "Server error", error: error.message });
+      res.status(500).json({ message: "Server error", error: error.message });
     }
   }
 };
@@ -127,7 +127,7 @@ const getProfile = async (req: Request, res: Response) => {
     user?.set({ recipes: recipe });
     // check user existince
     if (!user) {
-      return res.status(404).json({ msg: "User not found" });
+      return res.status(404).json({ message: "User not found" });
     }
 
     // generate token
@@ -144,12 +144,12 @@ const getProfile = async (req: Request, res: Response) => {
     });
   } catch (error) {
     if (error instanceof Error) {
-      res.status(500).json({ msg: "Server error", error: error.message });
+      res.status(500).json({ message: "Server error", error: error.message });
     }
   }
 };
 
-  // @desc    Forgot password
+// @desc    Forgot password
 // @route   POST /api/v1/auth/forgot-password
 // @access  Public
 const forgotPassword = async (req: Request, res: Response) => {
@@ -159,27 +159,27 @@ const forgotPassword = async (req: Request, res: Response) => {
     const existingUser = await UserModel.findOne({ email });
 
     if (!existingUser) {
-      return res.status(400).json({ msg: "Email does not exist" });
+      return res.status(400).json({ message: "Email does not exist" });
     }
 
     // Check if email is provided
     if (!email) {
-      return res.status(400).json({ msg: "Please provide an email" });
+      return res.status(400).json({ message: "Please provide an email" });
     }
 
     // Check if answer is provided
     if (!answer) {
-      return res.status(400).json({ msg: "Please provide an answer" });
+      return res.status(400).json({ message: "Please provide an answer" });
     }
 
     // Check if newPassword is provided
     if (existingUser.answer !== answer) {
-      return res.status(400).json({ msg: "Answer is incorrect" });
+      return res.status(400).json({ message: "Answer is incorrect" });
     }
 
     // Check if newPassword is empty
     if (!newPassword) {
-      return res.status(400).json({ msg: "Please provide a new password" });
+      return res.status(400).json({ message: "Please provide a new password" });
     }
 
     // generate salt to hash password
@@ -197,7 +197,7 @@ const forgotPassword = async (req: Request, res: Response) => {
     });
   } catch (error) {
     if (error instanceof Error) {
-      res.status(500).json({ msg: "Server error", error: error.message });
+      res.status(500).json({ message: "Server error", error: error.message });
     }
   }
 };
@@ -211,7 +211,7 @@ const updateProfile = async (req: Request, res: Response) => {
     const user = await UserModel.findById(req.user?._id); // req.user?._id is set by the auth middleware
 
     if (!user) {
-      return res.status(404).json({ msg: "User not found" });
+      return res.status(404).json({ message: "User not found" });
     }
 
     const updatedUser = await UserModel.findByIdAndUpdate(
@@ -230,7 +230,7 @@ const updateProfile = async (req: Request, res: Response) => {
     });
   } catch (error) {
     if (error instanceof Error) {
-      res.status(500).json({ msg: "Server error", error: error.message });
+      res.status(500).json({ message: "Server error", error: error.message });
     }
   }
 };
@@ -241,27 +241,30 @@ const updateProfile = async (req: Request, res: Response) => {
 const deleteUserByUser = async (req: Request, res: Response) => {
   try {
     const user = await UserModel.findById(req.user?._id);
-
+    const recipes = await RecipeModel.findOneAndDelete({
+      owner: req.user?._id,
+    });
     // Check if user exists with the given id
     if (!user) {
-      return res.status(404).json({ msg: "User not found" });
+      return res.status(404).json({ message: "User not found" });
     }
 
     // Check if user is authorized to delete the user
     if (user?._id.toString() !== req.user?._id.toString()) {
-      return res.status(401).json({ msg: "Not authorized" });
+      return res.status(401).json({ message: "Not authorized" });
     }
 
     // Delete user
     await user.deleteOne();
-
+    // Delete recipes
+    await recipes?.deleteOne();
     res.status(200).json({
       success: true,
       message: "Sad to see you go, user deleted successfully",
     });
   } catch (error) {
     if (error instanceof Error) {
-      res.status(500).json({ msg: "Server error", error: error.message });
+      res.status(500).json({ message: "Server error", error: error.message });
     }
   }
 };
@@ -275,7 +278,7 @@ const deleteUserByAdmin = async (req: Request, res: Response) => {
 
     // Check if user exists with the given id
     if (!user) {
-      return res.status(404).json({ msg: "User not found" });
+      return res.status(404).json({ message: "User not found" });
     }
 
     // Check if user is authorized to delete the user
@@ -283,7 +286,7 @@ const deleteUserByAdmin = async (req: Request, res: Response) => {
       user?._id.toString() !== req.user?._id.toString() &&
       user.role === "admin"
     ) {
-      return res.status(401).json({ msg: "Not authorized" });
+      return res.status(401).json({ message: "Not authorized" });
     }
 
     // Delete user
@@ -295,7 +298,7 @@ const deleteUserByAdmin = async (req: Request, res: Response) => {
     });
   } catch (error) {
     if (error instanceof Error) {
-      res.status(500).json({ msg: "Server error", error: error.message });
+      res.status(500).json({ message: "Server error", error: error.message });
     }
   }
 };
@@ -314,7 +317,7 @@ const getUsers = async (req: Request, res: Response) => {
     });
   } catch (error) {
     if (error instanceof Error) {
-      res.status(500).json({ msg: "Server error", error: error.message });
+      res.status(500).json({ message: "Server error", error: error.message });
     }
   }
 };
@@ -327,7 +330,7 @@ const getUserProfile = async (req: Request, res: Response) => {
     const user = await UserModel.findById(req.params.id).select("-password");
 
     if (!user) {
-      return res.status(404).json({ msg: "User not found" });
+      return res.status(404).json({ message: "User not found" });
     }
 
     // Get user's recipes
@@ -336,7 +339,7 @@ const getUserProfile = async (req: Request, res: Response) => {
     res.status(200).json({ user, recipes });
   } catch (error) {
     if (error instanceof Error) {
-      res.status(500).json({ msg: "Server error", error: error.message });
+      res.status(500).json({ message: "Server error", error: error.message });
     }
   }
 };

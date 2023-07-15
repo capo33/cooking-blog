@@ -13,7 +13,7 @@ import { IRecipe } from "../interfaces/recipeInterface";
 const getRecipes = async (req: Request, res: Response) => {
   try {
     const recipes = await RecipeModel.find({})
-      .populate("owner", "name avatar")
+      .populate("owner", "name image")
       .populate("category", "name image");
 
     res.status(200).json(recipes);
@@ -40,7 +40,7 @@ const getRecipeById = async (req: Request, res: Response) => {
     await recipe?.save();
 
     if (!recipe) {
-      res.status(404).json({ message: "Recipe not found" });
+      return res.status(404).json({ message: "Recipe not found" });
     }
 
     res.status(200).json(recipe);
@@ -60,11 +60,13 @@ const createRecipe = async (req: Request, res: Response) => {
       return res.status(401).json({ message: "Unauthorized" });
     }
 
+    // Create a new recipe
     const newRecipe = await RecipeModel.create({
       ...req.body,
       owner: req?.user?._id,
     });
 
+    // Add the recipe to the category
     await CategoryModel.findByIdAndUpdate(req.body.category, {
       $push: { recipes: newRecipe._id },
     });
@@ -99,7 +101,7 @@ const updateRecipe = async (req: Request, res: Response) => {
 
     const updatedRecipe = await RecipeModel.findByIdAndUpdate(
       recipeId,
-      req.body,
+      { ...req.body },
       { new: true }
     );
 
@@ -121,10 +123,12 @@ const updateRecipe = async (req: Request, res: Response) => {
 const deleteRecipe = async (req: Request, res: Response) => {
   const { recipeId } = req.params;
   try {
+    // Check if the user is logged in
     if (!req.user) {
       return res.status(401).json({ message: "Unauthorized" });
     }
 
+    // Check if the recipe exists
     const recipe = await RecipeModel.findById(recipeId);
     if (!recipe) {
       return res.status(404).json({ message: "Recipe not found" });
@@ -168,12 +172,6 @@ const saveRecipe = async (req: Request, res: Response) => {
       return res.status(404).json({ message: "Recipe not found" });
     }
 
-    // Check if the user is the owner of the recipe
-    // if (recipe.owner.toString() === req?.user?._id.toString()) {
-    //   res.status(401);
-    //   throw new Error("You cannot save your own recipe");
-    // }
-
     // Check if the recipe is already saved
     const isSaved = user?.savedRecipes.includes(recipe._id);
     if (isSaved) {
@@ -188,10 +186,6 @@ const saveRecipe = async (req: Request, res: Response) => {
       },
       { new: true } // to return the updated document
     );
-
-    // user?.savedRecipes.push(recipe._id);
-
-    // await user?.save();
 
     res.status(200).json({
       success: true,
@@ -215,7 +209,7 @@ const unsaveRecipe = async (req: Request, res: Response) => {
     }
     const recipe = await RecipeModel.findById(req.body.recipeID).populate(
       "category",
-      "name"
+      "name image recipes"
     );
     const user = await UserModel.findById(req.body.userID);
 
@@ -284,10 +278,7 @@ const getSavedRecipes = async (req: Request, res: Response) => {
       .populate("category", "name image")
       .populate("owner", "name");
 
-    res.status(200).json({
-      // savedRecipes: user?.savedRecipes,
-      savedRecipes,
-    });
+    res.status(200).json({ savedRecipes });
   } catch (error) {
     if (error instanceof Error) {
       res.status(500).json({ message: error.message });
@@ -306,7 +297,7 @@ const addReview = async (req: Request, res: Response) => {
     const { rating, comment } = req.body;
 
     const recipe = await RecipeModel.findById(id)
-      .sort({ createdAt: -1 })
+      // .sort({ createdAt: -1 })
       .populate({
         path: "reviews",
         populate: {
@@ -324,9 +315,9 @@ const addReview = async (req: Request, res: Response) => {
       (review) => review?.user?.toString() === req.user?._id.toString()
     );
 
-    // if (alreadyReviewed) {
-    //   return res.status(400).json({ message: "Recipe already reviewed" });
-    // }
+    if (alreadyReviewed) {
+      return res.status(400).json({ message: "Recipe already reviewed" });
+    }
 
     // if the user has not reviewed the recipe before, we create a new review object
     const review = {

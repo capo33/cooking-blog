@@ -1,15 +1,15 @@
 import React, { useEffect } from "react";
+import { Link } from "react-router-dom";
 import { TrashIcon } from "@heroicons/react/24/outline";
 
+import { subStringFunc } from "../../utils";
 import {
   getSavedRecipes,
   unsaveRecipe,
 } from "../../redux/feature/Recipe/recipeSlice";
+import BackLink from "../../components/BackLink/BackLink";
 import { userProfile } from "../../redux/feature/Auth/authSlice";
 import { useAppSelector, useAppDispatch } from "../../redux/app/store";
-import BackLink from "../../components/BackLink/BackLink";
-import { Link } from "react-router-dom";
-import { subStringFunc } from "../../utils";
 
 const SavedRecipes = () => {
   const { user } = useAppSelector((state) => state.auth);
@@ -42,7 +42,7 @@ const SavedRecipes = () => {
       <h2 className='text-center mb-5 text-2xl font-semibold text-gray-800 capitalize lg:text-3xl dark:text-white'>
         {savedRecipes?.length === 0 ? "No saved recipes" : "My saved recipes"}
       </h2>
-      <BackLink link='/' name='Back to saved recipe' />
+      <BackLink link='/' name='Back to home' />
 
       <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-10'>
         {savedRecipes?.map((myRecipe) => (
@@ -63,10 +63,7 @@ const SavedRecipes = () => {
                 <p
                   className='dark:text-gray-100'
                   dangerouslySetInnerHTML={{
-                    __html: subStringFunc(
-                      myRecipe?.instructions as string,
-                      25
-                    ),
+                    __html: subStringFunc(myRecipe?.instructions as string, 25),
                   }}
                 />
               </div>
