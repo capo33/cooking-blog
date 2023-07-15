@@ -1,14 +1,13 @@
-import  { FileFilterCallback } from "multer";
+import { FileFilterCallback } from "multer";
 import multer from "multer";
 import * as express from "express";
-import  { Request } from "express";
+import { Request } from "express";
 import * as path from "path";
 
 const router = express.Router();
 
 // If production, use Render server's data folder, else use local uploads folder
-const uploadFolder =
-  process.env.NODE_ENV === "production" ? "/var/data/uploads/" : "uploads/";
+const uploadFolder = "uploads/";
 
 type DestinationCallback = (error: Error | null, destination: string) => void;
 type FileNameCallback = (error: Error | null, filename: string) => void;

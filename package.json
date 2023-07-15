@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "cooking blog",
   "main": "index.js",
-   "author": "mohamed <s2000588@edu.bc.fi>",
+  "author": "mohamed <s2000588@edu.bc.fi>",
   "license": "MIT",
   "scripts": {
     "compile": "tsc -p backend/tsconfig.json",
