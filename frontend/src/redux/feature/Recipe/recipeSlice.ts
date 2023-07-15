@@ -1,11 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 import recipeServices from "./recipeServices";
-import {
-  CreateRecipe,
-  Recipe,
-  Review,
-} from "../../../interfaces/RecipeInterface";
+import { Recipe, Review } from "../../../interfaces/RecipeInterface";
 
 interface RecipeState {
   recipes: Recipe[];
@@ -69,11 +65,23 @@ export const getSingleRecipe = createAsyncThunk(
 );
 
 // Create a recipe
-export const createRecipe = createAsyncThunk<Recipe, CreateRecipe>(
+export const createRecipe = createAsyncThunk(
   "recipe/createRecipe",
-  async ({ formData, token }, thunkAPI) => {
+  async (
+    {
+      formData,
+      token,
+      toast,
+    }: {
+      formData: Recipe;
+      token: string;
+      toast: any;
+    },
+    thunkAPI
+  ) => {
     try {
       const response = await recipeServices.createRecipe(formData, token);
+      toast.success("Recipe created successfully");
       thunkAPI.dispatch(getAllRecipes());
       return response;
     } catch (error: unknown | any) {
@@ -527,7 +535,7 @@ const recipeSlice = createSlice({
       state.isError = true;
       state.message = payload as string;
     });
-    
+
     // Upload images
     //   builder.addCase(uploadImages.pending, (state) => {
     //     state.isLoading = true;

@@ -71,7 +71,11 @@ const createRecipe = async (req: Request, res: Response) => {
       $push: { recipes: newRecipe._id },
     });
 
-    res.status(201).json(newRecipe);
+    res.status(201).json({
+      success: true,
+      message: "Recipe created successfully",
+      newRecipe,
+    });
   } catch (error) {
     if (error instanceof Error) {
       res.status(500).json({ message: error.message });

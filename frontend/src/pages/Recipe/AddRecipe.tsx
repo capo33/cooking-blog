@@ -14,7 +14,7 @@ import Ingredients from "../../components/RecipeForm/Ingredients";
 import RecipeButton from "../../components/RecipeForm/RecipeButton";
 import { createRecipe } from "../../redux/feature/Recipe/recipeSlice";
 import UploadPicture from "../../components/RecipeForm/UploadPicture";
- import { useAppDispatch, useAppSelector } from "../../redux/app/store";
+import { useAppDispatch, useAppSelector } from "../../redux/app/store";
 import { getAllCategories } from "../../redux/feature/Category/categorySlice";
 import Editor from "../../components/Editor/Editor";
 
@@ -83,7 +83,7 @@ const AddRecipe = () => {
   // Submit handler for form
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(createRecipe({ formData: recipe, token }));
+    dispatch(createRecipe({ formData: recipe, token, toast }));
     navigate("/");
     setRecipe({
       name: "",
@@ -147,7 +147,12 @@ const AddRecipe = () => {
                   setInputValue={setInputValue}
                 />
                 {/* <Instructions recipe={recipe} handleChange={handleChange} /> */}
-                <Editor recipe={recipe} onChange={(value :string) => setRecipe({ ...recipe, instructions: value })} />
+                <Editor
+                  recipe={recipe}
+                  onChange={(value: string) =>
+                    setRecipe({ ...recipe, instructions: value })
+                  }
+                />
                 <CookingTime recipe={recipe} handleChange={handleChange} />
                 <Category recipe={recipe} handleChange={handleChange} />
                 <UploadPicture

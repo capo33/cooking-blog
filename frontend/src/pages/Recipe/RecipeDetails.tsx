@@ -453,50 +453,61 @@ const RecipeDetails = () => {
           </div>
 
           {/* Add Review */}
-          <form
-            className='mt-12 max-w-2xl shadow-xl rounded-lg p-6 g'
-            onSubmit={handleSubmit}
-          >
-            <div className='px-3 mb-2 mt-2'>
-              <div className='flex flex-wrap -mx-3 mb-6'>
-                <select
-                  className='w-full bg-gray-100 rounded border border-gray-400 leading-normal resize-none h-10 py-2 px-3 font-medium placeholder-gray-700 focus:outline-none focus:bg-white'
-                  value={data.rating}
-                  onChange={(e) =>
-                    setData({
-                      ...data,
-                      rating: e.target.value as unknown as number,
-                    })
-                  }
+          {!user ? (
+            <Link
+              to='/login'
+              className='bg-black text-white px-4 py-2 rounded mr-2'
+            >
+              Login to Add Review
+            </Link>
+          ) : (
+            <form
+              className='mt-12 max-w-2xl shadow-xl rounded-lg p-6 g'
+              onSubmit={handleSubmit}
+            >
+              <div className='px-3 mb-2 mt-2'>
+                <div className='flex flex-wrap -mx-3 mb-6'>
+                  <select
+                    className='w-full bg-gray-100 rounded border border-gray-400 leading-normal resize-none h-10 py-2 px-3 font-medium placeholder-gray-700 focus:outline-none focus:bg-white'
+                    value={data.rating}
+                    required
+                    onChange={(e) =>
+                      setData({
+                        ...data,
+                        rating: e.target.value as unknown as number,
+                      })
+                    }
+                  >
+                    <option value=''>Select Rating</option>
+                    <option value='1'>1 - Unacceptable</option>
+                    <option value='2'>2 - Needs Improvement</option>
+                    <option value='3'>3 - Decent</option>
+                    <option value='4'>4 - Good</option>
+                    <option value='5'>5 - Very tasty</option>
+                  </select>
+                </div>
+                <div className='flex flex-wrap -mx-3 mb-6'>
+                  <textarea
+                    placeholder='comment'
+                    value={data.comment}
+                    required
+                    onChange={(e) =>
+                      setData({ ...data, comment: e.target.value as string })
+                    }
+                    className='w-full bg-gray-100 rounded border border-gray-400 leading-normal resize-none h-20 py-2 px-3 font-medium placeholder-gray-700 focus:outline-none focus:bg-white'
+                  ></textarea>
+                </div>
+              </div>
+              <div className='flex justify-end px-4'>
+                <button
+                  type='submit'
+                  className='bg-black text-white px-4 py-2 rounded mr-2'
                 >
-                  <option value=''>Select Rating</option>
-                  <option value='1'>1 - Unacceptable</option>
-                  <option value='2'>2 - Needs Improvement</option>
-                  <option value='3'>3 - Decent</option>
-                  <option value='4'>4 - Good</option>
-                  <option value='5'>5 - Very tasty</option>
-                </select>
+                  Add Review
+                </button>
               </div>
-              <div className='flex flex-wrap -mx-3 mb-6'>
-                <textarea
-                  placeholder='comment'
-                  value={data.comment}
-                  onChange={(e) =>
-                    setData({ ...data, comment: e.target.value as string })
-                  }
-                  className='w-full bg-gray-100 rounded border border-gray-400 leading-normal resize-none h-20 py-2 px-3 font-medium placeholder-gray-700 focus:outline-none focus:bg-white'
-                ></textarea>
-              </div>
-            </div>
-            <div className='flex justify-end px-4'>
-              <button
-                type='submit'
-                className='bg-black text-white px-4 py-2 rounded mr-2'
-              >
-                Add Review
-              </button>
-            </div>
-          </form>
+            </form>
+          )}
         </div>
       </div>
     </>
