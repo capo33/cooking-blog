@@ -50,7 +50,9 @@ function ProfileMenu() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const avatar = user?.image as string;
+  const avatar = user?.image
+    ? user?.image
+    : (`http://localhost:5000/${user?.image}` as string);
   const admin = user?.role;
   const token = user?.token as string;
 

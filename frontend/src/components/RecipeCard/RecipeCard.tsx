@@ -44,8 +44,7 @@ const BLogCard = ({ recipe }: RecipeCardProps) => {
   const recipesIDs = savedRecipes?.map((recipe) => recipe._id);
 
   useEffect(() => {
-    if(token)
-    dispatch(getSavedRecipes({ userID, token }));
+    if (token) dispatch(getSavedRecipes({ userID, token }));
   }, [dispatch, userID, token, user]);
 
   // Like Recipe
@@ -63,7 +62,11 @@ const BLogCard = ({ recipe }: RecipeCardProps) => {
       {/* CardHeader */}
       <CardHeader floated={false} color='blue-gray'>
         <img
-          src={recipe?.image}
+          src={
+            recipe?.image
+              ? recipe?.image
+              : `http://localhost:5000/${recipe?.image}`
+          }
           alt={recipe?.name}
           className='object-cover w-full h-48 rounded-t-lg'
         />
