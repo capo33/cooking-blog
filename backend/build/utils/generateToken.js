@@ -24,10 +24,10 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.generateToken = void 0;
-const jwt = __importStar(require("jsonwebtoken"));
+var jwt = __importStar(require("jsonwebtoken"));
 // Generate token for user
-const generateToken = (id) => {
-    return jwt.sign({ id }, process.env.JWT_SECRET, {
+var generateToken = function (id) {
+    return jwt.sign({ id: id }, process.env.JWT_SECRET, {
         expiresIn: "30d",
     });
 };

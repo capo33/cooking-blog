@@ -3,9 +3,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const mongoose_1 = require("mongoose");
-const Review_1 = __importDefault(require("./Review"));
-const recipeSchema = new mongoose_1.Schema({
+var mongoose_1 = require("mongoose");
+var Review_1 = __importDefault(require("./Review"));
+var recipeSchema = new mongoose_1.Schema({
     name: {
         type: String,
         required: true,

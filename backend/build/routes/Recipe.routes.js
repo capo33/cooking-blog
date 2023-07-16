@@ -23,15 +23,15 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = require("express");
-const authMiddleware_1 = require("../middlewares/authMiddleware");
-const recipeController = __importStar(require("../controllers/RecipeController"));
-const router = (0, express_1.Router)();
+var express_1 = require("express");
+var authMiddleware_1 = require("../middlewares/authMiddleware");
+var recipeController = __importStar(require("../controllers/RecipeController"));
+var router = (0, express_1.Router)();
 router.get("/", recipeController.getRecipes);
 router.get("/:recipeId", recipeController.getRecipeById);
-router.put("/saveRecipe", authMiddleware_1.protect, recipeController.saveRecipe);
 router.get("/savedRecipes/:id", recipeController.getRecipesByUser); // Own recipes
 router.get("/savedRecipes/ids/:id", recipeController.getSavedRecipes); // Saved recipes
+router.put("/saveRecipe", authMiddleware_1.protect, recipeController.saveRecipe);
 router.put("/unsaveRecipe", authMiddleware_1.protect, recipeController.unsaveRecipe);
 router.post("/", authMiddleware_1.protect, recipeController.createRecipe);
 router.post("/:id/reviews", authMiddleware_1.protect, recipeController.addReview);
