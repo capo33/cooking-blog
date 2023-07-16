@@ -32,6 +32,7 @@ const Categories = () => {
           </div>
         )}
         {categories?.map((category) => (
+          
           <>
             <div
               key={category._id}

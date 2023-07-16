@@ -21,24 +21,28 @@ var PORT = parseInt(process.env.PORT, 10) || 5000;
 // Connect to MongoDB
 (0, db_1.connectDB)();
 // Middleware
-app.use(express_1.default.json());
-app.use(express_1.default.urlencoded({ extended: true }));
+app.use(express_1.default.json({ limit: "10mb" }));
+app.use(express_1.default.urlencoded({
+    extended: true,
+    limit: "10mb",
+    parameterLimit: 100000, //
+}));
 // Routes
 app.use("/api/v1/auth", Auth_routes_1.default);
 app.use("/api/v1/recipes", Recipe_routes_1.default);
 app.use("/api/v1/categories", Category_routes_1.default);
 app.use("/api/v1/upload", Upload_routes_1.default);
-var __dirname = path_1.default.resolve();
-app.use("/uploads", express_1.default.static(path_1.default.join(__dirname, "/uploads")));
+// const __dirname: string = path.resolve();
+// app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
 // Make uploads folder static
 if (process.env.NODE_ENV === "production") {
-    var __dirname_1 = path_1.default.resolve();
+    // const __dirname: string = path.resolve();
     // var/data/uploads is the folder where Render stores uploaded files in production mode, so we need to make it static so that we can access the files from the frontend
-    app.use("/uploads", express_1.default.static(path_1.default.join(__dirname_1, "/var/data/uploads")));
-    app.use(express_1.default.static(path_1.default.join(__dirname_1, "/frontend/build")));
+    // app.use("/uploads", express.static("/var/data/uploads"));
+    app.use(express_1.default.static(path_1.default.join(__dirname, "/frontend/build")));
     // for any route that is not api, redirect to index.html
     app.get("*", function (req, res) {
-        return res.sendFile(path_1.default.resolve(__dirname_1, "frontend", "build", "index.html"));
+        return res.sendFile(path_1.default.resolve(__dirname, "frontend", "build", "index.html"));
     });
 }
 else {
