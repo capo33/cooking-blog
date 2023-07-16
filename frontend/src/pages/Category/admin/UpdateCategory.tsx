@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import axios from "axios";
+import FileBase from "react-file-base64";
 
 import {
   getCategoryBySlug,
@@ -9,7 +9,6 @@ import {
 } from "../../../redux/feature/Category/categorySlice";
 import { ICategoryData } from "../../../interfaces/CategoryInterface";
 import RecipeButton from "../../../components/RecipeForm/RecipeButton";
-import UploadPicture from "../../../components/RecipeForm/UploadPicture";
 import { useAppDispatch, useAppSelector } from "../../../redux/app/store";
 
 const UpdateCategory = () => {
@@ -23,7 +22,6 @@ const UpdateCategory = () => {
     image: (category?.image as string) || "",
   };
 
-  const [uploading, setUploading] = useState(false);
   const [data, setData] = useState<ICategoryData>(categoryData);
 
   const navigate = useNavigate();
@@ -55,30 +53,6 @@ const UpdateCategory = () => {
     );
   };
 
-  // Upload image handler
-  const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e?.currentTarget?.files?.[0];
-    const formData = new FormData();
-    formData.append("image", file as Blob);
-    setUploading(true);
-    try {
-      const response = await axios.post("/api/v1/upload", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setData((prevCategory) => ({
-        ...prevCategory,
-        image: response.data.image,
-      }));
-      setUploading(false);
-    } catch (error: any) {
-      toast.error(error?.response?.data?.message);
-      setUploading(false);
-    }
-  };
-
   return (
     <div className='p-5 mt-10 max-w-md'>
       <div className='p-8 rounded border border-gray-200'>
@@ -104,13 +78,16 @@ const UpdateCategory = () => {
             </div>
           </div>
           <div className='mt-8'>
-            <img
-              src={
-                data?.image ? data?.image : `http://localhost:5000${data.image}`
+            <img src={data?.image as string} alt={data?.name} />
+            <FileBase
+              type='file'
+              multiple={false}
+              onDone={({ base64 }: any) =>
+                setData({ ...data, image: base64 as string })
               }
-              alt={data?.name}
             />
-            <UploadPicture handleUpload={handleUpload} uploading={uploading} />
+
+            {/* <UploadPicture handleUpload={handleUpload} uploading={uploading} /> */}
           </div>
           <div className='space-x-4 mt-8'>
             <RecipeButton title='Update' />

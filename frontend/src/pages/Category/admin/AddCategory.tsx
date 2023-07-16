@@ -1,11 +1,10 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import FileBase from "react-file-base64";
 
 import { Category } from "../../../interfaces/CategoryInterface";
 import RecipeButton from "../../../components/RecipeForm/RecipeButton";
-import UploadPicture from "../../../components/RecipeForm/UploadPicture";
 import { useAppSelector, useAppDispatch } from "../../../redux/app/store";
 import { createCategory } from "../../../redux/feature/Category/categorySlice";
 
@@ -15,7 +14,6 @@ const AddCategory = () => {
     image: "",
   });
 
-  const [uploading, setUploading] = useState<boolean>(false);
   const { user } = useAppSelector((state) => state.auth);
 
   const token = user?.token as string;
@@ -38,32 +36,6 @@ const AddCategory = () => {
       name: "",
       image: "",
     });
-  };
-
-  // Upload image handler
-  const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e?.currentTarget?.files?.[0];
-    const formData = new FormData();
-    formData.append("image", file as Blob);
-    setUploading(true);
-    try {
-      const response = await axios.post("/api/v1/upload", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      console.log(response.data);
-
-      setCategoryData({
-        ...categoryData,
-        image: response.data.image,
-      });
-      setUploading(false);
-    } catch (error) {
-      console.log(error);
-      setUploading(false);
-    }
   };
 
   return (
@@ -95,12 +67,14 @@ const AddCategory = () => {
             </div>
             <div className='mt-8'>
               <img src={categoryData?.image} alt={categoryData?.name} />
-              <UploadPicture
-                handleUpload={handleUpload}
-                uploading={uploading}
+              <FileBase
+                type='file'
+                multiple={false}
+                onDone={({ base64 }: any) =>
+                  setCategoryData({ ...categoryData, image: base64 })
+                }
               />
             </div>
-            {uploading && <p>Uploading image...</p>}
 
             <div className=' mt-8'>
               <RecipeButton title='Add' />

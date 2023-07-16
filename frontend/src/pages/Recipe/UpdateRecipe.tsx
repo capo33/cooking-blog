@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
 import { toast } from "react-toastify";
 import ReactQuill from "react-quill";
+import FileBase from "react-file-base64";
 import "react-quill/dist/quill.snow.css";
 
 import {
@@ -17,7 +17,6 @@ import RecipeName from "../../components/RecipeForm/RecipeName";
 import Ingredients from "../../components/RecipeForm/Ingredients";
 import CookingTime from "../../components/RecipeForm/CookingTime";
 import RecipeButton from "../../components/RecipeForm/RecipeButton";
-import UploadPicture from "../../components/RecipeForm/UploadPicture";
 import { useAppSelector, useAppDispatch } from "../../redux/app/store";
 
 const UpdateRecipe = () => {
@@ -43,7 +42,6 @@ const UpdateRecipe = () => {
   };
 
   const [data, setData] = useState<Recipe>(recipeData);
-  const [uploading, setUploading] = useState(false);
   const [inputValue, setInputValue] = useState("");
 
   useEffect(() => {
@@ -105,30 +103,6 @@ const UpdateRecipe = () => {
     setData(recipeData);
   };
 
-  // Upload image handler
-  const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e?.currentTarget?.files?.[0];
-    const formData = new FormData();
-    formData.append("image", file as Blob);
-    setUploading(true);
-    try {
-      const response = await axios.post("/api/v1/upload", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setData((prevRecipe) => ({
-        ...prevRecipe,
-        image: response.data.image,
-      }));
-      setUploading(false);
-    } catch (error: any) {
-      toast.error(error?.response?.data?.message);
-      setUploading(false);
-    }
-  };
-
   return (
     <div className='mt-12 mb-5'>
       <BackLink
@@ -188,17 +162,29 @@ const UpdateRecipe = () => {
                 </div>
                 <CookingTime recipe={data} handleChange={handleChange} />
                 <Category recipe={data} handleChange={handleChange} />
-                <UploadPicture
-                  handleUpload={handleUpload}
-                  uploading={uploading}
-                />
+                <div className='mb-5'>
+                  <label
+                    htmlFor='image'
+                    className='block text-sm font-medium text-gray-700'
+                  >
+                    Image
+                  </label>
+
+                  <FileBase
+                    type='file'
+                    multiple={false}
+                    onDone={({ base64 }: any) =>
+                      setData((prevRecipe) => ({
+                        ...prevRecipe,
+                        image: base64,
+                      }))
+                    }
+                  />
+                </div>
+
                 {data.image ? (
                   <img
-                    src={
-                      data?.image
-                        ? data?.image
-                        : `http://localhost:5000/${data?.image}`
-                    }
+                    src={data?.image || ""}
                     alt={data?.name || "Recipe image"}
                     className='w-1/2 h-1/2'
                   />

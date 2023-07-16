@@ -25,11 +25,7 @@ const CategoryDetails = () => {
       <div className='flex justify-center mt-10'>
         <img
           className='object-cover max-w-screen-lg w-full h-56 rounded-lg'
-          src={
-            category?.image
-              ? category?.image
-              : `http://localhost:5000${category?.image}`
-          }
+          src={category?.image}
           alt={category?.name}
         />
       </div>
@@ -48,11 +44,7 @@ const CategoryDetails = () => {
           >
             <Link to={`/recipe-details/${recipe?._id}`}>
               <img
-                src={
-                  recipe?.image
-                    ? recipe?.image
-                    : `http://localhost:5000${recipe?.image}`
-                }
+                src={recipe?.image}
                 alt={recipe?.name}
                 loading='lazy'
                 className='object-cover w-full h-56 rounded-md dark:bg-gray-500'

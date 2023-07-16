@@ -199,11 +199,7 @@ const RecipeDetails = () => {
               )}
             </div>
             <img
-              src={
-                recipe?.image
-                  ? recipe?.image
-                  : `http://localhost:5000/${recipe?.image}`
-              }
+              src={recipe?.image}
               alt={recipe?.name}
               className='w-full h-full object-cover rounded'
               style={{ height: "28em" }}
@@ -262,11 +258,7 @@ const RecipeDetails = () => {
                 >
                   <div className='flex py-2'>
                     <img
-                      src={
-                        recipe?.owner?.image
-                          ? recipe?.owner?.image
-                          : `http://localhost:5000/${recipe?.owner?.image}`
-                      }
+                      src={recipe?.owner?.image}
                       alt={recipe?.owner?.name}
                       className='h-10 w-10 rounded-full mr-2 object-cover'
                     />

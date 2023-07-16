@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import axios from "axios";
+import FileBase from "react-file-base64";
 import "react-quill/dist/quill.snow.css";
 
 import { Recipe } from "../../interfaces/RecipeInterface";
@@ -13,14 +13,12 @@ import Ingredients from "../../components/RecipeForm/Ingredients";
 // import Instructions from "../../components/RecipeForm/Instructions";
 import RecipeButton from "../../components/RecipeForm/RecipeButton";
 import { createRecipe } from "../../redux/feature/Recipe/recipeSlice";
-import UploadPicture from "../../components/RecipeForm/UploadPicture";
 import { useAppDispatch, useAppSelector } from "../../redux/app/store";
 import { getAllCategories } from "../../redux/feature/Category/categorySlice";
 import Editor from "../../components/Editor/Editor";
 
 const AddRecipe = () => {
   const { user } = useAppSelector((state) => state.auth);
-  const [uploading, setUploading] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [recipe, setRecipe] = useState<Recipe>({
     name: "",
@@ -98,27 +96,6 @@ const AddRecipe = () => {
     });
   };
 
-  // Upload image handler
-  const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e?.currentTarget?.files?.[0];
-    const formData = new FormData();
-    formData.append("image", file as Blob);
-    setUploading(true);
-    try {
-      const response = await axios.post("/api/v1/upload", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setRecipe({ ...recipe, image: response.data.image });
-      setUploading(false);
-    } catch (error: any) {
-      toast.error(error?.response?.data?.message);
-      setUploading(false);
-    }
-  };
-
   return (
     <div className='mt-12 mb-5'>
       <div className='md:grid md:grid-cols-3 md:gap-6'>
@@ -155,10 +132,20 @@ const AddRecipe = () => {
                 />
                 <CookingTime recipe={recipe} handleChange={handleChange} />
                 <Category recipe={recipe} handleChange={handleChange} />
-                <UploadPicture
-                  handleUpload={handleUpload}
-                  uploading={uploading}
-                />
+                <div className='flex flex-col items-center justify-center w-full'>
+                  <label className='w-full p-2 text-sm font-medium text-gray-700'>
+                    Upload image
+                  </label>
+                  <div className='w-full'>
+                    <FileBase
+                      type='file'
+                      multiple={false}
+                      onDone={({ base64 }: any) =>
+                        setRecipe({ ...recipe, image: base64 })
+                      }
+                    />
+                  </div>
+                </div>
               </div>
               <RecipeButton title='Add recipe' />
             </div>

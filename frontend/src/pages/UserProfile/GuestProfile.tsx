@@ -25,11 +25,7 @@ export const GuestProfile = () => {
             <div className='bg-white p-3 border-t-4 border-green-600'>
               <img
                 alt={guest?.user?.name}
-                src={
-                  guest?.user?.image
-                    ? guest?.user?.image
-                    : `http://localhost:5000/${guest?.user?.image}`
-                }
+                src={guest?.user?.image}
                 className='shadow-xl rounded-full h-auto align-middle border-none max-w-40-px'
               />
 
@@ -185,11 +181,7 @@ export const GuestProfile = () => {
                             {recipe.name}
                             <img
                               className='h-16 w-16 rounded-full mx-auto'
-                              src={
-                                recipe?.image
-                                  ? recipe?.image
-                                  : `http://localhost:5000/${recipe?.image}`
-                              }
+                              src={recipe?.image}
                               alt='recipe'
                             />
                           </div>

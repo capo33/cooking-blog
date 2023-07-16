@@ -33,14 +33,11 @@ const Categories = () => {
         )}
         {categories?.map((category) => (
           <>
-            {console.log(category.image)}
-            {console.log(`http://localhost:5000${category.image}`)}
             <div
               key={category._id}
               className='relative w-full h-64 bg-cover bg-center group rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition duration-300 ease-in-out'
               style={{
-                backgroundImage: `url(http://localhost:5000${category.image})`,
-                // backgroundImage: `url(${category.image})`,
+                backgroundImage: `url(${category.image})`,
               }}
             >
               <div className='absolute inset-0 bg-black bg-opacity-50 group-hover:opacity-75 transition duration-300 ease-in-out' />

@@ -62,11 +62,7 @@ const BLogCard = ({ recipe }: RecipeCardProps) => {
       {/* CardHeader */}
       <CardHeader floated={false} color='blue-gray'>
         <img
-          src={
-            recipe?.image
-              ? recipe?.image
-              : `http://localhost:5000/${recipe?.image}`
-          }
+          src={recipe?.image}
           alt={recipe?.name}
           className='object-cover w-full h-48 rounded-t-lg'
         />

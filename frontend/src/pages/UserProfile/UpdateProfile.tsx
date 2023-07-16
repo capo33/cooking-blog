@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import axios from "axios";
+import FileBase from "react-file-base64";
 
 import {
   updateUserProfile,
@@ -13,7 +13,6 @@ import Textarea from "../../components/ProfileForm/Textarea";
 import { IUpdateProfile } from "../../interfaces/AuthInterface";
 import RecipeButton from "../../components/RecipeForm/RecipeButton";
 import { useAppDispatch, useAppSelector } from "../../redux/app/store";
-import UploadPicture from "../../components/RecipeForm/UploadPicture";
 
 const UpdateProfile = () => {
   const { user } = useAppSelector((state) => state.auth);
@@ -30,7 +29,6 @@ const UpdateProfile = () => {
   };
 
   const [userData, setUserData] = useState<IUpdateProfile>(formData);
-  const [uploading, setUploading] = useState(false);
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -61,33 +59,6 @@ const UpdateProfile = () => {
       setUserData(user as IUpdateProfile);
     }
   }, [user]);
-
-  // Upload image handler
-  const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e?.currentTarget?.files?.[0];
-    const formData = new FormData();
-    formData.append("image", file as Blob);
-    setUploading(true);
-    try {
-      const response = await axios.post("/api/v1/upload", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      setUserData((prevUser) => ({
-        ...prevUser,
-        image: response.data.image,
-      }));
-      setUploading(false);
-    } catch (error: any) {
-      toast.error(error.response.data.message);
-
-      console.error(error);
-      setUploading(false);
-    }
-  };
 
   // Submit handler
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -207,17 +178,19 @@ const UpdateProfile = () => {
               </label>
               <div className='flex justify-around flex-wrap'>
                 <img
-                  src={
-                    userData?.image
-                      ? userData?.image
-                      : `http://localhost:5000/${userData?.image}`
-                  }
-                  alt=''
+                  src={userData?.image}
+                  alt={userData?.name as string}
                   className='w-20 h-20 flex justify-center'
                 />
-                <UploadPicture
-                  handleUpload={handleUpload}
-                  uploading={uploading}
+                <FileBase
+                  type='file'
+                  multiple={false}
+                  onDone={({ base64 }: any) =>
+                    setUserData((prevUser) => ({
+                      ...prevUser,
+                      image: base64,
+                    }))
+                  }
                 />
               </div>
               <RecipeButton title='Update' />

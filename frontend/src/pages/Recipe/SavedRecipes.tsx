@@ -51,11 +51,7 @@ const SavedRecipes = () => {
             key={myRecipe?._id}
           >
             <img
-              src={
-                myRecipe?.image
-                  ? myRecipe?.image
-                  : `http://localhost:5000/${myRecipe?.image}`
-              }
+              src={myRecipe?.image}
               alt={myRecipe?.name}
               className='object-cover object-center w-full rounded-t-md h-72 dark:bg-gray-500'
             />
