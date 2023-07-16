@@ -186,10 +186,10 @@ const UpdateProfile = () => {
                   type='file'
                   multiple={false}
                   onDone={({ base64 }: any) =>
-                    setUserData((prevUser) => ({
-                      ...prevUser,
+                    setUserData({
+                      ...userData,
                       image: base64,
-                    }))
+                    })
                   }
                 />
               </div>

@@ -112,7 +112,7 @@ export const updateCategory = createAsyncThunk(
         token
       );
 
-      navigate("/categories");
+      navigate("/admin/allcategories");
       toast.success(response?.message);
       return response;
     } catch (error: unknown | any) {

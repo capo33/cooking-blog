@@ -133,6 +133,7 @@ const AddRecipe = () => {
                 <CookingTime recipe={recipe} handleChange={handleChange} />
                 <Category recipe={recipe} handleChange={handleChange} />
                 <div className='flex flex-col items-center justify-center w-full'>
+                  <img src={recipe.image} className='w-1/2' alt={recipe?.name} />
                   <label className='w-full p-2 text-sm font-medium text-gray-700'>
                     Upload image
                   </label>

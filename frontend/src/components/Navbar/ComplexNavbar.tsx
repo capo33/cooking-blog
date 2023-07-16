@@ -76,7 +76,7 @@ function ProfileMenu() {
       icon: PlusIcon,
       link: "/add-recipe",
     },
-    ...(admin && admin
+    ...(admin && admin === "admin"
       ? [
           {
             label: "Add Category",

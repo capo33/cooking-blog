@@ -30,7 +30,7 @@ const UpdateRecipe = () => {
   const token = user?.token as string;
 
   const recipeData = {
-    name: recipe?.name as string,
+    name: recipe?.name  as string,
     ingredients: recipe?.ingredients as string[],
     instructions: recipe?.instructions as string,
     image: recipe?.image as string,
@@ -170,6 +170,12 @@ const UpdateRecipe = () => {
                     Image
                   </label>
 
+                  <img
+                    src={data?.image}
+                    alt={data?.name || "Recipe image"}
+                    className='w-1/2 h-1/2'
+                  />
+
                   <FileBase
                     type='file'
                     multiple={false}
@@ -181,16 +187,6 @@ const UpdateRecipe = () => {
                     }
                   />
                 </div>
-
-                {data.image ? (
-                  <img
-                    src={data?.image || ""}
-                    alt={data?.name || "Recipe image"}
-                    className='w-1/2 h-1/2'
-                  />
-                ) : (
-                  <p>No image uploaded yet</p>
-                )}
               </div>
 
               {/* <RecipeButton /> */}

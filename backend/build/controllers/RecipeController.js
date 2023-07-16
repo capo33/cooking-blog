@@ -184,7 +184,7 @@ var updateRecipe = function (req, res) { return __awaiter(void 0, void 0, void 0
                 if ((recipe === null || recipe === void 0 ? void 0 : recipe.owner.toString()) !== ((_a = req.user) === null || _a === void 0 ? void 0 : _a._id.toString())) {
                     return [2 /*return*/, res.status(401).json({ message: "Unauthorized" })];
                 }
-                return [4 /*yield*/, Recipe_1.default.findByIdAndUpdate(recipeId, __assign({}, req.body), { new: true })];
+                return [4 /*yield*/, Recipe_1.default.findByIdAndUpdate(recipeId, req.body, { new: true })];
             case 3:
                 updatedRecipe = _b.sent();
                 res.status(200).json({

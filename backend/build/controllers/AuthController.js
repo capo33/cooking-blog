@@ -289,6 +289,7 @@ var forgotPassword = function (req, res) { return __awaiter(void 0, void 0, void
                 res.status(200).json({
                     success: true,
                     message: "Password updated successfully",
+                    user: user,
                 });
                 return [3 /*break*/, 7];
             case 6:
@@ -306,7 +307,7 @@ exports.forgotPassword = forgotPassword;
 // @route   PUT /api/v1/auth/update
 // @access  Private
 var updateProfile = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var user, updatedUser, token, error_5;
+    var user, updatedUser, error_5;
     var _a, _b;
     return __generator(this, function (_c) {
         switch (_c.label) {
@@ -318,15 +319,15 @@ var updateProfile = function (req, res) { return __awaiter(void 0, void 0, void 
                 if (!user) {
                     return [2 /*return*/, res.status(404).json({ message: "User not found" })];
                 }
-                return [4 /*yield*/, User_1.default.findByIdAndUpdate((_b = req.user) === null || _b === void 0 ? void 0 : _b._id, __assign({}, req.body), { new: true })];
+                return [4 /*yield*/, User_1.default.findByIdAndUpdate((_b = req.user) === null || _b === void 0 ? void 0 : _b._id, req.body, { new: true })];
             case 2:
                 updatedUser = _c.sent();
-                token = (0, generateToken_1.generateToken)(updatedUser === null || updatedUser === void 0 ? void 0 : updatedUser._id);
+                // Create token
+                // const token = generateToken(updatedUser?._id);
                 res.status(200).json({
                     success: true,
                     message: "User updated successfully",
-                    user: updatedUser,
-                    token: token,
+                    updatedUser: updatedUser,
                 });
                 return [3 /*break*/, 4];
             case 3:

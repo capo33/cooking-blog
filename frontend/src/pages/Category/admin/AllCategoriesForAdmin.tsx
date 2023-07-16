@@ -12,7 +12,7 @@ import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
 
 const AllCategoriesForAdmin = () => {
   const { user } = useAppSelector((state) => state.auth);
-  const { categories, isLoading } = useAppSelector((state) => state.category);
+  const { categories } = useAppSelector((state) => state.category);
 
   const token = user?.token as string;
 
@@ -40,13 +40,15 @@ const AllCategoriesForAdmin = () => {
 
   return (
     <div className='container px-5 py-10 mx-auto'>
-      <BackLink link='/' name='Home' />
+   
+          <div className='flex flex-wrap col justify-around'>
+            <span className='text-lg '>
+              <h1 className='font-medium text-3xl'>All Categories for Admin</h1>
+            </span>
+          </div>
+      <BackLink link='/categories' name='Back to Categories' />
       <div className='bg-white rounded-lg shadow-lg p-4'>
         <div className='flex flex-col justify-around'>
-          <div className='flex flex-wrap col justify-around'>
-            <span className='text-lg '>Categories </span>
-            {isLoading && <div>Loading...</div>}
-          </div>
           <hr className='my-4' />
           <table className='text-center'>
             <thead>

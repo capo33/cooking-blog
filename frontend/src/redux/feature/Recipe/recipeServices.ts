@@ -96,11 +96,15 @@ const updateRecipe = async (
   formData: Recipe,
   token: string
 ) => {
-  const response = await axios.put(`${RECIPE_URL}/${recipeID}`, formData, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  const response = await axios.put(
+    `${RECIPE_URL}/${recipeID}`,
+    { ...formData },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
   return response.data;
 };
 
@@ -158,7 +162,11 @@ const addReview = async (recipeID: string, formData: Review, token: string) => {
 };
 
 // delete a review
-const deleteReview = async (recipeID: string, reviewID: string, token: string) => {
+const deleteReview = async (
+  recipeID: string,
+  reviewID: string,
+  token: string
+) => {
   const response = await axios.delete(
     `${RECIPE_URL}/reviews/${recipeID}/${reviewID}`,
     {
@@ -169,7 +177,6 @@ const deleteReview = async (recipeID: string, reviewID: string, token: string) =
   );
   return response.data;
 };
-
 
 const recipeService = {
   getAllRecipes,
@@ -185,7 +192,7 @@ const recipeService = {
   likeRecipe,
   unlikeRecipe,
   addReview,
-  deleteReview
+  deleteReview,
 };
 
 export default recipeService;

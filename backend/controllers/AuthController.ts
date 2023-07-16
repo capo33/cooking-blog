@@ -194,6 +194,7 @@ const forgotPassword = async (req: Request, res: Response) => {
     res.status(200).json({
       success: true,
       message: "Password updated successfully",
+      user,
     });
   } catch (error) {
     if (error instanceof Error) {
@@ -216,17 +217,16 @@ const updateProfile = async (req: Request, res: Response) => {
 
     const updatedUser = await UserModel.findByIdAndUpdate(
       req.user?._id,
-      { ...req.body },
+      req.body,
       { new: true }
     );
     // Create token
-    const token = generateToken(updatedUser?._id);
+    // const token = generateToken(updatedUser?._id);
 
     res.status(200).json({
       success: true,
       message: "User updated successfully",
-      user: updatedUser,
-      token,
+      updatedUser,
     });
   } catch (error) {
     if (error instanceof Error) {
