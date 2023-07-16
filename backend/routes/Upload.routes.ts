@@ -39,26 +39,32 @@ const storage = multer.diskStorage({
 // Check File Type
 const checkFileType = (file: Express.Multer.File, cb: FileFilterCallback) => {
   // Allowed extensions
-  const filetypes = /jpg|jpeg|png|gif|jfif/;
+  const filetypes = /jpe?g|png|webp/;
+  const mimetypes = /image\/jpe?g|image\/png|image\/webp/;
+
   // Check extension
 
   const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
   // Check mime type
-  const mimetype = filetypes.test(file.mimetype);
+  const mimetype = mimetypes.test(file.mimetype);
 
   if (extname && mimetype) {
     return cb(null, true);
   } else {
     // cb = callback
-    cb(new Error("Only jpg, jpeg, png files are allowed!"));
+    cb(new Error("Images only!"));
   }
 };
 
 // Init Upload
 const upload = multer({
   storage,
-  limits: { fileSize: 1000000 }, // 1MB
-  fileFilter: (req, file, cb) => {
+
+  fileFilter: (
+    req: Request,
+    file: Express.Multer.File,
+    cb: FileFilterCallback
+  ) => {
     checkFileType(file, cb);
   },
 });
@@ -69,7 +75,8 @@ router.post("/", upload.single("image"), (req, res) => {
   try {
     res.json({
       message: "Image Uploaded Successfully",
-      image: `/${req?.file?.path.replace(/\\/g, "/")}`,
+      // image: `/${req?.file?.path?.replace(/\\/g, "/")}`,
+      image: `/${req?.file?.path}`,
     });
   } catch (error) {
     console.log(error);
