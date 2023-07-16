@@ -26,7 +26,7 @@ const UpdateRecipe = () => {
   const { recipe } = useAppSelector((state) => state.recipe);
 
   const dispatch = useAppDispatch();
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   const token = user?.token as string;
 
@@ -194,7 +194,11 @@ const UpdateRecipe = () => {
                 />
                 {data.image ? (
                   <img
-                    src={data?.image || "https://via.placeholder.com/150"}
+                    src={
+                      data?.image
+                        ? data?.image
+                        : `http://localhost:5000/${data?.image}`
+                    }
                     alt={data?.name || "Recipe image"}
                     className='w-1/2 h-1/2'
                   />

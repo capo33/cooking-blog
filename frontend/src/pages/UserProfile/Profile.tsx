@@ -78,7 +78,11 @@ const Profile = () => {
             <div className='bg-white p-3 border-t-4 border-green-600'>
               <img
                 alt={userData?.name}
-                src={userData?.image}
+                src={
+                  userData?.image
+                    ? userData?.image
+                    : `http://localhost:5000/${userData?.image}`
+                }
                 className='shadow-xl rounded-full h-auto align-middle border-none max-w-40-px'
               />
               <div className=' py-5 '>
@@ -248,7 +252,11 @@ const Profile = () => {
                             {recipe?.name}
                             <img
                               className='h-16 w-16 rounded-full mx-auto'
-                              src={recipe?.image}
+                              src={
+                                recipe?.image
+                                  ? recipe?.image
+                                  : `http://localhost:5000/${recipe?.image}`
+                              }
                               alt='recipe'
                             />
                           </div>

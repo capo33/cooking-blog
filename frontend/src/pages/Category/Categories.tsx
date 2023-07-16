@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
- 
+
 import BackLink from "../../components/BackLink/BackLink";
 import { useAppSelector, useAppDispatch } from "../../redux/app/store";
 import { getAllCategories } from "../../redux/feature/Category/categorySlice";
@@ -19,20 +19,20 @@ const Categories = () => {
   };
 
   return (
-     <section className='bg-white container px-6 py-10 mx-auto'>
+    <section className='bg-white container px-6 py-10 mx-auto'>
       <h2 className='text-center mb-5 text-2xl font-semibold text-gray-800 capitalize lg:text-3xl dark:text-white'>
         Categories
       </h2>
       <BackLink link='/' name='Back to home' />
       {isLoading && <div>Loading...</div>}
-         <div className='mt-6 grid grid-cols-1 md:grid-cols-1 lg:grid-cols-3 gap-x-6 gap-y-8'>
-          {categories?.length === 0 && (
-            <div className='flex justify-center items-center'>
-              <h1 className='text-2xl text-gray-500'>No categories found</h1>
-            </div>
-          )}
-          {categories?.map((category) => (
-            <>
+      <div className='mt-6 grid grid-cols-1 md:grid-cols-1 lg:grid-cols-3 gap-x-6 gap-y-8'>
+        {categories?.length === 0 && (
+          <div className='flex justify-center items-center'>
+            <h1 className='text-2xl text-gray-500'>No categories found</h1>
+          </div>
+        )}
+        {categories?.map((category) => (
+          <>
             {console.log(category.image)}
             {console.log(`http://localhost:5000${category.image}`)}
             <div
@@ -40,6 +40,7 @@ const Categories = () => {
               className='relative w-full h-64 bg-cover bg-center group rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition duration-300 ease-in-out'
               style={{
                 backgroundImage: `url(http://localhost:5000${category.image})`,
+                // backgroundImage: `url(${category.image})`,
               }}
             >
               <div className='absolute inset-0 bg-black bg-opacity-50 group-hover:opacity-75 transition duration-300 ease-in-out' />
@@ -55,10 +56,10 @@ const Categories = () => {
                 </h3>
               </div>
             </div>
-              </>
-          ))}
-        </div>
-     </section>
+          </>
+        ))}
+      </div>
+    </section>
   );
 };
 

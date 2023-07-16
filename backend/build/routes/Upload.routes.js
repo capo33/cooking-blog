@@ -70,12 +70,12 @@ var upload = (0, multer_1.default)({
 // @route POST /upload
 // @desc Uploads file to DB
 router.post("/", upload.single("image"), function (req, res) {
-    var _a;
+    var _a, _b;
     try {
         res.json({
             message: "Image Uploaded Successfully",
-            // image: `/${req?.file?.path?.replace(/\\/g, "/")}`,
-            image: "/".concat((_a = req === null || req === void 0 ? void 0 : req.file) === null || _a === void 0 ? void 0 : _a.path),
+            image: "/".concat((_b = (_a = req === null || req === void 0 ? void 0 : req.file) === null || _a === void 0 ? void 0 : _a.path) === null || _b === void 0 ? void 0 : _b.replace(/\\/g, "/")),
+            // image: `/${req?.file?.path}`,
         });
     }
     catch (error) {

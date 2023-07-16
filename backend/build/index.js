@@ -33,7 +33,7 @@ app.use("/uploads", express_1.default.static(path_1.default.join(__dirname, "/up
 // Make uploads folder static
 if (process.env.NODE_ENV === "production") {
     var __dirname_1 = path_1.default.resolve();
-    // var/data/uploads is the folder where Render stores uploaded files in production mode, so we need to make it static so that we can access the files from the frontend (e.g. <img src="https://mydomain.com/uploads/myimage.jpg" />)
+    // var/data/uploads is the folder where Render stores uploaded files in production mode, so we need to make it static so that we can access the files from the frontend  
     app.use("/uploads", express_1.default.static("/var/data/uploads"));
     app.use(express_1.default.static(path_1.default.join(__dirname_1, "/frontend/build")));
     // for any route that is not api, redirect to index.html

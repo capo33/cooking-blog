@@ -75,8 +75,8 @@ router.post("/", upload.single("image"), (req, res) => {
   try {
     res.json({
       message: "Image Uploaded Successfully",
-      // image: `/${req?.file?.path?.replace(/\\/g, "/")}`,
-      image: `/${req?.file?.path}`,
+      image: `/${req?.file?.path?.replace(/\\/g, "/")}`,
+      // image: `/${req?.file?.path}`,
     });
   } catch (error) {
     console.log(error);

@@ -46,7 +46,7 @@ const UpdateProfile = () => {
     const { name, value } = e.target;
     setUserData((prevUser) => ({
       ...prevUser,
-        [name]: value,
+      [name]: value,
     }));
   };
 
@@ -207,7 +207,11 @@ const UpdateProfile = () => {
               </label>
               <div className='flex justify-around flex-wrap'>
                 <img
-                  src={userData?.image}
+                  src={
+                    userData?.image
+                      ? userData?.image
+                      : `http://localhost:5000/${userData?.image}`
+                  }
                   alt=''
                   className='w-20 h-20 flex justify-center'
                 />

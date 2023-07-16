@@ -104,7 +104,12 @@ const UpdateCategory = () => {
             </div>
           </div>
           <div className='mt-8'>
-            <img src={data?.image} alt={data?.name} />
+            <img
+              src={
+                data?.image ? data?.image : `http://localhost:5000${data.image}`
+              }
+              alt={data?.name}
+            />
             <UploadPicture handleUpload={handleUpload} uploading={uploading} />
           </div>
           <div className='space-x-4 mt-8'>
