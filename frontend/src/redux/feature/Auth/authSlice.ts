@@ -40,6 +40,8 @@ export const register = createAsyncThunk(
     try {
       const response = await authServices.register(formData);
       navigate("/");
+      console.log(response);
+      
       toast.success(response?.message);
       return response;
     } catch (error: unknown | any) {
@@ -49,7 +51,7 @@ export const register = createAsyncThunk(
           error.response.data.message) ||
         error.message ||
         error.toString();
-      toast.error(error.response?.data?.msg);
+      toast.error(error.response?.data?.message);
       return rejectWithValue(message);
     }
   }
@@ -71,7 +73,7 @@ export const login = createAsyncThunk(
           error.response.data.message) ||
         error.message ||
         error.toString();
-      toast.error(error.response?.data?.msg);
+      toast.error(error.response?.data?.message);
       return rejectWithValue(message);
     }
   }

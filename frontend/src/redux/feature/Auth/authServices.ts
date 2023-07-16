@@ -11,11 +11,11 @@ import {
 // register
 const register = async (formData: AuthUser) => {
   const response = await axios.post(`${AUTH_URL}/register`, formData);
+  console.log(response.data);
 
   if (response.data) {
     localStorage.setItem("user", JSON.stringify(response.data));
   }
-  console.log(response.data);
 
   return response.data;
 };

@@ -26,7 +26,6 @@ connectDB();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-
 // Routes
 app.use("/api/v1/auth", userRoutes);
 app.use("/api/v1/recipes", recipeRoutes);
@@ -39,9 +38,9 @@ app.use("/uploads", express.static(path.join(directoryname, "/uploads")));
 // Make uploads folder static
 // const directoryname: string = path.resolve();
 if (process.env.NODE_ENV === "production") {
-  app.use("/uploads", express.static("/var/data/uploads"));
+  app.use("/uploads", express.static("/uploads"));
   app.use(express.static(path.join(directoryname, "/frontend/build")));
-  
+
   // for any route that is not api, redirect to index.html
   app.get("*", (req, res) =>
     res.sendFile(path.resolve(directoryname, "frontend", "build", "index.html"))
