@@ -28,11 +28,13 @@ app.use("/api/v1/auth", Auth_routes_1.default);
 app.use("/api/v1/recipes", Recipe_routes_1.default);
 app.use("/api/v1/categories", Category_routes_1.default);
 app.use("/api/v1/upload", Upload_routes_1.default);
+var __dirname = path_1.default.resolve();
+app.use("/uploads", express_1.default.static(path_1.default.join(__dirname, "/uploads")));
 // Make uploads folder static
 if (process.env.NODE_ENV === "production") {
     var __dirname_1 = path_1.default.resolve();
     // var/data/uploads is the folder where Render stores uploaded files in production mode, so we need to make it static so that we can access the files from the frontend
-    app.use("/uploads", express_1.default.static("/var/data/uploads"));
+    app.use("/uploads", express_1.default.static(path_1.default.join(__dirname_1, "/var/data/uploads")));
     app.use(express_1.default.static(path_1.default.join(__dirname_1, "/frontend/build")));
     // for any route that is not api, redirect to index.html
     app.get("*", function (req, res) {
@@ -40,8 +42,6 @@ if (process.env.NODE_ENV === "production") {
     });
 }
 else {
-    var __dirname_2 = path_1.default.resolve();
-    app.use("/uploads", express_1.default.static(path_1.default.join(__dirname_2, "/uploads")));
     // Welcome route
     app.get("/", function (req, res) {
         res.json({
