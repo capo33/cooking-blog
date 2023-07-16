@@ -43,7 +43,7 @@ app.use("/api/v1/upload", uploadRoutes);
 
 // Make uploads folder static
 if (process.env.NODE_ENV === "production") {
-  // const __dirname: string = path.resolve();
+  const __dirname: string = path.resolve();
   // var/data/uploads is the folder where Render stores uploaded files in production mode, so we need to make it static so that we can access the files from the frontend
   // app.use("/uploads", express.static("/var/data/uploads"));
   app.use(express.static(path.join(__dirname, "/frontend/build")));
