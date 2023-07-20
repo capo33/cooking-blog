@@ -20,20 +20,22 @@ import { GuestProfile } from "./pages/UserProfile/GuestProfile";
 import ScrollToTop from "./components/ScrollToTop/ScrollToTop";
 import UpdateCategory from "./pages/Category/admin/UpdateCategory";
 import AllCategoriesForAdmin from "./pages/Category/admin/AllCategoriesForAdmin";
+import { Header } from "./components/Header/Index";
 
 function App() {
   return (
-    <div className='container mx-auto py-10 px-5 bg-white min-h-screen'>
+    <div>
       <Router>
         <ScrollToTop />
-        <ComplexNavbar />
+        {/* <ComplexNavbar /> */}
+
+        <Header />
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/login' element={<Login />} />
           <Route path='/register' element={<Register />} />
           <Route path='/forgot-password' element={<ForgotPassword />} />
           <Route path='/recipe-details/:id' element={<RecipeDetails />} />
-          <Route path='/saved-recipes' element={<SavedRecipes />} />
           <Route path='/user-profile/:guestID' element={<GuestProfile />} />
           <Route path='/categories' element={<Categories />} />
           <Route path='/category/:slug' element={<CategoryDetails />} />
@@ -41,6 +43,7 @@ function App() {
           {/* PrivateRoutes */}
           <Route path='' element={<PrivateRoute />}>
             <Route path='/add-recipe' element={<AddRecipe />} />
+            <Route path='/saved-recipes' element={<SavedRecipes />} />
             <Route path='/profile' element={<Profile />} />
             <Route path='/update-recipe/:recipeId' element={<UpdateRecipe />} />
             <Route path='/update-profile/:id' element={<UpdateProfile />} />
@@ -54,7 +57,7 @@ function App() {
               element={<UpdateCategory />}
             />
             <Route
-              path='/admin/allcategories'
+              path='/admin/all-categories'
               element={<AllCategoriesForAdmin />}
             />
           </Route>
