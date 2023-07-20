@@ -34,56 +34,49 @@ const Home = () => {
             ))}
         </div>
       </section> */}
-      <section className='page-top-recipe'>
+      {/* <section className='page-top-recipe'>
         <Container>
           <Row>
-            <Col lg={6} className='order-lg-1'>
-            {/* <div className='col-lg-6 order-lg-2'> */}
-              <div className='pt-recipe-item large-item'>
+             
+             
+            <Col md={3}>
+              <div className='page-top-recipe__image'>
                 <img src={Lentil} alt='' />
-
-                <div className='pt-recipe-text'>
-                  <span>March 10, 2019</span>
-                  <h3>Cannellini Aglio e Olio with Salmon</h3>
-                </div>
               </div>
-              </Col>
-            <div className='col-lg-3 col-md-6 order-lg-1'>
-              <div className='pt-recipe-item'>
+            </Col>
+            <Col md={6}>
+              <div className='page-top-recipe__image'>
                 <img src={Lentil} alt='' />
-                {/* <div className="pt-recipe-img set-bg" data-setbg="img/recipe-1.jpg">
-           </div> */}
-                <div className='pt-recipe-text'>
-                  <h4>Raw Vegan Carrot Cake Bites with Avocado</h4>
-                </div>
               </div>
-              <div className='pt-recipe-item'>
+            </Col>
+            <Col md={3}>
+              <div className='page-top-recipe__image'>
                 <img src={Lentil} alt='' />
-
-                <div className='pt-recipe-text'>
-                  <h4>One Pot Weeknight Lasagna Soup Recipe</h4>
-                </div>
               </div>
-            </div>
-            <div className='col-lg-3 col-md-6 order-lg-3'>
-              <div className='pt-recipe-item'>
-                <img src={Lentil} alt='' />
-
-                <div className='pt-recipe-text'>
-                  <h4>Beef Burger with French Fries and Salad</h4>
-                </div>
-              </div>
-              <div className='pt-recipe-item'>
-                <img src={Lentil} alt='' />
-
-                <div className='pt-recipe-text'>
-                  <h4>Raspberry Pancakes with Honey and Butter</h4>
-                </div>
-              </div>
-            </div>
+            </Col>
           </Row>
         </Container>
-      </section>
+      </section> */}
+      <Container>
+        <div className='mt-0 mt-md-4'>
+          <div className='row g-0'>
+            <div className='col-lg-7'>
+              <img src={Lentil} height={100} alt='Menu' />
+            </div>
+            <div className='col-lg-5'>
+              <div className='p-4 p-md-5 d-flex flex-column justify-content-center h-100 '>
+                lortm
+                <h4 className='my-3'>Mighty Super Cheesecake</h4>
+                <p className='big pr-0 pr-md-5 pb-3 pb-sm-5 pb-lg-0'>
+                  Look no further for a creamy and ultra smooth classic
+                  cheesecake recipe! no one can deny its simple decadence.
+                </p>
+                <a href='#0' className='circle circle-lg tstbite-arrow'></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </Container>
     </>
   );
 };

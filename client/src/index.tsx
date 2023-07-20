@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { Provider } from "react-redux";
 import { store } from "./redux/app/store";
- import { Toaster } from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
 
 import "./assets/styles/index.css";
 import "./assets/styles/bootstrap.custom.css";
