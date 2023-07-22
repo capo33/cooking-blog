@@ -31,7 +31,7 @@ export const getAllRecipes = createAsyncThunk(
   "recipe/getAllRecipes",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await recipeServices.getAllRecipes();
+      const response = await recipeServices.getAllRecipes();      
       return response;
     } catch (error: unknown | any) {
       const message =
@@ -331,7 +331,7 @@ const recipeSlice = createSlice({
     });
     builder.addCase(getAllRecipes.fulfilled, (state, { payload }) => {
       state.isLoading = false;
-      state.recipes = payload;
+      state.recipes = payload as Recipe[];
     });
     builder.addCase(getAllRecipes.rejected, (state, { payload }) => {
       state.isLoading = false;

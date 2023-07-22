@@ -57,7 +57,7 @@ const Home = () => {
           </Row>
         </Container>
       </section> */}
-      <Container>
+      {/* <Container>
         <div className='mt-0 mt-md-4'>
           <div className='row g-0'>
             <div className='col-lg-7'>
@@ -76,7 +76,7 @@ const Home = () => {
             </div>
           </div>
         </div>
-      </Container>
+      </Container> */}
     </>
   );
 };

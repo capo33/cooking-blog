@@ -1,5 +1,5 @@
 import { useEffect } from "react";
- import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { LinkContainer } from "react-router-bootstrap";
 import { FaShoppingCart, FaUser } from "react-icons/fa";
@@ -33,9 +33,20 @@ export const Header = () => {
     <header>
       <Navbar bg='success' variant='' expand='md' collapseOnSelect>
         <Container>
-          <LinkContainer to='/'>
+          {/* <LinkContainer to='/'>
             <Navbar.Brand>
               <img src={logo} alt='yummy' width='250' height='250' />
+            </Navbar.Brand>
+          </LinkContainer> */}
+          <LinkContainer to='/'>
+            <Navbar.Brand>
+              <img
+                src={logo}
+                alt='logo'
+                width='100'
+                // height='30'
+                className='d-inline-block  mx-2 my-2   '
+              />
             </Navbar.Brand>
           </LinkContainer>
 
@@ -43,22 +54,28 @@ export const Header = () => {
           <Navbar.Collapse id='basic-navbar-nav'>
             <Nav className='ms-auto'>
               {/* <SearchBox /> */}
-              <LinkContainer to='/saved-recipes'>
-                <Nav.Link>
-                  Saved Recipes
-                  {savedRecipes?.length > 0 && (
-                    <Badge pill bg='dark' className='mx-1'>
-                      {savedRecipes?.length}
-                    </Badge>
-                  )}
-                </Nav.Link>
-              </LinkContainer>
 
+              {user && (
+                <LinkContainer to='/saved-recipes'>
+                  <Nav.Link>
+                    Saved Recipes
+                    {savedRecipes?.length > 0 && (
+                      <Badge pill bg='dark' className='mx-1'>
+                        {savedRecipes?.length}
+                      </Badge>
+                    )}
+                  </Nav.Link>
+                </LinkContainer>
+              )}
               {user ? (
                 <NavDropdown title={user.name} id='username'>
                   <LinkContainer to='/profile'>
                     <NavDropdown.Item>Profile</NavDropdown.Item>
                   </LinkContainer>
+                  <LinkContainer to='/add-recipe'>
+                    <NavDropdown.Item>Add recipe</NavDropdown.Item>
+                  </LinkContainer>
+
                   {user && user.role === "admin" && (
                     <>
                       <LinkContainer to='/admin/add-category'>

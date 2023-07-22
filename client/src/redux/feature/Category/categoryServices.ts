@@ -1,9 +1,8 @@
 import axios from "axios";
 
-// import { CATEGORY_URL } from "../../../constants/constants";
+import { CATEGORY_URL } from "../../../constants/constants";
 import { ICategoryData } from "../../../interfaces/CategoryInterface";
-const CATEGORY_URL = 'http://localhost:5000/api/v1/category';
-
+ 
 // *************************** Category *************************** //
 // get all categories
 const getAllCategories = async () => {

@@ -1,14 +1,13 @@
 import axios from "axios";
 
-// import { AUTH_URL } from "../../../constants/constants";
+import { AUTH_URL } from "../../../constants/constants";
 import {
   AuthUser,
   IResetPassword,
   IUpdateProfile,
 } from "../../../interfaces/AuthInterface";
 
-const AUTH_URL = "http://localhost:5000/api/v1/auth";
-// *************************** Auth *************************** //
+ // *************************** Auth *************************** //
 // register
 const register = async (formData: AuthUser) => {
   const response = await axios.post(`${AUTH_URL}/register`, formData);

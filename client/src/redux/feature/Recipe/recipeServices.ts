@@ -1,8 +1,8 @@
 import axios from "axios";
 
-// import { RECIPE_URL, UPLOAD_URL } from "../../../constants/constants";
+import { RECIPE_URL, UPLOAD_URL } from "../../../constants/constants";
 import { Recipe, Review } from "../../../interfaces/RecipeInterface";
-const RECIPE_URL = 'http://localhost:5000/api/v1/recipe';
+// const RECIPE_URL = 'http://localhost:5000/api/v1/recipe';
 
 // *************************** Recipe *************************** //
 // get all recipes
