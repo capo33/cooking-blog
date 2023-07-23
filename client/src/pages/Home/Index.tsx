@@ -18,6 +18,7 @@ const Home = () => {
   const { recipes, isLoading } = useAppSelector((state) => state.recipe);
 
   const dispatch = useAppDispatch();
+
   const getRecipes = useCallback(() => {
     dispatch(getAllRecipes());
   }, [dispatch]);
@@ -72,62 +73,6 @@ const Home = () => {
 
           <Category />
 
-          <>
-            <div className='row'>
-              <div className='col-md-4 '>
-                <figure className='my-3 '>
-                  <a href='#0' className='rounded-top-6'>
-                    <img src={Lentil} className='w-100' alt='Menu' />
-                  </a>
-                  <figcaption className='mt-2 px-3 px-lg-4'>
-                    <div className='w-100 float-left'>
-                      <div className='float-left'>start here</div>
-                    </div>
-                    <h6 className='font-weight-semibold inter-font f-size-20 mt-2 mb-4'>
-                      <a href='#0' className='text-black d-block mt-1'>
-                        Very Berry Healthy Summer Smoothie
-                      </a>
-                    </h6>
-                  </figcaption>
-                </figure>
-              </div>
-              <div className='col-md-4'>
-                <figure className='my-3 '>
-                  <a href='#0' className='rounded-top-6'>
-                    <img src={Lentil} className='w-100' alt='Menu' />
-                  </a>
-                  <figcaption className='mt-2 px-3 px-lg-4'>
-                    <div className='w-100 float-left'>
-                      <div className='float-left'>start here</div>
-                    </div>
-                    <h6 className='font-weight-semibold inter-font f-size-20 mt-2 mb-4'>
-                      <a href='#0' className='text-black d-block mt-1'>
-                        Very Berry Healthy Summer Smoothie
-                      </a>
-                    </h6>
-                  </figcaption>
-                </figure>
-              </div>
-              <div className='col-md-4'>
-                <figure className='my-3 '>
-                  <a href='#0' className='rounded-top-6'>
-                    <img src={Lentil} className='w-100' alt='Menu' />
-                  </a>
-                  <figcaption className='mt-2 px-3 px-lg-4'>
-                    <div className='w-100 float-left'>
-                      <div className='float-left'>start here</div>
-                    </div>
-                    <h6 className='font-weight-semibold inter-font f-size-20 mt-2 mb-4'>
-                      <a href='#0' className='text-black d-block mt-1'>
-                        Very Berry Healthy Summer Smoothie
-                      </a>
-                    </h6>
-                  </figcaption>
-                </figure>
-              </div>
-            </div>
-          </>
-
           <hr />
 
           {recipes?.length < 1 && !isLoading && (
@@ -139,294 +84,130 @@ const Home = () => {
           <div className='row'>
             {recipes &&
               recipes?.map((recipe: Recipe) => (
-                // <RecipeCard key={recipe._id} recipe={recipe} />
-                <div className='py-5 team4'>
-                  <div className='container'>
-                    <div className='row justify-content-center mb-4'>
-                      <div className='col-md-7 text-center'>
-                        <h3 className='mb-3'>
-                          Experienced &amp; Professional Team
-                        </h3>
-                        <h6 className='subtitle'>
-                          You can relay on our amazing features list and also
-                          our customer services will be great experience for you
-                          without doubt and in no-time
-                        </h6>
-                      </div>
-                    </div>
-                    <div className='row'>
-                      {/* column  */}
-                      <div className='col-lg-3 mb-4'>
-                        {/* Row */}
-                        <div className='row'>
-                          <div className='col-md-12'>
-                            <img
-                              src={recipe?.image}
-                              alt='wrapkit'
-                              className='img-fluid rounded'
-                            />
-                          </div>
-                          <div className='col-md-12 text-center'>
-                            <div className='pt-2'>
-                              <h5 className='mt-4 font-weight-medium mb-0'>
-                                {recipe?.name}
-                              </h5>
-                              <h6
-                                className='subtitle mb-3'
-                                dangerouslySetInnerHTML={{
-                                  __html: subStringFunc(recipe?.instructions, 40),
-                                }}
-                              />
+                <RecipeCard key={recipe._id} recipe={recipe} />
+                // <div className='py-5 team4'>
+                //   <div className='container'>
+                //     <div className='row justify-content-center mb-4'>
+                //       <div className='col-md-7 text-center'>
+                //         <h3 className='mb-3'>
+                //           Experienced &amp; Professional Team
+                //         </h3>
+                //         <h6 className='subtitle'>
+                //           You can relay on our amazing features list and also
+                //           our customer services will be great experience for you
+                //           without doubt and in no-time
+                //         </h6>
+                //       </div>
+                //     </div>
+                //     <div className='row'>
+                //        <div className='col-lg-3 mb-4'>
+                //          <div className='row'>
+                //           <div className='col-md-12'>
+                //             <img
+                //               alt="" src={recipe?.image}
+                //               alt='wrapkit'
+                //               className='img-fluid rounded'
+                //             />
+                //           </div>
+                //           <div className='col-md-12 text-center'>
+                //             <div className='pt-2'>
+                //               <h5 className='mt-4 font-weight-medium  '>
+                //                 {recipe?.name}
+                //               </h5>
+                //               <h6
+                //                 className=''
+                //                 dangerouslySetInnerHTML={{
+                //                   __html: subStringFunc(recipe?.instructions, 40),
+                //                 }}
+                //               />
 
-                              <p>
-                                
-                              </p>
-                              <ul className='list-inline'>
-                                <li className='list-inline-item'>
-                                  <a
-                                    href='#'
-                                    className='text-decoration-none d-block px-1'
-                                  >
-                                    <MdFavoriteBorder
-                                      className='icon-social-facebook'
-                                      size={20}
-                                    />
-                                  </a>
-                                </li>
-                                <li className='list-inline-item'>
-                                  <a
-                                    href='#'
-                                    className='text-decoration-none d-block px-1'
-                                  >
-                                    <MdFavoriteBorder
-                                      className='icon-social-facebook'
-                                      size={20}
-                                    />
-                                  </a>
-                                </li>
-                                <li className='list-inline-item'>
-                                  <a
-                                    href='#'
-                                    className='text-decoration-none d-block px-1'
-                                  >
-                                     <MdFavoriteBorder
-                                      className='icon-social-facebook'
-                                      size={20}
-                                    />
-                                  </a>
-                                </li>
-                                <li className='list-inline-item'>
-                                  <a
-                                    href='#'
-                                    className='text-decoration-none d-block px-1'
-                                  >
-                                    <MdFavoriteBorder
-                                      className='icon-social-facebook'
-                                      size={20}
-                                    />
-                                  </a>
-                                </li>
-                              </ul>
-                            </div>
-                          </div>
-                        </div>
-                        {/* Row */}
-                      </div>
-                      {/* column  */}
-                      {/* column  */}
-                      <div className='col-lg-3 mb-4'>
-                        {/* Row */}
-                        <div className='row'>
-                          <div className='col-md-12'>
-                            <img
-                              src='https://www.wrappixel.com/demos/ui-kit/wrapkit/assets/images/team/t2.jpg'
-                              alt='wrapkit'
-                              className='img-fluid rounded-circle'
-                            />
-                          </div>
-                          <div className='col-md-12 text-center'>
-                            <div className='pt-2'>
-                              <h5 className='mt-4 font-weight-medium mb-0'>
-                                Michael Doe
-                              </h5>
-                              <h6 className='subtitle mb-3'>
-                                Property Specialist
-                              </h6>
-                              <p>
-                                You can relay on our amazing features list and
-                                also our customer services will be great
-                                experience.
-                              </p>
-                              <ul className='list-inline'>
-                                <li className='list-inline-item'>
-                                  <a
-                                    href='#'
-                                    className='text-decoration-none d-block px-1'
-                                  >
-                                    <i className='icon-social-facebook' />
-                                  </a>
-                                </li>
-                                <li className='list-inline-item'>
-                                  <a
-                                    href='#'
-                                    className='text-decoration-none d-block px-1'
-                                  >
-                                    <i className='icon-social-twitter' />
-                                  </a>
-                                </li>
-                                <li className='list-inline-item'>
-                                  <a
-                                    href='#'
-                                    className='text-decoration-none d-block px-1'
-                                  >
-                                    <i className='icon-social-instagram' />
-                                  </a>
-                                </li>
-                                <li className='list-inline-item'>
-                                  <a
-                                    href='#'
-                                    className='text-decoration-none d-block px-1'
-                                  >
-                                    <i className='icon-social-behance' />
-                                  </a>
-                                </li>
-                              </ul>
-                            </div>
-                          </div>
-                        </div>
-                        {/* Row */}
-                      </div>
-                      {/* column  */}
-                      {/* column  */}
-                      <div className='col-lg-3 mb-4'>
-                        {/* Row */}
-                        <div className='row'>
-                          <div className='col-md-12'>
-                            <img
-                              src='https://www.wrappixel.com/demos/ui-kit/wrapkit/assets/images/team/t3.jpg'
-                              alt='wrapkit'
-                              className='img-fluid rounded-circle'
-                            />
-                          </div>
-                          <div className='col-md-12 text-center'>
-                            <div className='pt-2'>
-                              <h5 className='mt-4 font-weight-medium mb-0'>
-                                Michael Doe
-                              </h5>
-                              <h6 className='subtitle mb-3'>
-                                Property Specialist
-                              </h6>
-                              <p>
-                                You can relay on our amazing features list and
-                                also our customer services will be great
-                                experience.
-                              </p>
-                              <ul className='list-inline'>
-                                <li className='list-inline-item'>
-                                  <a
-                                    href='#'
-                                    className='text-decoration-none d-block px-1'
-                                  >
-                                    <i className='icon-social-facebook' />
-                                  </a>
-                                </li>
-                                <li className='list-inline-item'>
-                                  <a
-                                    href='#'
-                                    className='text-decoration-none d-block px-1'
-                                  >
-                                    <i className='icon-social-twitter' />
-                                  </a>
-                                </li>
-                                <li className='list-inline-item'>
-                                  <a
-                                    href='#'
-                                    className='text-decoration-none d-block px-1'
-                                  >
-                                    <i className='icon-social-instagram' />
-                                  </a>
-                                </li>
-                                <li className='list-inline-item'>
-                                  <a
-                                    href='#'
-                                    className='text-decoration-none d-block px-1'
-                                  >
-                                    <i className='icon-social-behance' />
-                                  </a>
-                                </li>
-                              </ul>
-                            </div>
-                          </div>
-                        </div>
-                        {/* Row */}
-                      </div>
-                      {/* column  */}
-                      {/* column  */}
-                      <div className='col-lg-3 mb-4'>
-                        {/* Row */}
-                        <div className='row'>
-                          <div className='col-md-12'>
-                            <img
-                              src='https://www.wrappixel.com/demos/ui-kit/wrapkit/assets/images/team/t4.jpg'
-                              alt='wrapkit'
-                              className='img-fluid rounded-circle'
-                            />
-                          </div>
-                          <div className='col-md-12 text-center'>
-                            <div className='pt-2'>
-                              <h5 className='mt-4 font-weight-medium mb-0'>
-                                Michael Doe
-                              </h5>
-                              <h6 className='subtitle mb-3'>
-                                Property Specialist
-                              </h6>
-                              <p>
-                                You can relay on our amazing features list and
-                                also our customer services will be great
-                                experience.
-                              </p>
-                              <ul className='list-inline'>
-                                <li className='list-inline-item'>
-                                  <a
-                                    href='#'
-                                    className='text-decoration-none d-block px-1'
-                                  >
-                                    <i className='icon-social-facebook' />
-                                  </a>
-                                </li>
-                                <li className='list-inline-item'>
-                                  <a
-                                    href='#'
-                                    className='text-decoration-none d-block px-1'
-                                  >
-                                    <i className='icon-social-twitter' />
-                                  </a>
-                                </li>
-                                <li className='list-inline-item'>
-                                  <a
-                                    href='#'
-                                    className='text-decoration-none d-block px-1'
-                                  >
-                                    <i className='icon-social-instagram' />
-                                  </a>
-                                </li>
-                                <li className='list-inline-item'>
-                                  <a
-                                    href='#'
-                                    className='text-decoration-none d-block px-1'
-                                  >
-                                    <i className='icon-social-behance' />
-                                  </a>
-                                </li>
-                              </ul>
-                            </div>
-                          </div>
-                        </div>
-                        {/* Row */}
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                //               <ul className='list-inline'>
+                //                 <li className='list-inline-item'>
+                //                   <MdFavoriteBorder
+                //                     className='icon-social-facebook'
+                //                     size={20}
+                //                   />
+                //                 </li>
+                //                 <li className='list-inline-item'>
+                //                   <a
+                //                     href='#'
+                //                     className='text-decoration-none d-block px-1'
+                //                   >
+                //                     <MdFavoriteBorder
+                //                       className='icon-social-facebook'
+                //                       size={20}
+                //                     />
+                //                   </a>
+                //                 </li>
+                //                 <li className='list-inline-item'>
+                //                   <a
+                //                     href='#'
+                //                     className='text-decoration-none d-block px-1'
+                //                   >
+                //                     <MdFavoriteBorder
+                //                       className='icon-social-facebook'
+                //                       size={20}
+                //                     />
+                //                   </a>
+                //                 </li>
+                //                 <li className='list-inline-item'>
+                //                   <a
+                //                     href='#'
+                //                     className='text-decoration-none d-block px-1'
+                //                   >
+                //                     <MdFavoriteBorder
+                //                       className='icon-social-facebook'
+                //                       size={20}
+                //                     />
+                //                   </a>
+                //                 </li>
+                //               </ul>
+                //             </div>
+                //           </div>
+                //         </div>
+                //        </div>
+
+                //     </div>
+                //   </div>
+                // </div>
+
+                // <div className='container'>
+                //   <div className='row'>
+                //     <div className='col-sm-6 col-md-4 col-lg-3 mt-4'>
+                //       <div className='card'>
+                //         <img
+                //           className=' h-100'
+                //           alt=''
+                //           src={recipe?.image}
+                //         />
+                //         <div className='card-block'>
+                //           <figure className='profile'>
+                //             <img
+                //               alt=''
+                //               src={recipe?.owner?.image}
+                //               className='profile-avatar'
+                //             />
+                //           </figure>
+                //           <h4 className='card-title mt-3'>
+                //             Tawshif Ahsan Khan
+                //           </h4>
+                //           <div className='meta'>
+                //             <a>Friends</a>
+                //           </div>
+                //           <div className='card-text'>
+                //             Tawshif is a web designer living in Bangladesh.
+                //           </div>
+                //         </div>
+                //         <div className='card-footer'>
+                //           <small>Last updated 3 mins ago</small>
+                //           <button className='btn btn-secondary float-right btn-sm'>
+                //             show
+                //           </button>
+                //         </div>
+                //       </div>
+                //     </div>
+                //   </div>
+                // </div>
               ))}
           </div>
         </div>
